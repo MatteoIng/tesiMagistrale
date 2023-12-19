@@ -15,8 +15,12 @@ class Agente():
         self.cMax = 500
 
     def preCondizioni(self,spazio,legal_moves,mAttS,mAttA,agent):
+        # Per tutte le mosse sincrone
+        self.sincronaAzione.preCondizione(spazio,legal_moves,mAttS,agent)
 
-        pass
+        # Per tutte le mosse asincrone
+        if not(any(tupla[1] == 1 for tupla in self.mosseAsincroneRunning for i in range(mAttA))):
+            self.asincronaAzione.preCondizione(spazio,legal_moves,mAttS,mAttA,agent)
 
 
     def reward(self,azione):

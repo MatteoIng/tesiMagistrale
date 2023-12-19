@@ -44,12 +44,7 @@ class Difensore(Agente):
         mAttS = mosse[agent]['sincrone']
         mAttA = mosse[agent]['asincrone']
 
-        # Per tutte le mosse sincrone
-        self.sincronaAzione.preCondizione(spazio,legal_moves,mAttS,agent)
-
-        # Per tutte le mosse asincrone
-        if not(any(tupla[1] == 1 for tupla in self.mosseAsincroneRunning for i in range(mAttA))):
-            self.asincronaAzione.preCondizione(spazio,legal_moves,mAttS,mAttA,agent)
+        super().preCondizioni(spazio,legal_moves,mAttS,mAttA,agent)
         
 
 
