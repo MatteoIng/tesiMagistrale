@@ -29,12 +29,17 @@ class Attaccante(Agente):
 
 
     # Se l'attaccante trova il Timer <=0 non puo eseguire e per ora facciamo che ogni azione vale 1
-    def preCondizioni(self,spazio,legal_moves,mosse):     
-        mAttS = mosse['attaccante']['sincrone']
-        mAttA = mosse['attaccante']['asincrone']
+    def preCondizioni(self,spazio,legal_moves,mosse,agent):     
+        mAttS = mosse[agent]['sincrone']
+        mAttA = mosse[agent]['asincrone']
 
-        super().preCondizioni(spazio,legal_moves,mAttS,mAttA)
+        # Per tutte le mosse sincrone
+        self.sincronaAzione.preCondizione(spazio,legal_moves,mAttS,agent)
 
+        # Per tutte le mosse asincrone
+        if not(any(tupla[1] == 1 for tupla in self.mosseAsincroneRunning for i in range(mAttA))):
+            self.asincronaAzione.preCondizione(spazio,legal_moves,mAttS,mAttA,agent)
+        
 
     def postCondizioni(self,action,spazio,agent,mosse,timer):
         mAttS = mosse['attaccante']['sincrone']

@@ -32,20 +32,10 @@ curva_partita = {
     "difensore":[],
 }
 
-mosse = {
-    'attaccante':{
-        'sincrone':-1,
-        'asincrone':-1,
-    },
-    'difensore':{
-        'sincrone':-1,
-        'asincrone':-1,
-    }
-}
 
 
 # Pre condizioni codificate nell'action mask
-def preCondizioni(agent,spazio,legal_moves):
+def preCondizioni(agent,spazio,legal_moves,mosse):
     # STATO
         # [ firewall([True/False])(0), blockedip([])(1), flowlimit_ips([])(2), alert([True/False])(3), honeypot_ips([])(4),
         # log_verb([0-5])(5),
@@ -57,13 +47,13 @@ def preCondizioni(agent,spazio,legal_moves):
 
     if agent == 'difensore':
         # pre condizioni del difensore
-        difensore.preCondizioni(spazio,legal_moves,mosse)
+        difensore.preCondizioni(spazio,legal_moves,mosse,agent)
 
     else:
         # pre condizioni dell'attaccante
         # In tutte ho inserito che se il software viene aggiornato neanche più il pscan si può fare 
         # altrimenti non ce la farebbe mai ad uscire perche deve decrementare i log
-        attaccante.preCondizioni(spazio,legal_moves,mosse)
+        attaccante.preCondizioni(spazio,legal_moves,mosse,agent)
         
 
     if agent == 'difensore':
@@ -78,7 +68,7 @@ def preCondizioni(agent,spazio,legal_moves):
 
 
 # APPLICA L'AZIONE ALLo SPAZIO 'LOGICA'
-def postCondizioni(action,spazio,agent,timer):
+def postCondizioni(action,spazio,agent,mosse,timer):
     # Post COndizioni
     # STATO
     # [ firewall([True/False])(0), blockedip([])(1), flowlimit_ips([])(2), alert([True/False])(3), honeypot_ips([])(4),
@@ -95,14 +85,14 @@ def postCondizioni(action,spazio,agent,timer):
         difensore.postCondizioni(action,spazio,agent,mosse,timer)
         
     elif agent == 'attaccante':
-        attaccante.postCondizioni(action,spazio,'difensore',mosse,timer)
+        attaccante.postCondizioni(action,spazio,agent,mosse,timer)
         
 
 
 
 
 # VERIFICA QUANDO CALCOLARE LA REWARD, NEGLI ALTRI CASI 0
-def reward(agent,action):
+def reward(agent,action,mosse):
     # per la funzione di reward
     calcolo = 0
     if agent == 'attaccante':
@@ -154,13 +144,8 @@ def generazioneSpazioRandom(dim_obs):
     #spazio = [0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     spazio = []
     for i in range(dim_obs):
-        spazio.append(0)
+        spazio.append(random.randint(0,1))
 
-    """ for i in range(dim_obs):
-        if i == 5:
-            spazio.append(random.randint(0,5))
-        else:
-            spazio.append(random.randint(0,1)) """
 
     return spazio
 

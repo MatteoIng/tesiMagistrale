@@ -39,12 +39,17 @@ class Difensore(Agente):
         }
 
     # Il difensore invece può eseguire una mossa solo nel caso incui il Timer è <=0 ed ogni mossa vale 1
-    def preCondizioni(self,spazio,legal_moves,mosse):
+    def preCondizioni(self,spazio,legal_moves,mosse,agent):
         
-        mAttS = mosse['difensore']['sincrone']
-        mAttA = mosse['difensore']['asincrone']
+        mAttS = mosse[agent]['sincrone']
+        mAttA = mosse[agent]['asincrone']
 
-        super().preCondizioni(spazio,legal_moves,mAttS,mAttA)
+        # Per tutte le mosse sincrone
+        self.sincronaAzione.preCondizione(spazio,legal_moves,mAttS,agent)
+
+        # Per tutte le mosse asincrone
+        if not(any(tupla[1] == 1 for tupla in self.mosseAsincroneRunning for i in range(mAttA))):
+            self.asincronaAzione.preCondizione(spazio,legal_moves,mAttS,mAttA,agent)
         
 
 
@@ -71,7 +76,7 @@ class Difensore(Agente):
         else:
             agente = agenteMossaAsincrona(self.asincronaAzione,action,spazio,agent)
         
-        spazio[agent][timer] -= round(t,2)
+        spazio[agent][timer] += round(t,2)
         
         #----------------------------------------------------------------------------
         self.aggiornaMosseAsincrone(round(delta+t,2),agente,action)

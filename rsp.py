@@ -77,6 +77,17 @@ if ((n_azioni_attaccante_sincrone+n_azioni_attaccante_asincrone) == (n_azioni_di
 else:
     sys.exit('la somma delle azioni sincrone ed asincrone di ciascun agente deve essere la stessa')
 
+mosse = {
+    'attaccante':{
+        'sincrone':n_azioni_attaccante_sincrone,
+        'asincrone':n_azioni_attaccante_asincrone,
+    },
+    'difensore':{
+        'sincrone':n_azioni_difensore_sincrone,
+        'asincrone':n_azioni_difensore_asincrone,
+    }
+}
+
 #-------------------------------------- Lettura conf ----------------------------------#
 
 def env(render_mode=None):
@@ -248,7 +259,7 @@ class raw_env(AECEnv):
         #[Pscan(0), Pvsftpd(1), Psmbd(2), Pphpcgi(3), Pircd(4), Pdistccd(5), Prmi(6), noOp(7)]
         legal_moves = np.zeros(n_azioni,'int8')
 
-        preCondizioni(agent,self.spazio,legal_moves)
+        preCondizioni(agent,self.spazio,legal_moves,mosse)
         self.lm[agent]['mosse'] = np.copy(legal_moves)
 
         print('\t')
@@ -356,7 +367,7 @@ class raw_env(AECEnv):
         ######################## PRE(con action mask solo post)/POST condizioni #####################################################
 
         #print('Prima della mossa:',self.spazio)
-        postCondizioni(action,self.spazio,self.agent_selection,timer)
+        postCondizioni(action,self.spazio,self.agent_selection,mosse,timer)
         self.spazio['difensore'][timer] = round(self.spazio['difensore'][timer],3)
         print('Dopo la mossa:',self.spazio['difensore'])
 
@@ -365,7 +376,7 @@ class raw_env(AECEnv):
         # SI INFLUENZANO LE REWARD A VICENDA
         """ print('Mossa valida:',mossaValida)
         if mossaValida: """
-        rw = reward(agent,action)
+        rw = reward(agent,action,mosse)
         #if agent == 'difensore':
         self.rewards[agent] += rw
         """ else:
