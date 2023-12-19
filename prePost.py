@@ -13,11 +13,11 @@ difensore = Difensore()
 T1 = 0.33
 T2 = 0.66
 
-mosseDifensore = ['Generate alert','FirewallActivation','BlockSourceIp','UnblockSourceIp','FlowRateLimit','UnlimitFlowRate',
-                  'RedirectToHoneypot','UnRedirectToHoneypot','IncreaseLog','DecreaseLog','QuarantineHost','UnQuarantineHost',
-                  'ManualResolution','SystemReboot','SystemShutdown','SystemStart','BackupHost','SoftwareUpdate','noOp']
+#mosseDifensore = ['Generate alert','FirewallActivation','BlockSourceIp','UnblockSourceIp','FlowRateLimit','UnlimitFlowRate',
+#                  'RedirectToHoneypot','UnRedirectToHoneypot','IncreaseLog','DecreaseLog','QuarantineHost','UnQuarantineHost',
+#                  'ManualResolution','SystemReboot','SystemShutdown','SystemStart','BackupHost','SoftwareUpdate','noOp']
 
-mosseAttaccante = ['Pscan','Pvsftpd','Psmbd','Pphpcgi','Pircd','Pdistccd','Prmi', 'noOp']
+#mosseAttaccante = ['Pscan','Pvsftpd','Psmbd','Pphpcgi','Pircd','Pdistccd','Prmi', 'noOp']
 
 
 # qui per ogni partita mette numero di mosse fatte e le cumulative reward finali di quella partita
@@ -32,10 +32,16 @@ curva_partita = {
     "difensore":[],
 }
 
-""" lastMosse = {
-    'attaccante': -1,
-    'difensore': -1,
-} """
+mosse = {
+    'attaccante':{
+        'sincrone':-1,
+        'asincrone':-1,
+    },
+    'difensore':{
+        'sincrone':-1,
+        'asincrone':-1,
+    }
+}
 
 
 # Pre condizioni codificate nell'action mask
@@ -51,32 +57,28 @@ def preCondizioni(agent,spazio,legal_moves):
 
     if agent == 'difensore':
         # pre condizioni del difensore
-        difensore.preCondizioni(spazio,legal_moves)
+        difensore.preCondizioni(spazio,legal_moves,mosse)
 
     else:
         # pre condizioni dell'attaccante
         # In tutte ho inserito che se il software viene aggiornato neanche più il pscan si può fare 
         # altrimenti non ce la farebbe mai ad uscire perche deve decrementare i log
-        attaccante.preCondizioni(spazio,legal_moves)
+        attaccante.preCondizioni(spazio,legal_moves,mosse)
         
 
     if agent == 'difensore':
         print('-----------------------------------------------------------------------------------------')
         print(legal_moves)
-        for i in range(len(mosseDifensore)):
-            if legal_moves[i] == 1 :
-                print(mosseDifensore[i])
+        
     else :
         print('-----------------------------------------------------------------------------------------')
         print(legal_moves)
-        for i in range(len(mosseAttaccante)):
-            if legal_moves[i] == 1 :
-                print(mosseAttaccante[i])
+        
 
 
 
 # APPLICA L'AZIONE ALLo SPAZIO 'LOGICA'
-def postCondizioni(action,spazio,agent):
+def postCondizioni(action,spazio,agent,timer):
     # Post COndizioni
     # STATO
     # [ firewall([True/False])(0), blockedip([])(1), flowlimit_ips([])(2), alert([True/False])(3), honeypot_ips([])(4),
@@ -90,11 +92,10 @@ def postCondizioni(action,spazio,agent):
     mossaValida = True
 
     if agent == 'difensore':
-        print(mosseDifensore[action])
-        difensore.postCondizioni(action,spazio,agent)
+        difensore.postCondizioni(action,spazio,agent,mosse,timer)
         
     elif agent == 'attaccante':
-        attaccante.postCondizioni(action,spazio,'difensore')
+        attaccante.postCondizioni(action,spazio,'difensore',mosse,timer)
         
 
 
@@ -105,9 +106,15 @@ def reward(agent,action):
     # per la funzione di reward
     calcolo = 0
     if agent == 'attaccante':
-        calcolo = attaccante.reward(attaccante.REWARD_MAP[action])
+        if action < mosse[agent]['sincrone']:
+            calcolo = attaccante.reward(attaccante.REWARD_MAP[0])
+        else:
+            calcolo = attaccante.reward(attaccante.REWARD_MAP[1])
     else:
-        calcolo = -difensore.reward(difensore.REWARD_MAP[action])
+        if action < mosse[agent]['sincrone']:
+            calcolo = -attaccante.reward(attaccante.REWARD_MAP[0])
+        else:
+            calcolo = -attaccante.reward(attaccante.REWARD_MAP[1])
     return calcolo
 
 
@@ -120,21 +127,11 @@ def terminationPartita(spazio,lm,num_moves,NUM_ITERS):
     # come se gli altri fossero altri subsets states con minace in sicurezza)
     # stato terminale attaccante con tutti attacchi on
     # Consigliata dal professore
-    if ((spazio['difensore'][14] < T1 and spazio['difensore'][15] < T1 and spazio['difensore'][16] < T1 and spazio['difensore'][17] < T1 and spazio['difensore'][18] < T1 and spazio['difensore'][19] < T1 and spazio['difensore'] [20] < T1 
-        and spazio['difensore'] [1] == 0 and spazio['difensore'][2] == 0 and spazio['difensore'][4] == 0 and spazio['difensore'][5] == 0 and spazio['difensore'][6] == 1 and spazio['difensore'][7] == 0) or 
-        (spazio['difensore'][14] == 1 and spazio['difensore'][15] == 1 and spazio['difensore'][16] == 1 and spazio['difensore'][17] == 1 and spazio['difensore'][18] == 1 and spazio['difensore'][19] == 1 and spazio['difensore'] [20] == 1)):
+    checkNot = [not(spazio['difensore'][i]) for i in range(len(spazio['difensore'])-1)]
+    check = spazio['difensore'][:(len(spazio['difensore'])-1)]
+    if (all(check) or all(checkNot)):
         val = True
     else:
-            # prova a fermarlo il fatto che le ultime due mosse se sono nop e nop (att e diff) allora basta 
-            # non possono fare piu niente
-            # La differenza la uso per verificare che i due non possano più fare niente INSIEME
-            # altrimenti attaccante noOp assoluto al punto 10 poi attaccante fa una mosse e sblocca qualche attacco
-            # attaccante agisce perche difensore non aveva il nop assoluto e quando cel'ha magari al 50 l'altro era al 10 
-            # ed esce
-            differenza = lm['attaccante']['nmosse']-lm['difensore']['nmosse']
-            print('DIFFERENZA tempo noOp-noOp:',differenza)
-            if differenza == 1 or differenza == -1:
-                val = False
             # se non puo arrestarlo neanche quello provo a vedere il num di mosse
             # con noOp sempre selezionabili mi dovrebbe uscire con la condizione nell'if
             if num_moves >= NUM_ITERS:
@@ -158,8 +155,7 @@ def generazioneSpazioRandom(dim_obs):
     spazio = []
     for i in range(dim_obs):
         spazio.append(0)
-    spazio[5] = 1
-    spazio[6] = 1
+
     """ for i in range(dim_obs):
         if i == 5:
             spazio.append(random.randint(0,5))

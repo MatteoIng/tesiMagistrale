@@ -14,6 +14,15 @@ class Agente():
         self.tMax = 400
         self.cMax = 500
 
+    def preCondizioni(self,spazio,legal_moves,mAttS,mAttA):
+        # Per tutte le mosse sincrone
+        self.sincronaAzione.preCondizione(spazio,legal_moves,mAttS,'difensore')
+
+        # Per tutte le mosse asincrone
+        if not(any(tupla[1] == 1 for tupla in self.mosseAsincroneRunning for i in range(mAttA))):
+            self.asincronaAzione.preCondizione(spazio,legal_moves,mAttS,'difensore')
+
+
     def reward(self,azione):
         #  CONSIDERA SOLO IL TEMPO NELLA REWARD
         # CONSIDERARE COME CONTEGGIARE IL TEMPO E L'ASINCRONICITA

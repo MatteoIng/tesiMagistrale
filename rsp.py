@@ -48,16 +48,35 @@ import os
 #------------------------------------- Lettura conf ---------------------------------#
 conf = open("conf.txt", "r")
 lines = conf.readlines()
-for i in range(len(lines)):
+for i in range(len(lines)-1):
     lines[i] = int(lines[i].strip().split('= ')[1])
+
 n_agenti = int(lines[0])
 print(f'Numero agenti : {n_agenti}')
-dim_obs = int(lines[1])
-print(f'Dimensione OBS : {dim_obs}')
-n_azioni_attaccante = int(lines[2])
-print(f'Numero azioni attaccante : {n_azioni_attaccante}')
-n_azioni_difensore = int(lines[3])
-print(f'Numero azioni difensore : {n_azioni_difensore}')
+
+n_azioni_attaccante_sincrone = int(lines[2])
+print(f'Mosse sincrone dell attaccante: {n_azioni_attaccante_sincrone}')
+
+n_azioni_attaccante_asincrone = int(lines[2])
+print(f'Mosse asincrone dell attaccante: {n_azioni_attaccante_asincrone}')
+
+n_azioni_difensore_sincrone = int(lines[2])
+print(f'Mosse sincrone del difensore: {n_azioni_difensore_sincrone}')
+
+n_azioni_difensore_asincrone = int(lines[2])
+print(f'Mosse asincrone del difensore: {n_azioni_difensore_asincrone}')
+
+dim_obs = 0
+n_azioni = 0
+time = 0
+if ((n_azioni_attaccante_sincrone+n_azioni_attaccante_asincrone) == (n_azioni_difensore_sincrone+n_azioni_difensore_asincrone)):
+    dim_obs = n_azioni_attaccante_sincrone + n_azioni_attaccante_asincrone + 1
+    n_azioni = n_azioni_attaccante_sincrone + n_azioni_attaccante_asincrone
+    timer = dim_obs - 1
+
+else:
+    sys.exit('la somma delle azioni sincrone ed asincrone di ciascun agente deve essere la stessa')
+
 #-------------------------------------- Lettura conf ----------------------------------#
 
 def env(render_mode=None):
@@ -144,14 +163,15 @@ class raw_env(AECEnv):
         """ self._action_spaces = {
                 Discrete(n_azioni_) for i in self.possible_agents
             } """
+    
         # ATTACCANTE: attacchi=[Pscan(0), Pvsftpd(1), Psmbd(2), Pphpcgi(3), Pircd(4), Pdistccd(5), Prmi(6), noOp(7)]
-        self._action_spaces[self.possible_agents[0]] = Discrete(n_azioni_attaccante)
+        self._action_spaces[self.possible_agents[0]] = Discrete(n_azioni)
 
         # DIFENSORE: 18 azioni= [GenerateAlert(0), FirewallActivation(1), BlockSourceIp(2), UnblockSourceIp(3),
         # FlowRateLimit(4), UnlimitFlowRate(5), RedirectToHoneypot(6), UnHoneypot(7), IncreaseLog(8),
         # DecreaseLog(9), QuarantineHost(10), UnQuarantineHost(11), ManualResolution(12), SystemReboot(13),
         # SystemShutdown(14), SystemStart(15), BackupHost(16), SoftwareUpdate(17), noOp(18)]
-        self._action_spaces[self.possible_agents[1]] = Discrete(n_azioni_difensore)
+        self._action_spaces[self.possible_agents[1]] = Discrete(n_azioni)
 
         # DEVE ESSERE DELLA STESSA STRUTTURA DEL RITORNO DI observe() 
         self._observation_spaces = {}
@@ -172,7 +192,7 @@ class raw_env(AECEnv):
             i : Dict(
                 {
                     "observations": Box(low=-1000, high=1000, shape=(dim_obs,), dtype=float),
-                    "action_mask": Box(low=0, high=1, shape=(n_azioni_difensore,), dtype=np.int8),
+                    "action_mask": Box(low=0, high=1, shape=(n_azioni,), dtype=np.int8),
                 }
             ) for i in self.possible_agents
         }
@@ -226,7 +246,7 @@ class raw_env(AECEnv):
         
         # ATTACCANTE AZIONI
         #[Pscan(0), Pvsftpd(1), Psmbd(2), Pphpcgi(3), Pircd(4), Pdistccd(5), Prmi(6), noOp(7)]
-        legal_moves = np.zeros(19,'int8')
+        legal_moves = np.zeros(n_azioni,'int8')
 
         preCondizioni(agent,self.spazio,legal_moves)
         self.lm[agent]['mosse'] = np.copy(legal_moves)
@@ -331,13 +351,13 @@ class raw_env(AECEnv):
         agent = self.agent_selection
         #print('Agente in azione:',agent)
         print('Mossa da eseguire:',action)
-        print('Timer Prima:',self.spazio['difensore'][21])
+        print('Timer Prima:',self.spazio['difensore'][timer])
 
         ######################## PRE(con action mask solo post)/POST condizioni #####################################################
 
         #print('Prima della mossa:',self.spazio)
-        postCondizioni(action,self.spazio,self.agent_selection)
-        self.spazio['difensore'][21] = round(self.spazio['difensore'][21],3)
+        postCondizioni(action,self.spazio,self.agent_selection,timer)
+        self.spazio['difensore'][timer] = round(self.spazio['difensore'][timer],3)
         print('Dopo la mossa:',self.spazio['difensore'])
 
         ############################################## REWARD ###########################################
@@ -390,7 +410,7 @@ class raw_env(AECEnv):
 
         self._accumulate_rewards()
 
-        print('Timer Dopo:',self.spazio['difensore'][21])
+        print('Timer Dopo:',self.spazio['difensore'][timer])
         print('Num Mosse:',self.num_moves)
         print('Truncation:',self.truncations)
         print('Termination:',self.terminations)

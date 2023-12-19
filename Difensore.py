@@ -18,6 +18,8 @@ from azioni.Start import Start
 from azioni.Backup import Backup
 from azioni.Update import Update
 from azioni.noOp import noOp
+from azioni.mossaAsincrona import mossaAsincrona
+from azioni.mossaSincrona import mossaSincrona
 
 from threading import Thread
 from agenteMossaAsincrona import agenteMossaAsincrona
@@ -28,283 +30,60 @@ import random
 class Difensore(Agente):
     def __init__(self):
         super().__init__()
-        self.GenerateAlertAzione = GenerateAlert()
-        self.FirewallActivationAzione = FirewallActivation()
-        self.BlockIpAzione = BlockIp()
-        self.UnBlockIpAzione = UnBlockIp()
-        self.LimitFlowRateAzione = LimitFlowRate()
-        self.UnLimitFlowRateAzione = UnLimitFlowRate()
-        self.RedirectHoneypotAzione = RedirectHoneypot()
-        self.UnRedirectHoneypotAzione = UnRedirectHoneypot()
-        self.IncreaseLogAzione = IncreaseLog()
-        self.DecreaseLogAzione = DecreaseLog()
-        self.QuarantineAzione = Quarantine()
-        self.UnQuarantineAzione = UnQuarantine()
-        self.ManualResolutionAzione = ManualResolution()
-        self.RebootAzione = Reboot()
-        self.ShutDownAzione = ShutDown()
-        self.StartAzione = Start()
-        self.BackupAzione = Backup()
-        self.UpdateAzione = Update()
-        self.noOp = noOp()
+        self.sincronaAzione = mossaSincrona()
+        self.asincronaAzione = mossaAsincrona()
 
         self.REWARD_MAP = {
-            0 : (1,1,0),
-            1 : (2,1,0),
-            2 : (1,3,0.3),
-            3 : (1,3,0),
-            4 : (3,1,0.2),
-            5 : (3,1,0),
-            6 : (3,3,0.1),
-            7 : (3,3,0),
-            8 : (2,1,0.05),
-            9 : (1,1,0),
-            10 : (5,5,1),
-            11 : (5,5,0),
-            12 : (3600,200,0),
-            13 : (60,6,0.7),
-            14 : (30,6,1),
-            15 : (30,6,0),
-            16 : (3600,10,0.1),
-            17 : (600,300,0.1),
-            18 : (3600,300,0.1)
-            # voglio scoraggiare il difensore a non fare nulla così che faccia qualcosa per salvaguardare
-            # Con il professore abbiamo detto che deve essere in modulo la piu grande reward tra i due 
-            # ed io ho aggiunto un delta per evitare il calcolo preciso prendendo i coefficenti maggiori (x,y,z)
-            # sarebbe come a dire -inf
+            0 : (1,1,1),
+            1 : (1,1,1),
         }
 
     # Il difensore invece può eseguire una mossa solo nel caso incui il Timer è <=0 ed ogni mossa vale 1
-    def preCondizioni(self,spazio,legal_moves):
+    def preCondizioni(self,spazio,legal_moves,mosse):
         
-        # Generate alert
-        self.GenerateAlertAzione.preCondizione(spazio,legal_moves,self.T1,self.T2,'difensore')
+        mAttS = mosse['difensore']['sincrone']
+        mAttA = mosse['difensore']['asincrone']
+
+        super().preCondizioni(spazio,legal_moves,mAttS,mAttA)
         
-        # FirewallActivation
-        # preso dal paper
-        self.FirewallActivationAzione.preCondizione(spazio,legal_moves,self.T1,self.T2,'difensore')
-        
-        # BlockSourceIp
-        # preso dal paper
-        self.BlockIpAzione.preCondizione(spazio,legal_moves,self.T1,self.T2,'difensore')
-        
-        # UnblockSourceIp
-        self.UnBlockIpAzione.preCondizione(spazio,legal_moves,self.T1,self.T2,'difensore')
-        
-        # FlowRateLimit
-        # preso dal paper
-        self.LimitFlowRateAzione.preCondizione(spazio,legal_moves,self.T1,self.T2,'difensore')
-        
-        # UnlimitFlowRate
-        self.UnLimitFlowRateAzione.preCondizione(spazio,legal_moves,self.T1,self.T2,'difensore')
-        
-        # RedirectToHoneypot
-        self.RedirectHoneypotAzione.preCondizione(spazio,legal_moves,self.T1,self.T2,'difensore')
-        
-        # UnHoneypot
-        self.UnRedirectHoneypotAzione.preCondizione(spazio,legal_moves,self.T1,self.T2,'difensore')
-        
-        # IncreaseLog
-        self.IncreaseLogAzione.preCondizione(spazio,legal_moves,self.T1,self.T2,'difensore')
-        
-        # DecreaseLog
-        self.DecreaseLogAzione.preCondizione(spazio,legal_moves,self.T1,self.T2,'difensore')
-        
-        # QuarantineHost
-        self.QuarantineAzione.preCondizione(spazio,legal_moves,self.T1,self.T2,'difensore')
-          
-        # UnQuarantineHost
-        self.UnQuarantineAzione.preCondizione(spazio,legal_moves,self.T1,self.T2,'difensore')
-        
-        # ManualResolution 
-        self.ManualResolutionAzione.preCondizione(spazio,legal_moves,self.T1,self.T2,'difensore')
-        
-        # SystemReboot
-        self.RebootAzione.preCondizione(spazio,legal_moves,self.T1,self.T2,'difensore')
-        
-        # SystemShutdown
-        self.ShutDownAzione.preCondizione(spazio,legal_moves,self.T1,self.T2,'difensore')
-        
-        # SystemStart
-        self.StartAzione.preCondizione(spazio,legal_moves,self.T1,self.T2,'difensore')
-        
-        # BackupHost
-        if not(any(tupla[1] == 16 for tupla in self.mosseAsincroneRunning)):
-            self.BackupAzione.preCondizione(spazio,legal_moves,self.T1,self.T2,'difensore',self.mosseAsincroneRunning)
-        
-        # SoftwareUpdate
-        # detto dal prof: deve aver fatto backup
-        self.UpdateAzione.preCondizione(spazio,legal_moves,self.T1,self.T2,'difensore')
-        
-        # noOp (altrimenti se nulla è selezionbile sceglie a caso)
-        # Ora abbiamo deciso di renderla ammissibile ad ogni stato così che possa terminare anche 
-        # quando non ho piu mosse che mi portano sullo stato target (finale)
-        self.noOp.preCondizione(spazio,legal_moves,self.T1,self.T2,self.__class__.__name__)
 
 
 
+    def postCondizioni(self,action,spazio,agent,mosse,timer):
+        mAttS = mosse['attaccante']['sincrone']
+        mAttA = mosse['attaccante']['asincrone']
 
-    def postCondizioni(self,action,spazio,agent):
-      
         #-----------------------------------------------------
         # tempo appicazione della mossa sincrona
         t = 0
         # nuovo agente asincrono
         agente = 0
         # tempo mossa difensore turno precedente
-        delta = abs(spazio[agent][21]-self.lastTimer)
+        delta = abs(spazio[agent][timer]-self.lastTimer)
         # azzero i nop
-        spazio[agent][22] = 0
+        #spazio[agent][22] = 0
         #-----------------------------------------------------
 
-        # GenerateAlert
-        if action == 0 :
-            self.GenerateAlertAzione.postCondizione(spazio,agent)
-            # Timer
+        # esempio prima mosse sincrone 0-9 (10) e poi 10-14 asincrone (5): 15 mosse tot 10 e 5 
+        if action < mAttS :
+            self.sincronaAzione.postCondizione(spazio,agent,action)
             t = 0.5
+        else:
+            agente = agenteMossaAsincrona(self.asincronaAzione,action,spazio,agent)
         
-        # FirewallActivation
-        elif action == 1 :
-            self.FirewallActivationAzione.postCondizione(spazio,agent)
-            # Timer
-            t = 0.2
+        spazio[agent][timer] -= round(t,2)
         
-        # BlockSourceIp
-        elif action == 2 :
-            self.BlockIpAzione.postCondizione(spazio,agent)
-            # Timer
-            t = 0.3
-        
-        # UnblockSourceIp
-        elif action == 3 :
-            self.UnBlockIpAzione.postCondizione(spazio,agent)
-            # Timer
-            t = 0.3
-        
-        # FlowRateLimit
-        elif action == 4 :
-            self.LimitFlowRateAzione.postCondizione(spazio,agent)
-            # Timer
-            t = 0.2
-        
-        # UnlimitFlowRate
-        elif action == 5 :
-            self.UnLimitFlowRateAzione.postCondizione(spazio,agent)
-            # Timer
-            t = 0.2
-        
-        # RedirectToHoneypot
-        elif action == 6 :
-            self.RedirectHoneypotAzione.postCondizione(spazio,agent)
-            # Timer
-            t = 0.4
-        
-        # UnHoneypot
-        elif action == 7 :
-            self.UnRedirectHoneypotAzione.postCondizione(spazio,agent)
-            # Timer
-            t = 0.4
-        
-        # IncreaseLog
-        elif action == 8 :
-            self.IncreaseLogAzione.postCondizione(spazio,agent)
-            # Timer
-            t = 0.1
-        
-        # DecreaseLog
-        elif action == 9 :
-            """ self.mosseAsincroneRunning.append(action)
-            Thread(target=self.DecreaseLogAzione.postCondizione,args=(spazio,agent,self.mosseAsincroneRunning,action)).start()
-            print('AVVIATO -LOG')
-             """
-            self.DecreaseLogAzione.postCondizione(spazio,agent)
-            # Timer
-            t = 0.1
-        
-        # QuarantineHost
-        elif action == 10 :
-            self.QuarantineAzione.postCondizione(spazio,agent)
-            # Timer
-            t = 0.7
-        
-        # UnQuarantineHost
-        elif action == 11 :
-            self.UnQuarantineAzione.postCondizione(spazio,agent)
-            # Timer
-            t = 0.7
-        
-        # ManualResolution
-        elif action == 12 :
-            self.ManualResolutionAzione.postCondizione(spazio,agent)
-            # Timer
-            t = 0.4
-        
-        # SystemReboot
-        elif action == 13 :
-            # Timer
-            t = 0.7
-            self.RebootAzione.postCondizione(spazio,agent)
-        
-        # SystemShutdown
-        elif action == 14 :
-            self.ShutDownAzione.postCondizione(spazio,agent)
-            # Timer
-            t = 0.5
-        
-        # SystemStart
-        elif action == 15 :
-            self.StartAzione.postCondizione(spazio,agent)
-            # Timer
-            t = 0.2
-        
-        # BackupHost
-        elif action == 16 :
-            #self.mosseAsincroneRunning.append(action)
-            #Thread(target=self.BackupAzione.postCondizione,args=(spazio,agent,self.mosseAsincroneRunning,action)).start()
-            agente = agenteMossaAsincrona(self.BackupAzione,action,spazio,agent)
-            print('AVVIO BACKUP')
-            # Timer
-            #t = 0.1
-
-        # SoftwareUpdate
-        elif action == 17 :
-            self.UpdateAzione.postCondizione(spazio,agent)
-            # Timer
-            t = 0.8
-
-        # Noop solo per il timer
-        elif action == 18 :
-            self.noOp.postCondizione(spazio,agent)
-        
-        spazio[agent][21] += round(t,2)
-
         #----------------------------------------------------------------------------
         self.aggiornaMosseAsincrone(round(delta+t,2),agente,action)
 
-        self.lastTimer = round(spazio[agent][21],2)
+        self.lastTimer = round(spazio[agent][timer],2)
         #----------------------------------------------------------------------------
 
     
     
     def reset(self):
         super().reset()
-        self.GenerateAlertAzione.reset()
-        self.FirewallActivationAzione.reset()
-        self.BlockIpAzione.reset()
-        self.UnBlockIpAzione.reset()
-        self.LimitFlowRateAzione
-        self.UnLimitFlowRateAzione.reset()
-        self.RedirectHoneypotAzione.reset()
-        self.UnRedirectHoneypotAzione.reset()
-        self.IncreaseLogAzione.reset()
-        self.DecreaseLogAzione.reset()
-        self.QuarantineAzione.reset()
-        self.UnQuarantineAzione.reset()
-        self.ManualResolutionAzione.reset()
-        self.RebootAzione.reset()
-        self.ShutDownAzione.reset()
-        self.StartAzione.reset()
-        self.BackupAzione.reset()
-        self.UpdateAzione.reset()
+        self.asincronaAzione.reset()
+        self.sincronaAzione.reset()
 
         self.mosseAsincroneRunning = []
