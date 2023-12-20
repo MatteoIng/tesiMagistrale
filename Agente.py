@@ -6,7 +6,7 @@ class Agente():
 
         self.mosseAsincroneRunning = []
         # Per le mosse asincrone, per il calcolo del tempo del difensore
-        self.lastTimer = 0
+        #self.lastTimer = 0
 
         self.wt = 0.20
         self.wc = 0.20

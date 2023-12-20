@@ -49,7 +49,7 @@ class Difensore(Agente):
 
 
 
-    def postCondizioni(self,action,spazio,agent,mosse,timer):
+    def postCondizioni(self,action,spazio,agent,mosse,timer,lastTimer):
         mAttS = mosse['attaccante']['sincrone']
         mAttA = mosse['attaccante']['asincrone']
 
@@ -59,7 +59,8 @@ class Difensore(Agente):
         # nuovo agente asincrono
         agente = 0
         # tempo mossa difensore turno precedente
-        delta = abs(spazio[agent][timer]-self.lastTimer)
+        #delta = abs(spazio[agent][timer]-self.lastTimer)
+        delta = lastTimer
         # azzero i nop
         #spazio[agent][22] = 0
         #-----------------------------------------------------
@@ -78,8 +79,9 @@ class Difensore(Agente):
         #----------------------------------------------------------------------------
         self.aggiornaMosseAsincrone(round(delta+t,2),agente,action)
 
-        self.lastTimer = round(spazio[agent][timer],2)
+        #lastTimer = round(spazio[agent][timer],2)
         #----------------------------------------------------------------------------
+        return t
 
     
     

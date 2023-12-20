@@ -129,7 +129,7 @@ class raw_env(AECEnv):
 
         # Questa è la truncation cosi esce per non girare all'infinito
         self.NUM_ITERS = 10
-
+        self.lastTimer = 0
         # Lo utilizzo affinche termini quando entrambi i due agenti, in maniera conseutiva hanno a disposizione
         # solo mosse noop selezionabili:
         # nmosse è il numero di mossa della partita in cui hanno solo noop
@@ -298,6 +298,7 @@ class raw_env(AECEnv):
     def reset(self, seed=None, options=None):
         # prePost Reset per attaccante e difensore
         reset()
+        self.lastTimer = 0
 
         self.lm = {
             i:{
@@ -374,7 +375,7 @@ class raw_env(AECEnv):
         ######################## PRE(con action mask solo post)/POST condizioni #####################################################
 
         #print('Prima della mossa:',self.spazio)
-        postCondizioni(action,self.spazio,self.agent_selection,mosse,timer)
+        self.lastTimer = postCondizioni(action,self.spazio,self.agent_selection,mosse,timer,self.lastTimer)
         self.spazio['difensore'][timer] = round(self.spazio['difensore'][timer],3)
         print('Dopo la mossa:',self.spazio['difensore'])
 

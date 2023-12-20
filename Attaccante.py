@@ -36,7 +36,7 @@ class Attaccante(Agente):
         super().preCondizioni(spazio,legal_moves,mAttS,mAttA,agent,timer)
         
 
-    def postCondizioni(self,action,spazio,agent,mosse,timer):
+    def postCondizioni(self,action,spazio,agent,mosse,timer,lastTimer):
         mAttS = mosse['attaccante']['sincrone']
         mAttA = mosse['attaccante']['asincrone']
 
@@ -46,8 +46,9 @@ class Attaccante(Agente):
         # nuovo agente asincrono
         agente = 0
         # tempo mossa difensore turno precedente
-        delta = abs(spazio[agent][timer]-self.lastTimer)
-        print('LASTTIMER:',self.lastTimer)
+        #delta = abs(spazio[agent][timer]-self.lastTimer)
+        delta = lastTimer
+        print('LASTTIMER:',lastTimer)
         # azzero i nop
         #spazio[agent][22] = 0
         #-----------------------------------------------------
@@ -65,9 +66,10 @@ class Attaccante(Agente):
         #----------------------------------------------------------------------------
         self.aggiornaMosseAsincrone(round(delta+t,2),agente,action)
 
-        self.lastTimer = round(spazio['difensore'][timer],2)
+        #lastTimer = round(spazio['difensore'][timer],2)
         #----------------------------------------------------------------------------
-
+        return t
+    
         
     def reset(self):
         super().reset()

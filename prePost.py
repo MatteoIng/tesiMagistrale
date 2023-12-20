@@ -68,7 +68,7 @@ def preCondizioni(agent,spazio,legal_moves,mosse,timer):
 
 
 # APPLICA L'AZIONE ALLo SPAZIO 'LOGICA'
-def postCondizioni(action,spazio,agent,mosse,timer):
+def postCondizioni(action,spazio,agent,mosse,timer,lastTimer):
     # Post COndizioni
     # STATO
     # [ firewall([True/False])(0), blockedip([])(1), flowlimit_ips([])(2), alert([True/False])(3), honeypot_ips([])(4),
@@ -78,14 +78,16 @@ def postCondizioni(action,spazio,agent,mosse,timer):
     # manuallySolved([True/False])(11), everQuarantined([True/False])(12), everShutDown([True/False])(13),
     # +
     # pscan([0-1])(14), pvsftpd([0-1])(15), psmbd([0-1])(16), pphpcgi([0-1])(17), pircd([0-1])(18), pdistccd([0-1])(19), prmi([0-1])(20),]
-
+    
     mossaValida = True
 
     if agent == 'difensore':
-        difensore.postCondizioni(action,spazio,agent,mosse,timer)
+        lastTimer = difensore.postCondizioni(action,spazio,agent,mosse,timer,lastTimer)
         
     elif agent == 'attaccante':
-        attaccante.postCondizioni(action,spazio,agent,mosse,timer)
+        lastTimer = attaccante.postCondizioni(action,spazio,agent,mosse,timer,lastTimer)
+
+    return lastTimer
         
 
 
