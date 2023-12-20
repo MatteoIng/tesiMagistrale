@@ -20,6 +20,7 @@ class mossaAsincrona(azioneAsincrona):
                 legal_moves[pos] = 1
 
     def postCondizione(self,spazio,agent,action):
+        print(f'MODIFICO {action} di {agent}')
         if agent == 'attaccante':
             spazio['difensore'][action] = 1
         else:    

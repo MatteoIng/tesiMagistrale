@@ -69,7 +69,7 @@ class Agente():
         for i in self.mosseAsincroneRunning:
             print(i)
             # richiama il metodo dell'agente asincrono per aggiornare il tempo sulla mossa ed eventualmente applicarla
-            val = i[0].stepSuccessivo(tot,action)
+            val = i[0].stepSuccessivo(tot,i[1])
             if val :
                 listaRimozioni.append(i)
 
