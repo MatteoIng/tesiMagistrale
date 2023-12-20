@@ -23,8 +23,8 @@ class Agente():
 
             # Per tutte le mosse asincrone
             for mossa in range(mAttS,mAttT,1):
-                if not(any(tupla[1] == 1 for tupla in self.mosseAsincroneRunning)):
-                    self.asincronaAzione.preCondizione(spazio,legal_moves,mAttS,mAttT,agent)
+                if not(any(tupla[1] == mossa for tupla in self.mosseAsincroneRunning)):
+                    self.asincronaAzione.preCondizione(spazio,legal_moves,mossa,agent)
         
         if (spazio['difensore'][timer] >=0 and agent == 'attaccante'):
             # Per tutte le mosse sincrone
@@ -32,8 +32,8 @@ class Agente():
 
             # Per tutte le mosse asincrone
             for mossa in range(mAttS,mAttT,1):
-                if not(any(tupla[1] == 1 for tupla in self.mosseAsincroneRunning)):
-                    self.asincronaAzione.preCondizione(spazio,legal_moves,mAttS,mAttT,agent)
+                if not(any(tupla[1] == mossa for tupla in self.mosseAsincroneRunning)):
+                    self.asincronaAzione.preCondizione(spazio,legal_moves,mossa,agent)
 
         # controllo che nessuna mossa sia eseguibile 
         check = [ not(legal_moves[i]) for i in range(len(legal_moves)-1)]

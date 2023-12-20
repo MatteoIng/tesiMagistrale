@@ -65,15 +65,13 @@ class Difensore(Agente):
         #-----------------------------------------------------
 
         # esempio prima mosse sincrone 0-9 (10) e poi 10-14 asincrone (5): 15 mosse tot 10 e 5 
-        if action < mAttS :
+        if action < mAttS and action != timer :
             self.sincronaAzione.postCondizione(spazio,agent,action)
             t = 0.5
         else:
-            agente = agenteMossaAsincrona(self.asincronaAzione,action,spazio,agent)
+            if action != timer:
+                agente = agenteMossaAsincrona(self.asincronaAzione,action,spazio,agent)
 
-        # ovvero se la mossa è noop non modifica il timer
-        if action == timer:
-            t = 0
         
         spazio[agent][timer] += round(t,2)
         
