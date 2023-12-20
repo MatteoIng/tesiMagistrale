@@ -18,9 +18,11 @@ class Agente():
         # Per tutte le mosse sincrone
         self.sincronaAzione.preCondizione(spazio,legal_moves,mAttS,agent)
 
+        mAttT = (mAttS+mAttA)
         # Per tutte le mosse asincrone
-        if not(any(tupla[1] == 1 for tupla in self.mosseAsincroneRunning for i in range(mAttA))):
-            self.asincronaAzione.preCondizione(spazio,legal_moves,mAttS,mAttA,agent)
+        for mossa in range(mAttS,mAttT,1):
+            if not(any(tupla[1] == 1 for tupla in self.mosseAsincroneRunning)):
+                self.asincronaAzione.preCondizione(spazio,legal_moves,mAttS,mAttT,agent)
 
 
     def reward(self,azione):

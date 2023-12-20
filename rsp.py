@@ -121,7 +121,7 @@ class raw_env(AECEnv):
     def __init__(self, render_mode=None):
 
         # Questa è la truncation cosi esce per non girare all'infinito
-        self.NUM_ITERS = 1000
+        self.NUM_ITERS = 10
 
         # Lo utilizzo affinche termini quando entrambi i due agenti, in maniera conseutiva hanno a disposizione
         # solo mosse noop selezionabili:
