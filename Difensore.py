@@ -70,6 +70,10 @@ class Difensore(Agente):
             t = 0.5
         else:
             agente = agenteMossaAsincrona(self.asincronaAzione,action,spazio,agent)
+
+        # ovvero se la mossa è noop non modifica il timer
+        if action == timer:
+            t = 0
         
         spazio[agent][timer] += round(t,2)
         

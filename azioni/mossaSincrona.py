@@ -22,7 +22,7 @@ class mossaSincrona(azioneSincrona):
         if agent == 'attaccante':
             spazio['difensore'][action] = 1
         else:    
-            spazio['difensore'][action] = 0
+            spazio[agent][action] = 0
         
 
 

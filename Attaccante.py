@@ -47,6 +47,7 @@ class Attaccante(Agente):
         agente = 0
         # tempo mossa difensore turno precedente
         delta = abs(spazio[agent][timer]-self.lastTimer)
+        print('DELTA:',delta)
         # azzero i nop
         #spazio[agent][22] = 0
         #-----------------------------------------------------
@@ -60,8 +61,9 @@ class Attaccante(Agente):
             t = 0
 
         # ovvero se la mossa è noop non modifica il timer
-        if action != timer:
+        if action == timer:
             t = 0
+
         spazio['difensore'][timer] -= round(t,2)
         #----------------------------------------------------------------------------
         self.aggiornaMosseAsincrone(round(delta+t,2),agente,action)
