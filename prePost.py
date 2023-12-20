@@ -35,7 +35,7 @@ curva_partita = {
 
 
 # Pre condizioni codificate nell'action mask
-def preCondizioni(agent,spazio,legal_moves,mosse):
+def preCondizioni(agent,spazio,legal_moves,mosse,timer):
     # STATO
         # [ firewall([True/False])(0), blockedip([])(1), flowlimit_ips([])(2), alert([True/False])(3), honeypot_ips([])(4),
         # log_verb([0-5])(5),
@@ -47,13 +47,13 @@ def preCondizioni(agent,spazio,legal_moves,mosse):
 
     if agent == 'difensore':
         # pre condizioni del difensore
-        difensore.preCondizioni(spazio,legal_moves,mosse,agent)
+        difensore.preCondizioni(spazio,legal_moves,mosse,agent,timer)
 
     else:
         # pre condizioni dell'attaccante
         # In tutte ho inserito che se il software viene aggiornato neanche più il pscan si può fare 
         # altrimenti non ce la farebbe mai ad uscire perche deve decrementare i log
-        attaccante.preCondizioni(spazio,legal_moves,mosse,agent)
+        attaccante.preCondizioni(spazio,legal_moves,mosse,agent,timer)
         
 
     if agent == 'difensore':
@@ -143,8 +143,10 @@ def generazioneSpazioRandom(dim_obs):
     # STATO CHE AVEVO SUPPOSTO IO DI PARTENZA
     #spazio = [0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     spazio = []
-    for i in range(dim_obs):
+    for i in range(dim_obs-1):
         spazio.append(random.randint(0,1))
+    # timer
+    spazio.append(0)
 
 
     return spazio

@@ -39,12 +39,12 @@ class Difensore(Agente):
         }
 
     # Il difensore invece può eseguire una mossa solo nel caso incui il Timer è <=0 ed ogni mossa vale 1
-    def preCondizioni(self,spazio,legal_moves,mosse,agent):
+    def preCondizioni(self,spazio,legal_moves,mosse,agent,timer):
         
         mAttS = mosse[agent]['sincrone']
         mAttA = mosse[agent]['asincrone']
 
-        super().preCondizioni(spazio,legal_moves,mAttS,mAttA,agent)
+        super().preCondizioni(spazio,legal_moves,mAttS,mAttA,agent,timer)
         
 
 

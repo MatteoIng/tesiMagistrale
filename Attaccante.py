@@ -29,11 +29,11 @@ class Attaccante(Agente):
 
 
     # Se l'attaccante trova il Timer <=0 non puo eseguire e per ora facciamo che ogni azione vale 1
-    def preCondizioni(self,spazio,legal_moves,mosse,agent):     
+    def preCondizioni(self,spazio,legal_moves,mosse,agent,timer):     
         mAttS = mosse[agent]['sincrone']
         mAttA = mosse[agent]['asincrone']
 
-        super().preCondizioni(spazio,legal_moves,mAttS,mAttA,agent)
+        super().preCondizioni(spazio,legal_moves,mAttS,mAttA,agent,timer)
         
 
     def postCondizioni(self,action,spazio,agent,mosse,timer):
@@ -57,13 +57,16 @@ class Attaccante(Agente):
             t = 0.5
         else:
             agente = agenteMossaAsincrona(self.asincronaAzione,action,spazio,agent)
-         
-        spazio[agent][timer] -= round(t,2)
-        
+            t = 0
+
+        # ovvero se la mossa è noop non modifica il timer
+        if action != timer:
+            t = 0
+        spazio['difensore'][timer] -= round(t,2)
         #----------------------------------------------------------------------------
         self.aggiornaMosseAsincrone(round(delta+t,2),agente,action)
 
-        self.lastTimer = round(spazio[agent][timer],2)
+        self.lastTimer = round(spazio['difensore'][timer],2)
         #----------------------------------------------------------------------------
 
         

@@ -66,15 +66,22 @@ print(f'Mosse sincrone del difensore: {n_azioni_difensore_sincrone}')
 n_azioni_difensore_asincrone = int(lines[2])
 print(f'Mosse asincrone del difensore: {n_azioni_difensore_asincrone}')
 
+# dimensione dello stato, tutte variabili booleane + timer 
 dim_obs = 0
+# azioni attaccante e dfensore uguali, + noop (ma in numero sincrone ed asincrone puo variare)
 n_azioni = 0
-time = 0
+# posizione del timer nello spazio
+timer = 0
 if ((n_azioni_attaccante_sincrone+n_azioni_attaccante_asincrone) == (n_azioni_difensore_sincrone+n_azioni_difensore_asincrone)):
+    # ogni azione una var dello stato + timer
     dim_obs = n_azioni_attaccante_sincrone + n_azioni_attaccante_asincrone + 1
-    n_azioni = n_azioni_attaccante_sincrone + n_azioni_attaccante_asincrone
+    # mosse totali somma asincrone e sincrone + noop
+    n_azioni = n_azioni_attaccante_sincrone + n_azioni_attaccante_asincrone +1
+    # set timer
     timer = dim_obs - 1
 
 else:
+    # esce se in numero tot le mosse dell'attaccante e del difensore non sono uguali
     sys.exit('la somma delle azioni sincrone ed asincrone di ciascun agente deve essere la stessa')
 
 mosse = {
@@ -259,7 +266,7 @@ class raw_env(AECEnv):
         #[Pscan(0), Pvsftpd(1), Psmbd(2), Pphpcgi(3), Pircd(4), Pdistccd(5), Prmi(6), noOp(7)]
         legal_moves = np.zeros(n_azioni,'int8')
 
-        preCondizioni(agent,self.spazio,legal_moves,mosse)
+        preCondizioni(agent,self.spazio,legal_moves,mosse,timer)
         self.lm[agent]['mosse'] = np.copy(legal_moves)
 
         print('\t')

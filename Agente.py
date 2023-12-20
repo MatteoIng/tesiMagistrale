@@ -14,15 +14,33 @@ class Agente():
         self.tMax = 400
         self.cMax = 500
 
-    def preCondizioni(self,spazio,legal_moves,mAttS,mAttA,agent):
-        # Per tutte le mosse sincrone
-        self.sincronaAzione.preCondizione(spazio,legal_moves,mAttS,agent)
-
+    def preCondizioni(self,spazio,legal_moves,mAttS,mAttA,agent,timer):
         mAttT = (mAttS+mAttA)
-        # Per tutte le mosse asincrone
-        for mossa in range(mAttS,mAttT,1):
-            if not(any(tupla[1] == 1 for tupla in self.mosseAsincroneRunning)):
-                self.asincronaAzione.preCondizione(spazio,legal_moves,mAttS,mAttT,agent)
+
+        if (spazio['difensore'][timer] <=0 and agent == 'difensore'):
+            # Per tutte le mosse sincrone
+            self.sincronaAzione.preCondizione(spazio,legal_moves,mAttS,agent)
+
+            # Per tutte le mosse asincrone
+            for mossa in range(mAttS,mAttT,1):
+                if not(any(tupla[1] == 1 for tupla in self.mosseAsincroneRunning)):
+                    self.asincronaAzione.preCondizione(spazio,legal_moves,mAttS,mAttT,agent)
+        
+        if (spazio['difensore'][timer] >=0 and agent == 'attaccante'):
+            # Per tutte le mosse sincrone
+            self.sincronaAzione.preCondizione(spazio,legal_moves,mAttS,agent)
+
+            # Per tutte le mosse asincrone
+            for mossa in range(mAttS,mAttT,1):
+                if not(any(tupla[1] == 1 for tupla in self.mosseAsincroneRunning)):
+                    self.asincronaAzione.preCondizione(spazio,legal_moves,mAttS,mAttT,agent)
+
+        # controllo che nessuna mossa sia eseguibile 
+        check = [ not(legal_moves[i]) for i in range(len(legal_moves)-1)]
+        if all(check):
+            # abilito la noop
+            legal_moves[timer] = 1
+        
 
 
     def reward(self,azione):
