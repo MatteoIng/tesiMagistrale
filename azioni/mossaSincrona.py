@@ -1,6 +1,13 @@
 from azioneSincrona import azioneSincrona
 from azioneAsincrona import azioneAsincrona
 import time
+import random 
+
+# Nel paper abbiamo che l'attaccante incrementa un contatore con una probabilità di 0.05 (5%??)
+# il difensore lo decrementa con una probabilita di 1/10 (10%?)
+# ogni azione sincrona corrisponde una componente nello spazio
+# l'attaccante riesce nell'attacco con una probabilità pari al 5%
+# il difensore al 10%
 
 class mossaSincrona(azioneSincrona):
     
@@ -19,10 +26,13 @@ class mossaSincrona(azioneSincrona):
                     legal_moves[i] = 0
     
     def postCondizione(self,spazio,agent,action):
+        prob = round(random.random(),2)
         if agent == 'attaccante':
-            spazio['difensore'][action] = 1
+            if prob <= 0.05 :
+                spazio['difensore'][action] = 1
         else:    
-            spazio[agent][action] = 0
+            if prob <= 0.1 :
+                spazio[agent][action] = 0
         
 
 

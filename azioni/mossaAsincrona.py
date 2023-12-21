@@ -1,4 +1,7 @@
 from azioneAsincrona import azioneAsincrona
+import random
+
+# qui ho implementato la stessa idea delle mosse sincrone
 
 class mossaAsincrona(azioneAsincrona):
     def __init__(self):
@@ -20,8 +23,11 @@ class mossaAsincrona(azioneAsincrona):
                 legal_moves[pos] = 1
 
     def postCondizione(self,spazio,agent,action):
-        print(f'MODIFICO {action} di {agent}')
+        prob = round(random.random(),2)
         if agent == 'attaccante':
-            spazio['difensore'][action] = 1
+            if prob <= 0.05 :
+                spazio['difensore'][action] = 1
         else:    
-            spazio['difensore'][action] = 0
+            if prob <= 0.1 :
+                spazio[agent][action] = 0
+        
