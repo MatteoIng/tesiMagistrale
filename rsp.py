@@ -13,38 +13,6 @@ from prePost import postCondizioni,reward,terminationPartita,reward_mosse,curva_
 import sys
 import os
 
-# metto una copia delle legal moves così che lastmossa è nop solo se era l'unica disponibile
-
-# 7 attacchi (pscan,pvsftpd,psmbd,pphpcgi,pircd,pdistccd,prmi) hanno una probabilità con tui il difensore lo valuta
-# 0 < T1 < T2 < 1 e p < T1 rumore, T1 < p < T2 possibile attacco (prevenzione), p > T2 attacco by IDS (contromisure),
-# p=1 attacco noto e strategia da attuare
-# Lo stato del difensore è composto da: 7 p (una per ogni attacco) + 14 variabili di sistema,
-# presumibilmente l'attaccante ora vede tutto per un taining più efficace
-
-# il difensore ha 18 azioni, 21 componenti nello stato 
-# l'attaccante ne ha 7, lo stato esamina quello del difensore 
-# considererei lo stato clean quello di partenza e lo stato target una configurazione delle anomalie innocua (DA DEFINIRE BENE)
-# per l'attaccante qual'è lo stato target di vittoria??
-
-# PER ORA:
-# ATTACCANTE 
-# azioni : 3 (come gli attacchi).. IMPEGANTIVO OGNI VOLTA STARE A CODIFICARE UNO SCENARIO
-# lo spazio monitora quello del difensore
-# VINCE: per semplicità metto per ora che 2 mossE PER FARE BINGO (0 e 2: 0 da 0 a 6 e 6 da 6 a 14)
-
-# DIFENSORE
-# azioni : 14 (sono dippiù perche 1 azioni può modificare più variabili ma per ora facciamo 1 azione 1 variabile)
-# 14 attributi -> observation (nel paper non tutti true/false per ora 14 bool)
-# VINCE: quando spazio TUTTI TRUE, ma credo che punti a non morire mai
-
-# L'OTTIMO PER IL DIFENSORE E FAR SALIRE SEMPRE LA REWARD PERCHE NON MUORE E RIESCE SEMPRE A DIFENDERSI
-# L'ATTACCANTE DEVE TROVARE SUBITO LA COMBO VINCENTE (2 MOSSE)
-
-# E LE SUE REWARD DIMINUISCONO COL TEMPO, PERCHÈ SE IL DIFENSORE NEL CASO OTTIMO IN AL PIÙ 13 MOSSE VINCEREBBE
-# PERCHE TUTTI FALSE UN SOLO TRUE, L'ATTACCANTE SCEGLIE SEMPRE LA MOSSA DOVE HA GIA FALSE, E AD OGNI SUO TURNO
-# SCEGLIE UNA MOSSA BUONA CHE GLI CAMBIA UNA VARIABILE, 
-# CREDO CHE PERDA SEMPRE PER QUESTO MOTIVO, OTTIENE PIU REWARD SE RESISTE PIUTTOSTO CHE VINCERE)
-
 #------------------------------------- Lettura conf ---------------------------------#
 conf = open("conf.txt", "r")
 lines = conf.readlines()
@@ -153,25 +121,9 @@ class raw_env(AECEnv):
         }
         
         # STATO
-        # [ firewall([True/False])(0), blockedip([])(1), flowlimit_ips([])(2), alert([True/False])(3), honeypot_ips([])(4),
-        # log_verb([0-5])(5),
-        # active([True/False])(6), quarantined([True/False])(7), rebooted([True/False])(8), backup([True/False])(9),
-        # updated([True/False])(10),
-        # manuallySolved([True/False])(11), everQuarantined([True/False])(12), everShutDown([True/False])(13),
-        # +
-        # pscan([0-1])(14), pvsftpd([0-1])(15), psmbd([0-1])(16), pphpcgi([0-1])(17), pircd([0-1])(18), pdistccd([0-1])(19), prmi([0-1])(20),
-        # timer(21),noop(22)]
-
-        # per ora non lo sto usando lo spazio dell'attaccante
-        #self.spazio[self.possible_agents[0]] = [False]
-        # Mi serve solo per rimuovere un wrap per usare il dizionario per l'action mask MA NON LO STO USANDO
+        # [per ogni var 1 attacco diff e att,...,timer]
 
         print('Spazii:',self.spazio)
-
-        # optional: a mapping between agent name and ID
-        """ self.agent_name_mapping = dict(
-            zip(self.possible_agents, list(range(len(self.possible_agents))))
-        ) """
 
         # optional: we can define the observation and action spaces here as attributes to be used in their corresponding methods
         # SOLITAMENTE ALGORITMI ACCETTANO TUTTI DISCRETE, 1 VAL 1 MOSSA
@@ -182,13 +134,10 @@ class raw_env(AECEnv):
                 Discrete(n_azioni_) for i in self.possible_agents
             } """
     
-        # ATTACCANTE: attacchi=[Pscan(0), Pvsftpd(1), Psmbd(2), Pphpcgi(3), Pircd(4), Pdistccd(5), Prmi(6), noOp(7)]
+        # ATTACCANTE: attacchi=[nSinc + mAsinc]
         self._action_spaces[self.possible_agents[0]] = Discrete(n_azioni)
 
-        # DIFENSORE: 18 azioni= [GenerateAlert(0), FirewallActivation(1), BlockSourceIp(2), UnblockSourceIp(3),
-        # FlowRateLimit(4), UnlimitFlowRate(5), RedirectToHoneypot(6), UnHoneypot(7), IncreaseLog(8),
-        # DecreaseLog(9), QuarantineHost(10), UnQuarantineHost(11), ManualResolution(12), SystemReboot(13),
-        # SystemShutdown(14), SystemStart(15), BackupHost(16), SoftwareUpdate(17), noOp(18)]
+        # DIFENSORE:  azioni= [xSinc + yAsinc]
         self._action_spaces[self.possible_agents[1]] = Discrete(n_azioni)
 
         # DEVE ESSERE DELLA STESSA STRUTTURA DEL RITORNO DI observe() 
@@ -196,15 +145,7 @@ class raw_env(AECEnv):
         # lo spazio dell'attaccante per ora non viene utilizzato
         # Me ne basta uno solo
 
-        # [ firewall([True/False])(0), blockedip([])(1), flowlimit_ips([])(2), alert([True/False])(3), honeypot_ips([])(4),
-        # log_verb([0-5])(5),
-	    # active([True/False])(6), quarantined([True/False])(7), rebooted([True/False])(8), backup([True/False])(9),
-        # updated([True/False])(10),
-	    # manuallySolved([True/False])(11), everQuarantined([True/False])(12), everShutDown([True/False])(13),
-	    # +
-	    # pscan([0-1])(14), pvsftpd([0-1])(15), psmbd([0-1])(16), pphpcgi([0-1])(17), pircd([0-1])(18), pdistccd([0-1])(19), prmi([0-1])(20),]
-
-        #N = len(self.spazio['difensore'])
+        # [n+mVar + timer]
 
         self._observation_spaces = {
             i : Dict(
@@ -245,25 +186,6 @@ class raw_env(AECEnv):
     def observe(self, agent):
         # PRE CONDIZIONI
 
-        # STATO
-        # [ firewall([True/False])(0), blockedip([])(1), flowlimit_ips([])(2), alert([True/False])(3), honeypot_ips([])(4),
-        # log_verb([0-5])(5),
-	    # active([True/False])(6), quarantined([True/False])(7), rebooted([True/False])(8), backup([True/False])(9),
-        # updated([True/False])(10),
-	    # manuallySolved([True/False])(11), everQuarantined([True/False])(12), everShutDown([True/False])(13),
-	    # +
-	    # pscan([0-1])(14), pvsftpd([0-1])(15), psmbd([0-1])(16), pphpcgi([0-1])(17), pircd([0-1])(18), pdistccd([0-1])(19), prmi([0-1])(20),]
-
-        # SERVE A FAR SI CHE IN UNO STATO ALCUNE AZIONI NON SIANO SELEZIONABILI
-
-        # DIFENSORE AZIONI
-        # [GenerateAlert(0), FirewallActivation(1), BlockSourceIp(2), UnblockSourceIp(3), FlowRateLimit(4), UnlimitFlowRate(5), 
-		# RedirectToHoneypot(6), UnHoneypot(7), IncreaseLog(8), DecreaseLog(9), QuarantineHost(10), UnQuarantineHost(11),
-		# ManualResolution(12), SystemReboot(13), SystemShutdown(14), SystemStart(15), BackupHost(16), SoftwareUpdate(17),
-        # noOp(18)]
-        
-        # ATTACCANTE AZIONI
-        #[Pscan(0), Pvsftpd(1), Psmbd(2), Pphpcgi(3), Pircd(4), Pdistccd(5), Prmi(6), noOp(7)]
         legal_moves = np.zeros(n_azioni,'int8')
 
         preCondizioni(agent,self.spazio,legal_moves,mosse,timer)

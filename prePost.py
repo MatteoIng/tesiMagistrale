@@ -13,17 +13,11 @@ difensore = Difensore()
 T1 = 0.33
 T2 = 0.66
 
-#mosseDifensore = ['Generate alert','FirewallActivation','BlockSourceIp','UnblockSourceIp','FlowRateLimit','UnlimitFlowRate',
-#                  'RedirectToHoneypot','UnRedirectToHoneypot','IncreaseLog','DecreaseLog','QuarantineHost','UnQuarantineHost',
-#                  'ManualResolution','SystemReboot','SystemShutdown','SystemStart','BackupHost','SoftwareUpdate','noOp']
-
-#mosseAttaccante = ['Pscan','Pvsftpd','Psmbd','Pphpcgi','Pircd','Pdistccd','Prmi', 'noOp']
-
 
 # qui per ogni partita mette numero di mosse fatte e le cumulative reward finali di quella partita
 reward_mosse = {
-    "attaccante":[],
-    "difensore":[]
+    "attaccante":[(0,0)],
+    "difensore":[(0,0)]
 }
 
 # qui mette tutte le reward di ogni partita, le cumulative reward, ovvero i contatori
@@ -37,13 +31,6 @@ curva_partita = {
 # Pre condizioni codificate nell'action mask
 def preCondizioni(agent,spazio,legal_moves,mosse,timer):
     # STATO
-        # [ firewall([True/False])(0), blockedip([])(1), flowlimit_ips([])(2), alert([True/False])(3), honeypot_ips([])(4),
-        # log_verb([0-5])(5),
-        # active([True/False])(6), quarantined([True/False])(7), rebooted([True/False])(8), backup([True/False])(9),
-        # updated([True/False])(10),
-        # manuallySolved([True/False])(11), everQuarantined([True/False])(12), everShutDown([True/False])(13),
-        # +
-        # pscan([0-1])(14), pvsftpd([0-1])(15), psmbd([0-1])(16), pphpcgi([0-1])(17), pircd([0-1])(18), pdistccd([0-1])(19), prmi([0-1])(20),]
 
     if agent == 'difensore':
         # pre condizioni del difensore
@@ -70,15 +57,6 @@ def preCondizioni(agent,spazio,legal_moves,mosse,timer):
 # APPLICA L'AZIONE ALLo SPAZIO 'LOGICA'
 def postCondizioni(action,spazio,agent,mosse,timer,lastTimer):
     # Post COndizioni
-    # STATO
-    # [ firewall([True/False])(0), blockedip([])(1), flowlimit_ips([])(2), alert([True/False])(3), honeypot_ips([])(4),
-    # log_verb([0-5])(5),
-    # active([True/False])(6), quarantined([True/False])(7), rebooted([True/False])(8), backup([True/False])(9),
-    # updated([True/False])(10),
-    # manuallySolved([True/False])(11), everQuarantined([True/False])(12), everShutDown([True/False])(13),
-    # +
-    # pscan([0-1])(14), pvsftpd([0-1])(15), psmbd([0-1])(16), pphpcgi([0-1])(17), pircd([0-1])(18), pdistccd([0-1])(19), prmi([0-1])(20),]
-    
     mossaValida = True
 
     if agent == 'difensore':
@@ -127,21 +105,13 @@ def terminationPartita(spazio,lm,num_moves,NUM_ITERS):
             # se non puo arrestarlo neanche quello provo a vedere il num di mosse
             # con noOp sempre selezionabili mi dovrebbe uscire con la condizione nell'if
             if num_moves >= NUM_ITERS:
-                val = True
+                val = False
     return val
 
 
 # Randomicità dello stato
 def generazioneSpazioRandom(dim_obs):
-    # STATO
-        # [ firewall([True/False])(0), blockedip([])(1), flowlimit_ips([])(2), alert([True/False])(3), honeypot_ips([])(4),
-        # log_verb([0-5])(5),
-        # active([True/False])(6), quarantined([True/False])(7), rebooted([True/False])(8), backup([True/False])(9),
-        # updated([True/False])(10),
-        # manuallySolved([True/False])(11), everQuarantined([True/False])(12), everShutDown([True/False])(13),
-        # +
-        # pscan([0-1])(14), pvsftpd([0-1])(15), psmbd([0-1])(16), pphpcgi([0-1])(17), pircd([0-1])(18), pdistccd([0-1])(19), prmi([0-1])(20),
-        # timer(21),noop(22)]
+    # STATO [x+yVar + timer]
     # STATO CHE AVEVO SUPPOSTO IO DI PARTENZA
     #spazio = [0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     spazio = []
