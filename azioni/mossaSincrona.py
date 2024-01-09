@@ -26,13 +26,21 @@ class mossaSincrona(azioneSincrona):
                     legal_moves[i] = 0
     
     def postCondizione(self,spazio,agent,action):
-        prob = round(random.random(),2)
+        
+        soglia = round(random.random(),2)
+
         if agent == 'attaccante':
-            if prob <= 0.05 :
-                spazio['difensore'][action] = 1
+                for i in range(action):
+                    # probabilità per ogni mossa
+                    #prob = round(random.random(),2)
+                    #if prob <= soglia :
+                    spazio['difensore'][i] = 1
         else:    
-            if prob <= 0.1 :
-                spazio[agent][action] = 0
+            for i in range(action):
+                    # probabilità per ogni mossa
+                    #prob = round(random.random(),2)
+                    #if prob <= soglia :
+                    spazio['difensore'][i] = 0
         
 
 

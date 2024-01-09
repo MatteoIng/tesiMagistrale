@@ -105,7 +105,7 @@ def terminationPartita(spazio,lm,num_moves,NUM_ITERS):
             # se non puo arrestarlo neanche quello provo a vedere il num di mosse
             # con noOp sempre selezionabili mi dovrebbe uscire con la condizione nell'if
             if num_moves >= NUM_ITERS:
-                val = False
+                val = True
     return val
 
 

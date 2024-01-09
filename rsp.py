@@ -16,23 +16,31 @@ import os
 #------------------------------------- Lettura conf ---------------------------------#
 conf = open("conf.txt", "r")
 lines = conf.readlines()
-for i in range(len(lines)-1):
-    lines[i] = int(lines[i].strip().split('= ')[1])
+print(lines)
+for i in range(len(lines)):
+    p = lines[i].strip().split('= ')
+    print(int(p[1]))
+    lines[i] = int(p[1])
 
-n_agenti = int(lines[0])
+n_agenti = lines[0]
 print(f'Numero agenti : {n_agenti}')
 
-n_azioni_attaccante_sincrone = int(lines[2])
+n_azioni_attaccante_sincrone = lines[1]
 print(f'Mosse sincrone dell attaccante: {n_azioni_attaccante_sincrone}')
 
-n_azioni_attaccante_asincrone = int(lines[2])
+n_azioni_attaccante_asincrone = lines[2]
 print(f'Mosse asincrone dell attaccante: {n_azioni_attaccante_asincrone}')
 
-n_azioni_difensore_sincrone = int(lines[2])
+n_azioni_difensore_sincrone = lines[3]
 print(f'Mosse sincrone del difensore: {n_azioni_difensore_sincrone}')
 
-n_azioni_difensore_asincrone = int(lines[2])
+n_azioni_difensore_asincrone = lines[4]
 print(f'Mosse asincrone del difensore: {n_azioni_difensore_asincrone}')
+
+somma_attaccante = n_azioni_attaccante_sincrone+n_azioni_attaccante_asincrone
+print(f'somma_attaccante:{somma_attaccante}')
+somma_difensore = n_azioni_difensore_sincrone+n_azioni_difensore_asincrone
+print(f'somma_attaccante:{somma_difensore}')
 
 # dimensione dello stato, tutte variabili booleane + timer 
 dim_obs = 0
@@ -40,7 +48,7 @@ dim_obs = 0
 n_azioni = 0
 # posizione del timer nello spazio
 timer = 0
-if ((n_azioni_attaccante_sincrone+n_azioni_attaccante_asincrone) == (n_azioni_difensore_sincrone+n_azioni_difensore_asincrone)):
+if ((somma_attaccante) == (somma_difensore)):
     # ogni azione una var dello stato + timer
     dim_obs = n_azioni_attaccante_sincrone + n_azioni_attaccante_asincrone + 1
     # mosse totali somma asincrone e sincrone + noop

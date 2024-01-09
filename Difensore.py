@@ -1,23 +1,5 @@
 from Agente import Agente
-from azioni.GenerateAlert import GenerateAlert 
-from azioni.FirewallActivation import FirewallActivation
-from azioni.BlockIp import BlockIp 
-from azioni.UnBlockIp import UnBlockIp
-from azioni.LimitFlowRate import LimitFlowRate
-from azioni.UnLimitFlowRate import UnLimitFlowRate
-from azioni.RedirectHoneypot import RedirectHoneypot
-from azioni.UnRedirectHoneypot import UnRedirectHoneypot
-from azioni.IncreaseLog import IncreaseLog
-from azioni.DecreaseLog import DecreaseLog
-from azioni.Quarantine import Quarantine
-from azioni.UnQuarantine import UnQuarantine
-from azioni.ManualResolution import ManualResolution
-from azioni.Reboot import Reboot
-from azioni.ShutDown import ShutDown
-from azioni.Start import Start
-from azioni.Backup import Backup
-from azioni.Update import Update
-from azioni.noOp import noOp
+
 from azioni.mossaAsincrona import mossaAsincrona
 from azioni.mossaSincrona import mossaSincrona
 

@@ -1,13 +1,5 @@
 from Agente import Agente
 
-from azioni.Pscan import Pscan
-from azioni.Pvsftpd import Pvsftpd
-from azioni.Psmbd import Psmbd
-from azioni.Pphpcgi import Pphpcgi
-from azioni.Pircd import Pircd
-from azioni.Pdistccd import Pdistccd
-from azioni.Prmi import Prmi
-from azioni.noOp import noOp
 from azioni.mossaAsincrona import mossaAsincrona
 from azioni.mossaSincrona import mossaSincrona
 
