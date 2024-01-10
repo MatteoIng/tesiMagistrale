@@ -18,7 +18,6 @@ def visualizza_reward_mosse():
 
 
 
-    # Grafico 4
     # insieme di 2 e 3
     app = dati_dict['attaccante']
     bpp = dati_dict['difensore']
@@ -43,9 +42,40 @@ def visualizza_reward_mosse():
     plt.legend(['attaccante','difensore'])
 
 
+    # reward per epoca
+    app = dati_dict['attaccante']
+    bpp = dati_dict['difensore']
+    """ print('APP:',app)
+    print('BPP:',bpp) """
+
+    yA = []
+    yB = []
+
+    aPPEND = 0
+    bPPEND = 0
+    for i in range(len(app)):
+        aPPEND+=app[i][1]
+        bPPEND+=bpp[i][1]
+        if i%10 == 0:
+            #print(i)
+            #print(c/10)
+            yA.append(aPPEND/10)
+            yB.append(bPPEND/10)
+            aPPEND = 0
+            bPPEND = 0
+    """ print('YA:',yA)
+    print('YB:',yB) """
+    plt.figure()
+    plt.title('reward per epoca')
+    plt.ylabel('reward')
+    plt.xlabel('epoche')
+    #plt.xlabel('numero mosse per partita')
+    plt.plot(np.arange(len(yA)),yA)
+    plt.plot(np.arange(len(yB)),yB)
+    plt.legend(['attaccante','difensore'])
 
 
-    # Grafico 1
+
     # il numero di mosse fatte nel tempo, per partita
     y = []
     for i in a :
@@ -59,7 +89,6 @@ def visualizza_reward_mosse():
 
 
 
-    # Grafico 2
     # reward rispetto al numero di mosse fatte dall'attaccante
     x = []
     y = []
