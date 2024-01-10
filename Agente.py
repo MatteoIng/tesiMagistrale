@@ -11,8 +11,8 @@ class Agente():
         self.wt = 1
         self.wc = 0
         self.wi = 0
-        self.tMax = 400
-        self.cMax = 500
+        self.tMax = 1
+        self.cMax = 1
 
     def preCondizioni(self,spazio,legal_moves,mAttS,mAttA,agent,timer):
         mAttT = (mAttS+mAttA)
@@ -50,6 +50,7 @@ class Agente():
         # VEDERE ALTRE IDEE MA CONSIDERARE ANCHE L'INTRODUZIONE DELL NMOSSE O DEL TEMPO
         # calcolo = -(-self.wt*(azione[0]/self.tMax)-self.wc*(azione[1]/self.cMax)-self.wi*azione[2])
         calcolo = -(-self.wt*(azione[0]/self.tMax))
+        #calcolo = azione[0]
         print('Reward:',calcolo)
         return calcolo
     

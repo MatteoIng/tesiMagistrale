@@ -16,10 +16,10 @@ import os
 #------------------------------------- Lettura conf ---------------------------------#
 conf = open("conf.txt", "r")
 lines = conf.readlines()
-print(lines)
+#print(lines)
 for i in range(len(lines)):
     p = lines[i].strip().split('= ')
-    print(int(p[1]))
+    #print(int(p[1]))
     lines[i] = int(p[1])
 
 n_agenti = lines[0]
@@ -52,7 +52,7 @@ if ((somma_attaccante) == (somma_difensore)):
     # ogni azione una var dello stato + timer
     dim_obs = n_azioni_attaccante_sincrone + n_azioni_attaccante_asincrone + 1
     # mosse totali somma asincrone e sincrone + noop
-    n_azioni = n_azioni_attaccante_sincrone + n_azioni_attaccante_asincrone +1
+    n_azioni = n_azioni_attaccante_sincrone + n_azioni_attaccante_asincrone + 1
     # set timer
     timer = dim_obs - 1
 
@@ -314,7 +314,7 @@ class raw_env(AECEnv):
         # SI INFLUENZANO LE REWARD A VICENDA
         """ print('Mossa valida:',mossaValida)
         if mossaValida: """
-        rw = reward(agent,action,mosse)
+        rw = reward(agent,action,mosse,n_azioni)
         #if agent == 'difensore':
         self.rewards[agent] += rw
         """ else:

@@ -72,19 +72,19 @@ def postCondizioni(action,spazio,agent,mosse,timer,lastTimer):
 
 
 # VERIFICA QUANDO CALCOLARE LA REWARD, NEGLI ALTRI CASI 0
-def reward(agent,action,mosse):
+def reward(agent,action,mosse,n_azioni):
     # per la funzione di reward
     calcolo = 0
     if agent == 'attaccante':
         if action < mosse[agent]['sincrone']:
-            calcolo = attaccante.reward(attaccante.REWARD_MAP[0])
+            calcolo = attaccante.reward(attaccante.REWARD_MAP[0])/((n_azioni+1)/(action+1))
         else:
-            calcolo = attaccante.reward(attaccante.REWARD_MAP[1])
+            calcolo = attaccante.reward(attaccante.REWARD_MAP[0])/((n_azioni+1)/(action+1))
     else:
         if action < mosse[agent]['sincrone']:
-            calcolo = -attaccante.reward(attaccante.REWARD_MAP[0])
+            calcolo = -(difensore.reward(difensore.REWARD_MAP[0])/((n_azioni+1)/(action+1)))
         else:
-            calcolo = -attaccante.reward(attaccante.REWARD_MAP[1])
+            calcolo = -(difensore.reward(difensore.REWARD_MAP[0])/((n_azioni+1)/(action+1)))
     return calcolo
 
 
@@ -99,7 +99,8 @@ def terminationPartita(spazio,lm,num_moves,NUM_ITERS):
     # Consigliata dal professore
     checkNot = [not(spazio['difensore'][i]) for i in range(len(spazio['difensore'])-1)]
     check = spazio['difensore'][:(len(spazio['difensore'])-1)]
-    if (all(check) or all(checkNot)):
+    if (#all(check) or 
+        all(checkNot)):
         val = True
     else:
             # se non puo arrestarlo neanche quello provo a vedere il num di mosse

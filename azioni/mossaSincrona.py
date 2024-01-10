@@ -14,32 +14,36 @@ class mossaSincrona(azioneSincrona):
     def preCondizione(self,spazio,legal_moves,mAttS,agent):
         if agent == 'attaccante':
             for i in range(mAttS):
-                if spazio['difensore'][i] == 0 :
-                    legal_moves[i] = 1
-                else:
-                    legal_moves[i] = 0
+                for j in range(i+1):
+                    if spazio['difensore'][j] == 0 :
+                        legal_moves[i] = 1
+                        break
+                    else:
+                        legal_moves[i] = 0
         else:
             for i in range(mAttS):
-                if spazio[agent][i] == 1 :
-                    legal_moves[i] = 1
-                else:
-                    legal_moves[i] = 0
+                for j in range(i+1):
+                    if spazio[agent][i] == 1 :
+                        legal_moves[i] = 1
+                        break
+                    else:
+                        legal_moves[i] = 0
     
     def postCondizione(self,spazio,agent,action):
         
         soglia = round(random.random(),2)
 
         if agent == 'attaccante':
-                for i in range(action):
+                for i in range(action+1):
                     # probabilità per ogni mossa
                     #prob = round(random.random(),2)
                     #if prob <= soglia :
                     spazio['difensore'][i] = 1
         else:    
-            for i in range(action):
+            for i in range(action+1):
                     # probabilità per ogni mossa
                     #prob = round(random.random(),2)
-                    #if prob <= soglia :
+                    #if prob <= soglia :1
                     spazio['difensore'][i] = 0
         
 
