@@ -24,16 +24,22 @@ class Agente():
             # Per tutte le mosse asincrone
             for mossa in range(mAttS,mAttT,1):
                 if not(any(tupla[1] == mossa for tupla in self.mosseAsincroneRunning)):
-                    self.asincronaAzione.preCondizione(spazio,legal_moves,mossa,agent)
+                    self.asincronaAzione.preCondizione(spazio,legal_moves,mossa,agent,mAttS)
+                else:
+                    legal_moves[mossa] = 0
         
         if (spazio['difensore'][timer] >=0 and agent == 'attaccante'):
             # Per tutte le mosse sincrone
             self.sincronaAzione.preCondizione(spazio,legal_moves,mAttS,agent)
 
             # Per tutte le mosse asincrone
-            for mossa in range(mAttS,mAttT,1):
+            for mossa in range(mAttS,mAttT):
+                print(f'PRECONDIZIONI MOSSE ASINCRONE:{mossa}')
+                # mossa asincrona non in running
                 if not(any(tupla[1] == mossa for tupla in self.mosseAsincroneRunning)):
-                    self.asincronaAzione.preCondizione(spazio,legal_moves,mossa,agent)
+                    self.asincronaAzione.preCondizione(spazio,legal_moves,mossa,agent,mAttS)
+                else:
+                    legal_moves[mossa] = 0
 
         # controllo che nessuna mossa sia eseguibile 
         check = [ not(legal_moves[i]) for i in range(len(legal_moves)-1)]
@@ -57,7 +63,7 @@ class Agente():
     def reset(self):
         self.mosseAsincroneRunning = []
 
-    def aggiornaMosseAsincrone(self,tot,agente,action):
+    def aggiornaMosseAsincrone(self,tot,agente,action,mAttS):
         # Questo mi servirebbe a far scattare il tempo delle mosse asincrone
         # calcolo anche il delta della mossa del difensore + dell'attaccante
         print('Mosse Asincrone in Running PRIMA della mossa:',self.mosseAsincroneRunning)
@@ -70,7 +76,7 @@ class Agente():
         for i in self.mosseAsincroneRunning:
             print(i)
             # richiama il metodo dell'agente asincrono per aggiornare il tempo sulla mossa ed eventualmente applicarla
-            val = i[0].stepSuccessivo(tot,i[1])
+            val = i[0].stepSuccessivo(tot,i[1],mAttS)
             if val :
                 listaRimozioni.append(i)
 

@@ -59,7 +59,7 @@ class Difensore(Agente):
         spazio[agent][timer] += round(t,2)
         
         #----------------------------------------------------------------------------
-        self.aggiornaMosseAsincrone(round(delta+t,2),agente,action)
+        self.aggiornaMosseAsincrone(round(delta+t,2),agente,action,mAttS)
 
         #lastTimer = round(spazio[agent][timer],2)
         #----------------------------------------------------------------------------
