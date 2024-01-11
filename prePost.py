@@ -72,26 +72,28 @@ def postCondizioni(action,spazio,agent,mosse,timer,lastTimer):
 
 
 # VERIFICA QUANDO CALCOLARE LA REWARD, NEGLI ALTRI CASI 0
-def reward(agent,action,mosse,n_azioni,n_azioni_attaccante_asincrone,n_azioni_difensore_asincrone):
+def reward(agent,action,mosse,n_azioni,n_azioni_attaccante_sincrone,n_azioni_difensore_sincrone):
     # per la funzione di reward
     calcolo = 0
     val = action
     if agent == 'attaccante':
         # cosi la prima sincrona ha lo stesso costo della prima asincrona
-        if action > n_azioni_attaccante_asincrone:
-            val = action-n_azioni_attaccante_asincrone
+        #if action > n_azioni_attaccante_asincrone:
+        val = action-n_azioni_attaccante_sincrone
+        print(f'VAL MOSSA ASINCRONA {val}')
 
         if action < mosse[agent]['sincrone']:
-            calcolo = attaccante.reward(attaccante.REWARD_MAP[0])/((n_azioni+1)/(val+1))
+            calcolo = attaccante.reward(attaccante.REWARD_MAP[0])/((n_azioni+1)/(action+1))
         else:
             calcolo = attaccante.reward(attaccante.REWARD_MAP[0])/((n_azioni+1)/(val+1))
     else:
         # cosi la prima sincrona ha lo stesso costo della prima asincrona
-        if action > n_azioni_difensore_asincrone:
-            val = action-n_azioni_difensore_asincrone
+        #if action > n_azioni_difensore_asincrone:
+        val = action-n_azioni_difensore_sincrone
+        print(f'VAL MOSSA ASINCRONA {val}')
 
         if action < mosse[agent]['sincrone']:
-            calcolo = -(difensore.reward(difensore.REWARD_MAP[0])/((n_azioni+1)/(val+1)))
+            calcolo = -(difensore.reward(difensore.REWARD_MAP[0])/((n_azioni+1)/(action+1)))
         else:
             calcolo = -(difensore.reward(difensore.REWARD_MAP[0])/((n_azioni+1)/(val+1)))
     return calcolo
