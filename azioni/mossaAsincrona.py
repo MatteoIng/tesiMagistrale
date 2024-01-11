@@ -13,11 +13,11 @@ class mossaAsincrona(azioneAsincrona):
             
             for i in range(mAttS,len(legal_moves)):
                 for j in range(mAttS,i):
-                    print(f'POS {j} SPAZIO ATT {spazio}')
+                    #print(f'POS {j} SPAZIO ATT {spazio}')
                     if spazio['difensore'][j] == 1 :
-                        print(f'LEGAL PRIMA {legal_moves}')
+                        #print(f'LEGAL PRIMA {legal_moves}')
                         legal_moves[pos] = 0
-                        print(f'LEGAL DOPO {legal_moves}')
+                        #print(f'LEGAL DOPO {legal_moves}')
                         break
                     else:
                         legal_moves[pos] = 1
@@ -25,11 +25,11 @@ class mossaAsincrona(azioneAsincrona):
             
             for i in range(mAttS,len(legal_moves)):
                 for j in range(mAttS,i):
-                    print(f'POS {j} SPAZIO DIFF {spazio}')
+                    #print(f'POS {j} SPAZIO DIFF {spazio}')
                     if spazio['difensore'][j] == 0 :
-                        print(f'LEGAL PRIMA {legal_moves}')
+                        #print(f'LEGAL PRIMA {legal_moves}')
                         legal_moves[pos] = 0
-                        print(f'LEGAL DOPO {legal_moves}')
+                        #print(f'LEGAL DOPO {legal_moves}')
                         break
                     else:
                         legal_moves[pos] = 1
