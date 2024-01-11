@@ -43,9 +43,12 @@ class Agente():
 
         # controllo che nessuna mossa sia eseguibile 
         check = [ not(legal_moves[i]) for i in range(len(legal_moves)-1)]
+        print(f'CHECK NOOP:{check}')
         if all(check):
             # abilito la noop
             legal_moves[timer] = 1
+        else:
+            legal_moves[timer] = 0
         
 
 

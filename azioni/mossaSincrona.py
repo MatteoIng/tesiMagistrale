@@ -14,7 +14,7 @@ class mossaSincrona(azioneSincrona):
     def preCondizione(self,spazio,legal_moves,mAttS,agent):
         if agent == 'attaccante':
             # da 0 a 49 escluso
-            for i in range(mAttS):
+            for i in range(len(legal_moves)):
                 # i da 1 a 49 escluso
                 for j in range(i+1):
                     if spazio['difensore'][j] == 0 :
@@ -23,7 +23,7 @@ class mossaSincrona(azioneSincrona):
                     else:
                         legal_moves[i] = 0
         else:
-            for i in range(mAttS):
+            for i in range(len(legal_moves)):
                 for j in range(i+1):
                     if spazio[agent][j] == 1 :
                         legal_moves[i] = 1
