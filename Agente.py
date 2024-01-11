@@ -34,7 +34,7 @@ class Agente():
 
             # Per tutte le mosse asincrone
             for mossa in range(mAttS,mAttT):
-                print(f'PRECONDIZIONI MOSSE ASINCRONE:{mossa}')
+                #print(f'PRECONDIZIONI MOSSE ASINCRONE:{mossa}')
                 # mossa asincrona non in running
                 if not(any(tupla[1] == mossa for tupla in self.mosseAsincroneRunning)):
                     self.asincronaAzione.preCondizione(spazio,legal_moves,mossa,agent,mAttS)
@@ -43,7 +43,7 @@ class Agente():
 
         # controllo che nessuna mossa sia eseguibile 
         check = [ not(legal_moves[i]) for i in range(len(legal_moves)-1)]
-        print(f'CHECK NOOP:{check}')
+        #print(f'CHECK NOOP:{check}')
         if all(check):
             # abilito la noop
             legal_moves[timer] = 1
