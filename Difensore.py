@@ -54,6 +54,7 @@ class Difensore(Agente):
         else:
             if action != timer:
                 agente = agenteMossaAsincrona(self.asincronaAzione,action,spazio,agent)
+                agente.mossa.tempoAttesa = agente.mossa.tempoAttuazione
 
         
         spazio[agent][timer] += round(t,2)

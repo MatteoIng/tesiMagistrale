@@ -71,7 +71,7 @@ class Agente():
         # calcolo anche il delta della mossa del difensore + dell'attaccante
         print('Mosse Asincrone in Running PRIMA della mossa:',self.mosseAsincroneRunning)
         print('len:',len(self.mosseAsincroneRunning))
-
+        
         # lA LISTA RIMOZIONI la utilizzo per rimuovere tutte quelle azioni asincrone che vengono eseguite
         # non le elimino direttmente perche togliendo elementi dalla lista mentre la eseguo smonto 
         # l'ordine degli elementi rispetto l'indice
