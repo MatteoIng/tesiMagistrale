@@ -69,8 +69,8 @@ class Agente():
     def aggiornaMosseAsincrone(self,tot,agente,action,mAttS):
         # Questo mi servirebbe a far scattare il tempo delle mosse asincrone
         # calcolo anche il delta della mossa del difensore + dell'attaccante
-        print('Mosse Asincrone in Running PRIMA della mossa:',self.mosseAsincroneRunning)
-        print('len:',len(self.mosseAsincroneRunning))
+        print('Mosse Asincrone in Running PRIMA della mossa:',self.mosseAsincroneRunning)    
+        print('tot:',tot)
         
         # lA LISTA RIMOZIONI la utilizzo per rimuovere tutte quelle azioni asincrone che vengono eseguite
         # non le elimino direttmente perche togliendo elementi dalla lista mentre la eseguo smonto 
@@ -78,6 +78,8 @@ class Agente():
         listaRimozioni = []
         for i in self.mosseAsincroneRunning:
             print(i)
+            print('Tempo Attesa:',i[0].mossa.tempoAttesa)
+            print('Tempo Attuazione:',i[0].mossa.tempoAttuazione)
             # richiama il metodo dell'agente asincrono per aggiornare il tempo sulla mossa ed eventualmente applicarla
             val = i[0].stepSuccessivo(tot,i[1],mAttS)
             if val :
@@ -96,3 +98,6 @@ class Agente():
             self.mosseAsincroneRunning.append((agente,action))
 
         print('Mosse Asincrone in Running DOPO la mossa:',self.mosseAsincroneRunning)
+        for i in self.mosseAsincroneRunning:
+            print('Tempo Attesa:',i[0].mossa.tempoAttesa)
+            print('Tempo Attuazione:',i[0].mossa.tempoAttuazione)

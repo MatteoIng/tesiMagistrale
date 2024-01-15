@@ -42,18 +42,18 @@ class Difensore(Agente):
         agente = 0
         # tempo mossa difensore turno precedente
         #delta = abs(spazio[agent][timer]-self.lastTimer)
-        delta = lastTimer
+        #delta = lastTimer
         # azzero i nop
         #spazio[agent][22] = 0
         #-----------------------------------------------------
 
         # esempio prima mosse sincrone 0-9 (10) e poi 10-14 asincrone (5): 15 mosse tot 10 e 5 
-        if action < mAttS and action != timer :
+        if action < mAttS :
             self.sincronaAzione.postCondizione(spazio,agent,action)
             t = 0.5
         else:
             if action != timer:
-                agente = agenteMossaAsincrona(self.asincronaAzione,action,spazio,agent)
+                agente = agenteMossaAsincrona(mossaAsincrona(),action,spazio,agent)
                 agente.mossa.tempoAttesa = agente.mossa.tempoAttuazione
 
         
