@@ -15,9 +15,9 @@ class agenteMossaAsincrona():
     # ovvero è passato il tempo necessario all'esecuzione
     # torna true se ho eseguito la mossa così la rimuovo altrimenti false
     def stepSuccessivo(self,scalare,action,mAttS):
-        print('MOSSA:',self.mossa)
+        """ print('MOSSA:',self.mossa)
         print('Tempo Attesa:',self.mossa.tempoAttesa)
-        print('Tempo Attuazione:',self.mossa.tempoAttuazione)
+        print('Tempo Attuazione:',self.mossa.tempoAttuazione) """
         val = False
         if (self.mossa.tempoAttesa-scalare) > 0:
             self.mossa.tempoAttesa = round((self.mossa.tempoAttesa-scalare),2)

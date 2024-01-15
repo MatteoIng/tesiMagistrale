@@ -37,13 +37,16 @@ class mossaAsincrona(azioneAsincrona):
 
 
     def postCondizione(self,spazio,agent,action,mAttS):
-        prob = round(random.random(),2)
+        #soglia = round(random.random(),2)
+
         if agent == 'attaccante':
-            #if prob <= 0.05 :
+            #prob = round(random.random(),2)
+            #if prob <= soglia :
             for i in range((action+1)):
                 spazio['difensore'][i] = 1
         else:    
-            #if prob <= 0.1 :
+            #prob = round(random.random(),2)
+            #if prob <= soglia :
             for i in range((action+1)):
                 spazio['difensore'][i] = 0
         

@@ -33,7 +33,7 @@ class mossaSincrona(azioneSincrona):
     
     def postCondizione(self,spazio,agent,action):
         
-        soglia = round(random.random(),2)
+        #soglia = round(random.random(),2)
 
         if agent == 'attaccante':
                 for i in range(action+1):
@@ -45,7 +45,7 @@ class mossaSincrona(azioneSincrona):
             for i in range(action+1):
                     # probabilità per ogni mossa
                     #prob = round(random.random(),2)
-                    #if prob <= soglia :1
+                    #if prob <= soglia :
                     spazio['difensore'][i] = 0
         
 
