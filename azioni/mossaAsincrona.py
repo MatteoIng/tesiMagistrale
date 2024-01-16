@@ -12,7 +12,7 @@ class mossaAsincrona(azioneAsincrona):
         if agent == 'attaccante':
             
             #for i in range(mAttS,len(legal_moves)):
-            for j in range(pos):
+            for j in range(pos+1):
                 #print(f'pos {pos} j {j}')
                 if spazio['difensore'][j] == 0 :
                     #print(f'LEGAL PRIMA {legal_moves}')
@@ -24,7 +24,7 @@ class mossaAsincrona(azioneAsincrona):
         else:
             
             #for i in range(mAttS,len(legal_moves)):
-            for j in range(pos):
+            for j in range(pos+1):
                 #print(f'pos {pos} j {j}')
                 if spazio['difensore'][j] == 1 :
                     #print(f'LEGAL PRIMA {legal_moves}')
