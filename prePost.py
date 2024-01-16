@@ -83,9 +83,11 @@ def reward(agent,action,mosse,n_azioni,n_azioni_attaccante_sincrone,n_azioni_dif
         print(f'VAL MOSSA ASINCRONA {val}')
 
         if action < mosse[agent]['sincrone']:
-            calcolo = attaccante.reward(attaccante.REWARD_MAP[0])/((n_azioni+1)/(action+1))
+            #calcolo = attaccante.reward(attaccante.REWARD_MAP[0])/((n_azioni+1)/(action+1))
+            calcolo = (action+1 - n_azioni)/ n_azioni
         else:
-            calcolo = attaccante.reward(attaccante.REWARD_MAP[0])/((n_azioni+1)/(val+1))
+            #calcolo = attaccante.reward(attaccante.REWARD_MAP[0])/((n_azioni+1)/(val+1))
+            calcolo = (action+1 - n_azioni)/ n_azioni
     else:
         # cosi la prima sincrona ha lo stesso costo della prima asincrona
         #if action > n_azioni_difensore_asincrone:
@@ -93,9 +95,11 @@ def reward(agent,action,mosse,n_azioni,n_azioni_attaccante_sincrone,n_azioni_dif
         print(f'VAL MOSSA ASINCRONA {val}')
 
         if action < mosse[agent]['sincrone']:
-            calcolo = -(difensore.reward(difensore.REWARD_MAP[0])/((n_azioni+1)/(action+1)))
+            #calcolo = -(difensore.reward(difensore.REWARD_MAP[0])/((n_azioni+1)/(action+1)))
+            calcolo = (action+1 - n_azioni)/ n_azioni
         else:
-            calcolo = -(difensore.reward(difensore.REWARD_MAP[0])/((n_azioni+1)/(val+1)))
+            #calcolo = -(difensore.reward(difensore.REWARD_MAP[0])/((n_azioni+1)/(val+1)))
+            calcolo = (action+1 - n_azioni)/ n_azioni
     return calcolo
 
 
