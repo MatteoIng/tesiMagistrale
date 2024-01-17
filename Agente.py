@@ -7,6 +7,7 @@ class Agente():
         self.mosseAsincroneRunning = []
         # Per le mosse asincrone, per il calcolo del tempo del difensore
         #self.lastTimer = 0
+        self.mosseEseguite = []
 
         self.wt = 1
         self.wc = 0
@@ -14,30 +15,33 @@ class Agente():
         self.tMax = 1
         self.cMax = 1
 
+    def lenMosseEseguite(self):
+        return len(self.mosseEseguite)
+
     def preCondizioni(self,spazio,legal_moves,mAttS,mAttA,agent,timer):
         mAttT = (mAttS+mAttA)
 
         if (spazio['difensore'][timer] <=0 and agent == 'difensore'):
             # Per tutte le mosse sincrone
-            self.sincronaAzione.preCondizione(spazio,legal_moves,mAttS,agent)
+            self.sincronaAzione.preCondizione(spazio,legal_moves,mAttS,agent,self.mosseEseguite)
 
             # Per tutte le mosse asincrone
             for mossa in range(mAttS,mAttT,1):
                 if not(any(tupla[1] == mossa for tupla in self.mosseAsincroneRunning)):
-                    self.asincronaAzione.preCondizione(spazio,legal_moves,mossa,agent,mAttS)
+                    self.asincronaAzione.preCondizione(spazio,legal_moves,mossa,agent,mAttS,self.mosseEseguite)
                 else:
                     legal_moves[mossa] = 0
         
         if (spazio['difensore'][timer] >=0 and agent == 'attaccante'):
             # Per tutte le mosse sincrone
-            self.sincronaAzione.preCondizione(spazio,legal_moves,mAttS,agent)
+            self.sincronaAzione.preCondizione(spazio,legal_moves,mAttS,agent,self.mosseEseguite)
 
             # Per tutte le mosse asincrone
             for mossa in range(mAttS,mAttT):
                 #print(f'PRECONDIZIONI MOSSE ASINCRONE:{mossa}')
                 # mossa asincrona non in running
                 if not(any(tupla[1] == mossa for tupla in self.mosseAsincroneRunning)):
-                    self.asincronaAzione.preCondizione(spazio,legal_moves,mossa,agent,mAttS)
+                    self.asincronaAzione.preCondizione(spazio,legal_moves,mossa,agent,mAttS,self.mosseEseguite)
                 else:
                     legal_moves[mossa] = 0
 
@@ -88,6 +92,7 @@ class Agente():
         # rimuovo azoni asincrone eseguite
         for i in listaRimozioni:
             i[0].mossa.tempoAttesa = i[0].mossa.tempoAttuazione
+            self.mosseEseguite.append(i)
             self.mosseAsincroneRunning.remove(i)
         listaRimozioni = []
 

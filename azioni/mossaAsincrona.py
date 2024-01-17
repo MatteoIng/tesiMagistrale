@@ -8,13 +8,13 @@ class mossaAsincrona(azioneAsincrona):
         self.tempoAttuazione = 1.0
         self.tempoAttesa = 1.0
 
-    def preCondizione(self,spazio,legal_moves,pos,agent,mAttS):
+    def preCondizione(self,spazio,legal_moves,pos,agent,mAttS,mosseEseguite):
         if agent == 'attaccante':
             
             #for i in range(mAttS,len(legal_moves)):
             for j in range(pos+1):
                 #print(f'pos {pos} j {j}')
-                if spazio['difensore'][j] == 0 :
+                if spazio['difensore'][j] == 0 and j not in mosseEseguite:
                     #print(f'LEGAL PRIMA {legal_moves}')
                     legal_moves[pos] = 1
                     #print(f'LEGAL DOPO {legal_moves}')
@@ -26,7 +26,7 @@ class mossaAsincrona(azioneAsincrona):
             #for i in range(mAttS,len(legal_moves)):
             for j in range(pos+1):
                 #print(f'pos {pos} j {j}')
-                if spazio['difensore'][j] == 1 :
+                if spazio['difensore'][j] == 1 and j not in mosseEseguite:
                     #print(f'LEGAL PRIMA {legal_moves}')
                     legal_moves[pos] = 1
                     #print(f'LEGAL DOPO {legal_moves}')

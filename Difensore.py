@@ -25,7 +25,6 @@ class Difensore(Agente):
         
         mAttS = mosse[agent]['sincrone']
         mAttA = mosse[agent]['asincrone']
-
         super().preCondizioni(spazio,legal_moves,mAttS,mAttA,agent,timer)
         
 
@@ -55,12 +54,15 @@ class Difensore(Agente):
             if action != timer:
                 agente = agenteMossaAsincrona(mossaAsincrona(),action,spazio,agent)
                 agente.mossa.tempoAttesa = agente.mossa.tempoAttuazione
+            else:
+                t = 0.5
 
         
         spazio[agent][timer] += round(t,2)
         
         #----------------------------------------------------------------------------
         self.aggiornaMosseAsincrone(round(t,2),agente,action,mAttS)
+        self.mosseEseguite.append(action)
 
         #lastTimer = round(spazio[agent][timer],2)
         #----------------------------------------------------------------------------

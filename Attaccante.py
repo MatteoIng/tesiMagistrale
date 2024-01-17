@@ -25,7 +25,7 @@ class Attaccante(Agente):
         mAttS = mosse[agent]['sincrone']
         mAttA = mosse[agent]['asincrone']
 
-        super().preCondizioni(spazio,legal_moves,mAttS,mAttA,agent,timer)
+        return super().preCondizioni(spazio,legal_moves,mAttS,mAttA,agent,timer)
         
 
     def postCondizioni(self,action,spazio,agent,mosse,timer,lastTimer):
@@ -53,11 +53,14 @@ class Attaccante(Agente):
             if action != timer:
                 agente = agenteMossaAsincrona(mossaAsincrona(),action,spazio,agent)
                 agente.mossa.tempoAttesa = agente.mossa.tempoAttuazione
+            else:
+                t = 0.5
 
 
         spazio['difensore'][timer] -= round(t,2)
         #----------------------------------------------------------------------------
         self.aggiornaMosseAsincrone(round(t,2),agente,action,mAttS)
+        self.mosseEseguite.append(action)
 
         #lastTimer = round(spazio['difensore'][timer],2)
         #----------------------------------------------------------------------------

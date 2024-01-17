@@ -345,7 +345,9 @@ class raw_env(AECEnv):
 
 
         # NON POSSONO AVERE VALORI DISCORDI GLI AGENTI delle terminations e troncation
-        val = terminationPartita(self.spazio,self.lm,self.num_moves,self.NUM_ITERS)
+        mAtt = (n_azioni_attaccante_asincrone + n_azioni_attaccante_asincrone)
+        mDiff = (n_azioni_difensore_asincrone + n_azioni_difensore_asincrone)
+        val = terminationPartita(self.spazio,self.lm,self.num_moves,self.NUM_ITERS,mAtt,mDiff)
         # se la condizione di aresto generale lo ferma bene altrimenti...
         self.terminations = {
             agent: val for agent in self.agents

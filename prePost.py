@@ -16,8 +16,8 @@ T2 = 0.66
 
 # qui per ogni partita mette numero di mosse fatte e le cumulative reward finali di quella partita
 reward_mosse = {
-    "attaccante":[(0,0)],
-    "difensore":[(0,0)]
+    "attaccante":[],
+    "difensore":[]
 }
 
 # qui mette tutte le reward di ogni partita, le cumulative reward, ovvero i contatori
@@ -105,17 +105,19 @@ def reward(agent,action,mosse,n_azioni,n_azioni_attaccante_sincrone,n_azioni_dif
 
 
 # CONTROLLA LO STATE PER TERMINAR EO MENO
-def terminationPartita(spazio,lm,num_moves,NUM_ITERS):
+def terminationPartita(spazio,lm,num_moves,NUM_ITERS,mAtt,mDiff):
     val = False
-
+    
     # clean system state + esclusione degli altri parametri (lascio solo il check degli attacchi sotto T1 
     # come se gli altri fossero altri subsets states con minace in sicurezza)
     # stato terminale attaccante con tutti attacchi on
     # Consigliata dal professore
     checkNot = [not(spazio['difensore'][i]) for i in range(len(spazio['difensore'])-1)]
     check = spazio['difensore'][:(len(spazio['difensore'])-1)]
-    if (#all(check) or 
-        all(checkNot)):
+    lenMAtt = attaccante.lenMosseEseguite()
+    lenMDiff = difensore.lenMosseEseguite()
+
+    if ((all(checkNot) and lenMAtt == mAtt) or (lenMDiff == mDiff and all(checkNot)) or (lenMAtt == mAtt and lenMDiff == mDiff )):
         val = True
     else:
             # se non puo arrestarlo neanche quello provo a vedere il num di mosse
@@ -132,7 +134,8 @@ def generazioneSpazioRandom(dim_obs):
     #spazio = [0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     spazio = []
     for i in range(dim_obs-1):
-        spazio.append(random.randint(0,1))
+        #spazio.append(random.randint(0,1))
+        spazio.append(0)
     # timer
     spazio.append(0)
 
