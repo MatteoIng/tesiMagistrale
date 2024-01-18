@@ -1,5 +1,3 @@
-from Agente import Agente
-
 class agenteMossaAsincrona():
 
     def __init__(self, mossa,action,spazio,agent):

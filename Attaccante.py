@@ -1,23 +1,9 @@
 from Agente import Agente
 
-from azioni.mossaAsincrona import mossaAsincrona
-from azioni.mossaSincrona import mossaSincrona
-
-from agenteMossaAsincrona import agenteMossaAsincrona
-
-from threading import Thread
-
-
 class Attaccante(Agente):
+
     def __init__(self):
         super().__init__()
-        self.sincronaAzione = mossaSincrona()
-        self.asincronaAzione = mossaAsincrona()
-
-        self.REWARD_MAP = {
-            0 : (1,1,1),
-            1 : (1,1,1),
-        }
 
 
     # Se l'attaccante trova il Timer <=0 non puo eseguire e per ora facciamo che ogni azione vale 1
@@ -26,69 +12,14 @@ class Attaccante(Agente):
         mAttA = mosse[agent]['asincrone']
 
         return super().preCondizioni(spazio,legal_moves,mAttS,mAttA,agent,timer)
-        
-
-    def postCondizioni(self,action,spazio,agent,mosse,timer,lastTimer):
+            
+    
+    def postCondizioni(self,action,spazio,agent,mosse,timer):
         mAttS = mosse['attaccante']['sincrone']
         mAttA = mosse['attaccante']['asincrone']
         mAttT = mAttS+mAttA
 
-        #-----------------------------------------------------
-        # tempo appicazione della mossa sincrona
-        t = 0
-        # nuovo agente asincrono
-        agente = 0
-
-        # tempo mossa difensore turno precedente
-        #delta = abs(spazio[agent][timer]-self.lastTimer)
-        #delta = lastTimer
-        #print('LASTTIMER:',lastTimer)
-        # azzero i nop
-        #spazio[agent][22] = 0
-        #-----------------------------------------------------
-
-        # tnop usato perche nop non scala il tempo se l'agente ha ancora mosse asincrone e/o sincrone da fare
-        # lo scala solo nel momento in cui il nop viene selezionato perche son finite le mosse
-        # e devo scalare il tempo alle mosse asincrone affinche finiscano
-        # ma non mi altera ai il timer
-        tnop = 0 
-        # se l'azione è sincrona fa...
-        if action < mAttS :
-            self.sincronaAzione.postCondizione(spazio,agent,action)
-            self.mosseEseguite.append(action)
-            t = 0.5
-        # se l'azione è asincrona fa...
-        else:
-            if action != timer:
-                agente = agenteMossaAsincrona(mossaAsincrona(),action,spazio,agent)
-                agente.mossa.tempoAttesa = agente.mossa.tempoAttuazione
-            else:
-                # se invece la mossa è noop...
-                # ed è i suo turno MA QUESTO IF FUNZIONA SOLO SE HANNO LO STESSO NUMERO DI AZIONI SINCRONE
-                # PERCHE IL TIMER ALLA FINE SARà SEMPRE 0
-                if spazio['difensore'][timer] >= 0:
-                    # se ci sono mosse asincrone noop me le deve far terminare
-                    t = 0.5
-                    # verifico che tutte le mosse sincrone (SCALA TEMPO) siano state usate
-                    for i in range(mAttS):
-                        # se almeno 1 non usata t = 0
-                        if i not in self.mosseEseguite:
-                            t = 0
-                            tnop = 1
-                            break
-
-        # se tnop è 1 vuol dire che è stata scelta nop e nop scala 0.5 alle mosse asincrone
-        # per forza ha finito le mosse
-        # ma non deve alterarmi il timer in alcun modo
-        if tnop == 0:
-            spazio['difensore'][timer] -= round(t,2)
-        #----------------------------------------------------------------------------
-        self.aggiornaMosseAsincrone(round(t,2),agente,action,mAttS)
-        # perche lamossa noop col numero combacia alla posizione del timer
-
-        #lastTimer = round(spazio['difensore'][timer],2)
-        #----------------------------------------------------------------------------
-        return t
+        return super().postCondizioni(action,spazio,agent,mosse,timer,mAttS)
     
         
     def reset(self):

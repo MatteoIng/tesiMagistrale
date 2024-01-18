@@ -60,10 +60,10 @@ def postCondizioni(action,spazio,agent,mosse,timer,lastTimer):
     mossaValida = True
 
     if agent == 'difensore':
-        lastTimer = difensore.postCondizioni(action,spazio,agent,mosse,timer,lastTimer)
+        lastTimer = difensore.postCondizioni(action,spazio,agent,mosse,timer)
         
     elif agent == 'attaccante':
-        lastTimer = attaccante.postCondizioni(action,spazio,agent,mosse,timer,lastTimer)
+        lastTimer = attaccante.postCondizioni(action,spazio,agent,mosse,timer)
 
     return lastTimer
         

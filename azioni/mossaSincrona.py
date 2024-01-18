@@ -15,27 +15,33 @@ class mossaSincrona(azioneSincrona):
         print('MOSSE GIA ESEGUITE:',mosseEseguite)
     
         if agent == 'attaccante':
-            # da 0 a 49 escluso
+            # scorro mosse sinc...
             for i in range(mAttS):
-                # i da 1 a 49 escluso
+                # mossa sinc mai eseguita...
                 if (i not in mosseEseguite):
+                    # classiche pre consizioni...
                     for j in range(i+1):
                         if spazio['difensore'][j] == 0 :
                             legal_moves[i] = 1
                             break
                         else:
                             legal_moves[i] = 0
+                # mossa sinc già eseguita...
                 else:
                     legal_moves[i] = 0
         else:
+            # scorro mosse sinc...
             for i in range(mAttS):
+                # mossa sinc mai eseguita...
                 if (i not in mosseEseguite):
+                    # classiche pre consizioni...
                     for j in range(i+1):
                         if spazio[agent][j] == 1 :
                             legal_moves[i] = 1
                             break
                         else:
                             legal_moves[i] = 0
+                # mossa sinc già eseguita...
                 else:
                     legal_moves[i] = 0
                 
