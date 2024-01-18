@@ -58,10 +58,13 @@ def visualizza_reward_mosse():
 
     aPPEND = 0
     bPPEND = 0
+    count = 0
     for i in range(len(app)):
         aPPEND+=app[i][1]
         bPPEND+=bpp[i][1]
-        if i%10 == 0:
+        count +=1
+        if count == 10:
+            count = 0
             #print(i)
             #print(c/10)
             yA.append(aPPEND/10)
