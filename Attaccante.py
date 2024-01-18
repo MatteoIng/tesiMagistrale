@@ -31,6 +31,7 @@ class Attaccante(Agente):
     def postCondizioni(self,action,spazio,agent,mosse,timer,lastTimer):
         mAttS = mosse['attaccante']['sincrone']
         mAttA = mosse['attaccante']['asincrone']
+        mAttT = mAttS+mAttA
 
         #-----------------------------------------------------
         # tempo appicazione della mossa sincrona
@@ -48,21 +49,24 @@ class Attaccante(Agente):
         # esempio prima mosse sincrone 0-9 (10) e poi 10-14 asincrone (5): 15 mosse tot 10 e 5 
         if action < mAttS :
             self.sincronaAzione.postCondizione(spazio,agent,action)
+            self.mosseEseguite.append(action)
             t = 0.5
         else:
             if action != timer:
                 agente = agenteMossaAsincrona(mossaAsincrona(),action,spazio,agent)
                 agente.mossa.tempoAttesa = agente.mossa.tempoAttuazione
-            """ else:
-                t = 0.5 """
+            else:
+                t = 0.5
+                for i in range(mAttS):
+                    if i not in self.mosseEseguite:
+                        t = 0
+                        break
 
 
         spazio['difensore'][timer] -= round(t,2)
         #----------------------------------------------------------------------------
         self.aggiornaMosseAsincrone(round(t,2),agente,action,mAttS)
         # perche lamossa noop col numero combacia alla posizione del timer
-        if action != timer:
-            self.mosseEseguite.append(action)
 
         #lastTimer = round(spazio['difensore'][timer],2)
         #----------------------------------------------------------------------------

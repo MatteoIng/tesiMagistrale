@@ -15,6 +15,9 @@ class Agente():
         self.tMax = 1
         self.cMax = 1
 
+    def lenMosseAsincroneRunning(self):
+        return len(self.mosseAsincroneRunning)
+
     def lenMosseEseguite(self):
         return len(self.mosseEseguite)
 
@@ -94,6 +97,7 @@ class Agente():
         for i in listaRimozioni:
             i[0].mossa.tempoAttesa = i[0].mossa.tempoAttuazione
             self.mosseAsincroneRunning.remove(i)
+            self.mosseEseguite.append(i[1])
         listaRimozioni = []
 
 

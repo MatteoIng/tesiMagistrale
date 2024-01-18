@@ -23,16 +23,17 @@ class Difensore(Agente):
     # Il difensore invece può eseguire una mossa solo nel caso incui il Timer è <=0 ed ogni mossa vale 1
     def preCondizioni(self,spazio,legal_moves,mosse,agent,timer):
         
-        mAttS = mosse[agent]['sincrone']
-        mAttA = mosse[agent]['asincrone']
-        super().preCondizioni(spazio,legal_moves,mAttS,mAttA,agent,timer)
+        mDiffS = mosse[agent]['sincrone']
+        mDiffA = mosse[agent]['asincrone']
+        super().preCondizioni(spazio,legal_moves,mDiffS,mDiffA,agent,timer)
         
 
 
 
     def postCondizioni(self,action,spazio,agent,mosse,timer,lastTimer):
-        mAttS = mosse['attaccante']['sincrone']
-        mAttA = mosse['attaccante']['asincrone']
+        mDiffS = mosse['attaccante']['sincrone']
+        mDiffA = mosse['attaccante']['asincrone']
+        mDiffT = mDiffS+mDiffA
 
         #-----------------------------------------------------
         # tempo appicazione della mossa sincrona
@@ -47,24 +48,26 @@ class Difensore(Agente):
         #-----------------------------------------------------
 
         # esempio prima mosse sincrone 0-9 (10) e poi 10-14 asincrone (5): 15 mosse tot 10 e 5 
-        if action < mAttS :
+        if action < mDiffS :
             self.sincronaAzione.postCondizione(spazio,agent,action)
+            self.mosseEseguite.append(action)
             t = 0.5
         else:
             if action != timer:
                 agente = agenteMossaAsincrona(mossaAsincrona(),action,spazio,agent)
                 agente.mossa.tempoAttesa = agente.mossa.tempoAttuazione
-            """ else:
-                t = 0.5 """
-
+            else:
+                t = 0.5
+                for i in range(mDiffS):
+                    if i not in self.mosseEseguite:
+                        t = 0
+                        break
         
         spazio[agent][timer] += round(t,2)
         
         #----------------------------------------------------------------------------
-        self.aggiornaMosseAsincrone(round(t,2),agente,action,mAttS)
+        self.aggiornaMosseAsincrone(round(t,2),agente,action,mDiffS)
         # perche lamossa noop col numero combacia alla posizione del timer
-        if action != timer:
-            self.mosseEseguite.append(action)
 
         #lastTimer = round(spazio[agent][timer],2)
         #----------------------------------------------------------------------------
