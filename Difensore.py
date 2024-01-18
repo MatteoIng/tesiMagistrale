@@ -54,15 +54,17 @@ class Difensore(Agente):
             if action != timer:
                 agente = agenteMossaAsincrona(mossaAsincrona(),action,spazio,agent)
                 agente.mossa.tempoAttesa = agente.mossa.tempoAttuazione
-            else:
-                t = 0.5
+            """ else:
+                t = 0.5 """
 
         
         spazio[agent][timer] += round(t,2)
         
         #----------------------------------------------------------------------------
         self.aggiornaMosseAsincrone(round(t,2),agente,action,mAttS)
-        self.mosseEseguite.append(action)
+        # perche lamossa noop col numero combacia alla posizione del timer
+        if action != timer:
+            self.mosseEseguite.append(action)
 
         #lastTimer = round(spazio[agent][timer],2)
         #----------------------------------------------------------------------------
@@ -74,5 +76,3 @@ class Difensore(Agente):
         super().reset()
         self.asincronaAzione.reset()
         self.sincronaAzione.reset()
-
-        self.mosseAsincroneRunning = []

@@ -12,25 +12,33 @@ import random
 class mossaSincrona(azioneSincrona):
     
     def preCondizione(self,spazio,legal_moves,mAttS,agent,mosseEseguite):
+        print('MOSSE GIA ESEGUITE:',mosseEseguite)
     
         if agent == 'attaccante':
             # da 0 a 49 escluso
             for i in range(mAttS):
                 # i da 1 a 49 escluso
-                for j in range(i+1):
-                    if spazio['difensore'][j] == 0 and j not in mosseEseguite:
-                        legal_moves[i] = 1
-                        break
-                    else:
-                        legal_moves[i] = 0
+                if (i not in mosseEseguite):
+                    for j in range(i+1):
+                        if spazio['difensore'][j] == 0 :
+                            legal_moves[i] = 1
+                            break
+                        else:
+                            legal_moves[i] = 0
+                else:
+                    legal_moves[i] = 0
         else:
             for i in range(mAttS):
-                for j in range(i+1):
-                    if spazio[agent][j] == 1 and j not in mosseEseguite:
-                        legal_moves[i] = 1
-                        break
-                    else:
-                        legal_moves[i] = 0
+                if (i not in mosseEseguite):
+                    for j in range(i+1):
+                        if spazio[agent][j] == 1 :
+                            legal_moves[i] = 1
+                            break
+                        else:
+                            legal_moves[i] = 0
+                else:
+                    legal_moves[i] = 0
+                
     
     def postCondizione(self,spazio,agent,action):
         

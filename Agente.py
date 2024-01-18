@@ -69,6 +69,7 @@ class Agente():
     
     def reset(self):
         self.mosseAsincroneRunning = []
+        self.mosseEseguite = []
 
     def aggiornaMosseAsincrone(self,tot,agente,action,mAttS):
         # Questo mi servirebbe a far scattare il tempo delle mosse asincrone
@@ -92,7 +93,6 @@ class Agente():
         # rimuovo azoni asincrone eseguite
         for i in listaRimozioni:
             i[0].mossa.tempoAttesa = i[0].mossa.tempoAttuazione
-            self.mosseEseguite.append(i)
             self.mosseAsincroneRunning.remove(i)
         listaRimozioni = []
 

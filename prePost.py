@@ -117,7 +117,11 @@ def terminationPartita(spazio,lm,num_moves,NUM_ITERS,mAtt,mDiff):
     lenMAtt = attaccante.lenMosseEseguite()
     lenMDiff = difensore.lenMosseEseguite()
 
-    if ((all(checkNot) and lenMAtt == mAtt) or (lenMDiff == mDiff and all(checkNot)) or (lenMAtt == mAtt and lenMDiff == mDiff )):
+    print('checkNot:',checkNot)
+    print('check:',check)
+    print(f'lenMAtt:{lenMAtt} e mAtt:{mAtt}',)
+    print(f'lenMDiff:{lenMDiff} e mDiff:{mDiff}')
+    if ((all(checkNot) and lenMAtt == mAtt) or (lenMDiff == mDiff and (1 in check)) or (lenMAtt == mAtt and lenMDiff == mDiff )):
         val = True
     else:
             # se non puo arrestarlo neanche quello provo a vedere il num di mosse
