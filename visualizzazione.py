@@ -11,7 +11,8 @@ def visualizza_reward_mosse():
     with open("/home/matteo/Documenti/GitHub/tesiMagistrale/fileGrafici/reward_mosse.txt", "r") as file:
         dati = file.read()
     dati_dict = json.loads(dati)
-    #print(dati_dict)
+    
+    print(dati_dict)
 
     a = dati_dict['attaccante']
     b = dati_dict['difensore']
@@ -128,35 +129,3 @@ def visualizza_reward_mosse():
 
 
 
-""" def visualizza_curva_partita():
-    dati = ''
-    with open("/home/matteo/Documenti/GitHub/tesiMagistrale/fileGrafici/curva_partita.txt", "r") as file:
-        dati = file.read()
-    dati_dict = json.loads(dati)
-
-    a = dati_dict['attaccante']
-    b = dati_dict['difensore']
-    print(len(a))
-    print(len(b))
-
-    appA = []
-    appB = []
-    count = 0
-    for i in range(len(a)):
-        if a[i][0] != 1:
-            appA.append(a[i][1])
-            appB.append(b[i][1]) 
-        else:
-            plt.figure()
-            plt.title('Alg PG Partita '+str(count)+' attaccante/difensore')
-            plt.xlabel('ennesima mossa')
-            plt.ylabel('reward totale')
-            plt.plot(np.arange(len(appB)),appB)
-            plt.plot(np.arange(len(appA)),appA)
-            plt.legend(['difensore','attaccante'],title='legend')
-            count +=1
-            appA = []
-            appB = []
-            appA.append(a[i][1])
-            appB.append(b[i][1])
-    plt.show() """
