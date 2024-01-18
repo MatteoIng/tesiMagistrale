@@ -108,16 +108,28 @@ class Agente():
                 # se invece la mossa è noop...
                 # ed è i suo turno MA QUESTO IF FUNZIONA SOLO SE HANNO LO STESSO NUMERO DI AZIONI SINCRONE
                 # PERCHE IL TIMER ALLA FINE SARà SEMPRE 0
-                if spazio['difensore'][timer] >= 0:
-                    # se ci sono mosse asincrone noop me le deve far terminare
-                    t = 0.5
-                    # verifico che tutte le mosse sincrone (SCALA TEMPO) siano state usate
-                    for i in range(mAgentSinc):
-                        # se almeno 1 non usata t = 0
-                        if i not in self.mosseEseguite:
-                            t = 0
-                            tnop = 1
-                            break
+                if agent == 'attaccante':
+                    if spazio['difensore'][timer] >= 0:
+                        # se ci sono mosse asincrone noop me le deve far terminare
+                        t = 0.5
+                        # verifico che tutte le mosse sincrone (SCALA TEMPO) siano state usate
+                        for i in range(mAgentSinc):
+                            # se almeno 1 non usata t = 0
+                            if i not in self.mosseEseguite:
+                                t = 0
+                                tnop = 1
+                                break
+                else:
+                    if spazio['difensore'][timer] <= 0:
+                        # se ci sono mosse asincrone noop me le deve far terminare
+                        t = 0.5
+                        # verifico che tutte le mosse sincrone (SCALA TEMPO) siano state usate
+                        for i in range(mAgentSinc):
+                            # se almeno 1 non usata t = 0
+                            if i not in self.mosseEseguite:
+                                t = 0
+                                tnop = 1
+                                break
 
         # se tnop è 1 vuol dire che è stata scelta nop e nop scala 0.5 alle mosse asincrone
         # per forza ha finito le mosse
