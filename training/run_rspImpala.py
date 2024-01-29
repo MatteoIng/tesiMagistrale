@@ -80,8 +80,8 @@ stop = {
 
 # RAY  VIENE UTILIZZATO PER POTER FARE IL TUNING DEGLI IPERPARAMETRI
 # SI PUO DEFINIRE UN RANGE ED IN AUTOMATICA FA I DIVERSI TRAINING CON LE DIVERSE CONFIG
-ray.shutdown()
-ray.init()
+#ray.shutdown()
+#ray.init()
 
 
 
@@ -119,7 +119,7 @@ config = Impala().config
 # per l'evaluation
 config['evaluation_interval'] = 1
 
-algo = config.build()
+algo = config.training(gamma=0.1).build()
 
 results = tune.Tuner(
         "IMPALA", 

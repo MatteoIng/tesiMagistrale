@@ -79,8 +79,8 @@ stop = {
 
 # RAY  VIENE UTILIZZATO PER POTER FARE IL TUNING DEGLI IPERPARAMETRI
 # SI PUO DEFINIRE UN RANGE ED IN AUTOMATICA FA I DIVERSI TRAINING CON LE DIVERSE CONFIG
-ray.shutdown()
-ray.init(num_gpus=1)
+#ray.shutdown()
+#ray.init(num_gpus=1)
 
 
 
@@ -103,12 +103,16 @@ config['create_env_on_driver'] = True
 # per l'evaluation
 config['evaluation_interval'] = 1
 
-algo = config.build()
+
+algo = config.training(gamma=0).build()
+
+""" for i in range(20):
+    result  = algo.train() """
 
 results = tune.Tuner(
         "PPO", 
         param_space=config, 
-        run_config=air.RunConfig(stop=stop, verbose=1)
+        run_config=air.RunConfig(stop=stop, verbose=0)
     ).fit()  
 
 visualizza_reward_mosse()

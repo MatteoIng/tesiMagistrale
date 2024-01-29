@@ -72,34 +72,48 @@ def postCondizioni(action,spazio,agent,mosse,timer,lastTimer):
 
 
 # VERIFICA QUANDO CALCOLARE LA REWARD, NEGLI ALTRI CASI 0
-def reward(agent,action,mosse,n_azioni,n_azioni_attaccante_sincrone,n_azioni_difensore_sincrone):
+def reward(agent,action,spazioDiff,n_azioni,n_azioni_attaccante_sincrone,n_azioni_difensore_sincrone,noopDiff):
     # per la funzione di reward
     calcolo = 0
     val = action
     if agent == 'attaccante':
         # cosi la prima sincrona ha lo stesso costo della prima asincrona
         #if action > n_azioni_attaccante_asincrone:
-        val = action-n_azioni_attaccante_sincrone
-        print(f'VAL MOSSA ASINCRONA {val}')
+        """ val = action-n_azioni_attaccante_sincrone
+        print(f'VAL MOSSA ASINCRONA {val}') """
 
-        if action < mosse[agent]['sincrone']:
+        #if action < mosse[agent]['sincrone']:
             #calcolo = attaccante.reward(attaccante.REWARD_MAP[0])/((n_azioni+1)/(action+1))
-            calcolo = (action+1 - n_azioni)/ n_azioni
-        else:
+        calcolo = (action+1 - n_azioni)/ n_azioni
+        """ else:
             #calcolo = attaccante.reward(attaccante.REWARD_MAP[0])/((n_azioni+1)/(val+1))
-            calcolo = (action+1 - n_azioni)/ n_azioni
+            calcolo = (action+1 - n_azioni)/ n_azioni """
     else:
         # cosi la prima sincrona ha lo stesso costo della prima asincrona
         #if action > n_azioni_difensore_asincrone:
-        val = action-n_azioni_difensore_sincrone
-        print(f'VAL MOSSA ASINCRONA {val}')
+        """ val = action-n_azioni_difensore_sincrone
+        print(f'VAL MOSSA ASINCRONA {val}') """
 
-        if action < mosse[agent]['sincrone']:
+        #if action < mosse[agent]['sincrone']:
             #calcolo = -(difensore.reward(difensore.REWARD_MAP[0])/((n_azioni+1)/(action+1)))
-            calcolo = (action+1 - n_azioni)/ n_azioni
+        #calcolo = (action+1 - n_azioni)/ n_azioni
+        if action != noopDiff:
+            mossaRewardMinore = -1
+            for i in range(len(spazioDiff)-1):
+                if spazioDiff[i] == 1:
+                    mossaRewardMinore = i  
+
+            actionPerReward = action-mossaRewardMinore
+            if mossaRewardMinore > action:
+                actionPerReward = mossaRewardMinore-action
+            print('ACTIONPERREWARD:',actionPerReward)
+
+            calcolo = -((actionPerReward+1)/ (n_azioni))
         else:
+            calcolo = 0
+        """ else:
             #calcolo = -(difensore.reward(difensore.REWARD_MAP[0])/((n_azioni+1)/(val+1)))
-            calcolo = (action+1 - n_azioni)/ n_azioni
+            calcolo = (action+1 - n_azioni)/ n_azioni """
     return calcolo
 
 

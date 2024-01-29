@@ -185,7 +185,7 @@ class PPO():
           self.config = (
       PPOConfig()
       .environment(env_name,disable_env_checking=True)
-      .resources(num_cpus_for_local_worker=0,num_gpus=0)
+      .resources(num_cpus_for_local_worker=0,num_gpus=1)
       .framework("torch")
       .multi_agent(
         policies={

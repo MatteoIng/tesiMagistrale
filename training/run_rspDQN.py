@@ -79,8 +79,8 @@ stop = {
 
 # RAY  VIENE UTILIZZATO PER POTER FARE IL TUNING DEGLI IPERPARAMETRI
 # SI PUO DEFINIRE UN RANGE ED IN AUTOMATICA FA I DIVERSI TRAINING CON LE DIVERSE CONFIG
-ray.shutdown()
-ray.init()
+#ray.shutdown()
+#ray.init()
 
 
 
@@ -98,7 +98,7 @@ config['dueling'] = False
 # per l'evaluation
 config['evaluation_interval'] = 1
 
-algo = config.build()
+algo = config.training().build()
 
 results = tune.Tuner(
     "DQN",
