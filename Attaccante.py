@@ -1,5 +1,6 @@
 from Agente import Agente
 
+
 class Attaccante(Agente):
 
     def __init__(self):
@@ -21,7 +22,11 @@ class Attaccante(Agente):
 
         return super().postCondizioni(action,spazio,agent,mosse,timer,mAttS)
     
-        
+
+    def reward(self, azione,n_azioni):
+        return (azione+1 - n_azioni)/ n_azioni
+
+
     def reset(self):
         super().reset()
         self.asincronaAzione.reset()

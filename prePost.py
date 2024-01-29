@@ -1,11 +1,11 @@
-from matplotlib import pyplot as plt
-import numpy as np
 import random
+from threading import Thread
+
+import numpy as np
+from matplotlib import pyplot as plt
 
 from Attaccante import Attaccante
 from Difensore import Difensore
-
-from threading import Thread
 
 attaccante = Attaccante()
 difensore = Difensore()
@@ -72,7 +72,7 @@ def postCondizioni(action,spazio,agent,mosse,timer,lastTimer):
 
 
 # VERIFICA QUANDO CALCOLARE LA REWARD, NEGLI ALTRI CASI 0
-def reward(agent,action,spazioDiff,n_azioni,n_azioni_attaccante_sincrone,n_azioni_difensore_sincrone,noopDiff):
+def reward(agent,action,spazioDiff,n_azioni,n_azioni_attaccante_sincrone,n_azioni_difensore_sincrone,waitPosition):
     # per la funzione di reward
     calcolo = 0
     val = action
@@ -84,7 +84,8 @@ def reward(agent,action,spazioDiff,n_azioni,n_azioni_attaccante_sincrone,n_azion
 
         #if action < mosse[agent]['sincrone']:
             #calcolo = attaccante.reward(attaccante.REWARD_MAP[0])/((n_azioni+1)/(action+1))
-        calcolo = (action+1 - n_azioni)/ n_azioni
+        calcolo = attaccante.reward(action,n_azioni)
+        #calcolo = (action+1 - n_azioni)/ n_azioni
         """ else:
             #calcolo = attaccante.reward(attaccante.REWARD_MAP[0])/((n_azioni+1)/(val+1))
             calcolo = (action+1 - n_azioni)/ n_azioni """
@@ -97,7 +98,8 @@ def reward(agent,action,spazioDiff,n_azioni,n_azioni_attaccante_sincrone,n_azion
         #if action < mosse[agent]['sincrone']:
             #calcolo = -(difensore.reward(difensore.REWARD_MAP[0])/((n_azioni+1)/(action+1)))
         #calcolo = (action+1 - n_azioni)/ n_azioni
-        if action != noopDiff:
+
+        if action != waitPosition and action != waitPosition+1:
             mossaRewardMinore = -1
             for i in range(len(spazioDiff)-1):
                 if spazioDiff[i] == 1:

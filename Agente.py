@@ -1,6 +1,7 @@
+from agenteMossaAsincrona import agenteMossaAsincrona
 from azioni.mossaAsincrona import mossaAsincrona
 from azioni.mossaSincrona import mossaSincrona
-from agenteMossaAsincrona import agenteMossaAsincrona
+
 
 class Agente():
 
@@ -46,7 +47,8 @@ class Agente():
                 if any(tupla[1] == mossa for tupla in self.mosseAsincroneRunning):
                     running = 1
                 self.asincronaAzione.preCondizione(spazio,legal_moves,mossa,agent,mAgentSinc,self.mosseEseguite,running)
-                
+            
+
 
         # controllo chi dei due agenti è e se il timer è a suo famore
         if (spazio['difensore'][timer] >=0 and agent == 'attaccante'):
@@ -62,15 +64,32 @@ class Agente():
                     running = 1
                 self.asincronaAzione.preCondizione(spazio,legal_moves,mossa,agent,mAgentSinc,self.mosseEseguite,running)
 
+        # Fare check mossa wait
+        # vale solo quando ci sono mosse asinc in running e non ha più mosse sinc
+        sincDisp = False
+        asincDisp = False
+        for i in range(mAgentSinc):
+            if i not in self.mosseEseguite:
+                sincDisp = True   
+        for i in range(mAgentSinc,mAgentAsinc):
+            if i not in self.mosseEseguite:
+                asincDisp = True
 
-        # controllo che nessuna mossa sia eseguibile 
+        # se non ci sono 
+        if (len(self.mosseAsincroneRunning) != 0 and not(sincDisp) and not(asincDisp)) :
+            legal_moves[timer] = 1
+        else:
+            legal_moves[timer] = 0
+
+        # controllo che nessuna mossa sia eseguibile NOOP
+        noopPosition = timer + 1
         check = [ not(legal_moves[i]) for i in range(len(legal_moves)-1)]
         #print(f'CHECK NOOP:{check}')
         if all(check):
             # abilito la noop
-            legal_moves[timer] = 1
+            legal_moves[noopPosition] = 1
         else:
-            legal_moves[timer] = 0
+            legal_moves[noopPosition] = 0
         
 
     def postCondizioni(self,action,spazio,agent,mosse,timer,mAgentSinc):
@@ -101,14 +120,14 @@ class Agente():
             t = 0.5
         # se l'azione è asincrona fa...
         else:
-            if action != timer:
+            if action < timer:
                 agente = agenteMossaAsincrona(mossaAsincrona(),action,spazio,agent)
                 agente.mossa.tempoAttesa = agente.mossa.tempoAttuazione
             else:
                 # se invece la mossa è noop...
                 # ed è i suo turno MA QUESTO IF FUNZIONA SOLO SE HANNO LO STESSO NUMERO DI AZIONI SINCRONE
                 # PERCHE IL TIMER ALLA FINE SARà SEMPRE 0
-                if agent == 'attaccante':
+                """ if agent == 'attaccante':
                     if spazio['difensore'][timer] >= 0:
                         # se ci sono mosse asincrone noop me le deve far terminare
                         t = 0.5
@@ -129,16 +148,21 @@ class Agente():
                             if i not in self.mosseEseguite:
                                 t = 0
                                 tnop = 1
-                                break
+                                break """
+                # wait
+                if action == timer:
+                    t = 0.5
+                elif action == timer+1:
+                    t = 0
 
         # se tnop è 1 vuol dire che è stata scelta nop e nop scala 0.5 alle mosse asincrone
         # per forza ha finito le mosse
         # ma non deve alterarmi il timer in alcun modo
-        if tnop == 0:
-            if agent == 'attaccante':
-                spazio['difensore'][timer] -= round(t,2)
-            else:
-                spazio['difensore'][timer] += round(t,2)
+        # if tnop == 0:
+        if agent == 'attaccante':
+            spazio['difensore'][timer] -= round(t,2)
+        else:
+            spazio['difensore'][timer] += round(t,2)
         #----------------------------------------------------------------------------
         self.aggiornaMosseAsincrone(round(t,2),agente,action,mAgentSinc)
         # perche lamossa noop col numero combacia alla posizione del timer
@@ -148,16 +172,8 @@ class Agente():
         return t
 
 
-    def reward(self,azione):
-        #  CONSIDERA SOLO IL TEMPO NELLA REWARD
-        # CONSIDERARE COME CONTEGGIARE IL TEMPO E L'ASINCRONICITA
-        # MINIMIZZARE IL TEMPO
-        # VEDERE ALTRE IDEE MA CONSIDERARE ANCHE L'INTRODUZIONE DELL NMOSSE O DEL TEMPO
-        # calcolo = -(-self.wt*(azione[0]/self.tMax)-self.wc*(azione[1]/self.cMax)-self.wi*azione[2])
-        calcolo = -(-self.wt*(azione[0]/self.tMax))
-        #calcolo = azione[0]
-        print('Reward:',calcolo)
-        return calcolo
+    def reward(self,azione,n_azioni):
+        pass
     
 
     def reset(self):

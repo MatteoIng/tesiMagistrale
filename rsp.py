@@ -1,17 +1,16 @@
 import functools
 import json
+import os
+import sys
+
 import numpy as np
-
-from gymnasium.spaces import Discrete,Box,Dict
-
+from gymnasium.spaces import Box, Dict, Discrete
 from pettingzoo import AECEnv
 from pettingzoo.utils import agent_selector, wrappers
 
-from prePost import postCondizioni,reward,terminationPartita,reward_mosse,curva_partita,preCondizioni,generazioneSpazioRandom,reset
-
-
-import sys
-import os
+from prePost import (curva_partita, generazioneSpazioRandom, postCondizioni,
+                     preCondizioni, reset, reward, reward_mosse,
+                     terminationPartita)
 
 #------------------------------------- Lettura conf ---------------------------------#
 conf = open("conf.txt", "r")
@@ -51,8 +50,8 @@ timer = 0
 if ((somma_attaccante) == (somma_difensore)):
     # ogni azione una var dello stato + timer
     dim_obs = n_azioni_attaccante_sincrone + n_azioni_attaccante_asincrone + 1
-    # mosse totali somma asincrone e sincrone + noop
-    n_azioni = n_azioni_attaccante_sincrone + n_azioni_attaccante_asincrone + 1
+    # mosse totali somma asincrone e sincrone + noop + wait
+    n_azioni = n_azioni_attaccante_sincrone + n_azioni_attaccante_asincrone + 2
     # set timer
     timer = dim_obs - 1
 
