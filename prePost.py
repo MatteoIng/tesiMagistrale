@@ -142,8 +142,8 @@ def terminationPartita(spazio,lm,num_moves,NUM_ITERS,mAtt,mDiff):
     #print(f'lenMDiff:{lenMDiff} e mDiff:{mDiff}')
 
 
-    #if ( all(checkNot) or (lenMDiff == mDiff and lenMAADiff == 0 and (1 in check))): #or (lenMAtt == mAtt and lenMAAtt == 0 and lenMDiff == mDiff and lenMAADiff == 0)):
-    if ((all(checkNot) and lenMAtt == mAtt) or (lenMDiff == mDiff and (1 in check)) or (lenMAtt == mAtt and lenMAAtt == 0 and lenMDiff == mDiff and lenMAADiff == 0)):
+    if ( all(checkNot) or (lenMDiff == mDiff and lenMAADiff == 0 and (1 in check))): #or (lenMAtt == mAtt and lenMAAtt == 0 and lenMDiff == mDiff and lenMAADiff == 0)):
+    #if ((all(checkNot) and lenMAtt == mAtt) or (lenMDiff == mDiff and (1 in check)) or (lenMAtt == mAtt and lenMAAtt == 0 and lenMDiff == mDiff and lenMAADiff == 0)):
         val = True
     else:
             # se non puo arrestarlo neanche quello provo a vedere il num di mosse
@@ -162,8 +162,9 @@ def generazioneSpazioRandom(dim_obs):
     for i in range(dim_obs-1):
         #spazio.append(random.randint(0,1))
         spazio.append(0)
-    # timer
     spazio.append(0)
+    # altero random una componente simulando un attacco 
+    spazio[random.randint(0,dim_obs-1)] = 1
 
 
     return spazio

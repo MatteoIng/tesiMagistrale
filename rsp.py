@@ -112,7 +112,7 @@ class raw_env(AECEnv):
         # nmosse lo uso per la sequenzialità dei noop-noop
 
         #self.possible_agents = [f'agente{i}' for i in range(n_agenti)]
-        self.possible_agents = ['attaccante','difensore']
+        self.possible_agents = ['difensore','attaccante']
 
         self.lm = {
             i:{
