@@ -1,5 +1,6 @@
 from Agente import Agente
 
+
 class Difensore(Agente):
 
     def __init__(self):
@@ -25,4 +26,4 @@ class Difensore(Agente):
     def reset(self):
         super().reset()
         self.asincronaAzione.reset()
-        self.sincronaAzione.reset()
+        #self.sincronaAzione.reset()

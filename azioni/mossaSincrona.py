@@ -1,7 +1,4 @@
-from azioneSincrona import azioneSincrona
-from azioneAsincrona import azioneAsincrona
-import time
-import random 
+import random
 
 # Nel paper abbiamo che l'attaccante incrementa un contatore con una probabilità di 0.05 (5%??)
 # il difensore lo decrementa con una probabilita di 1/10 (10%?)
@@ -9,7 +6,7 @@ import random
 # l'attaccante riesce nell'attacco con una probabilità pari al 5%
 # il difensore al 10%
 
-class mossaSincrona(azioneSincrona):
+class mossaSincrona():
     
     def preCondizione(self,spazio,legal_moves,mAttS,agent,mosseEseguite):
         print('MOSSE GIA ESEGUITE:',mosseEseguite)

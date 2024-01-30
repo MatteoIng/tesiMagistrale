@@ -1,9 +1,8 @@
-from azioneAsincrona import azioneAsincrona
 import random
 
 # qui ho implementato la stessa idea delle mosse sincrone
 
-class mossaAsincrona(azioneAsincrona):
+class mossaAsincrona():
 
     def __init__(self):
         self.tempoAttuazione = 1.0
@@ -68,3 +67,5 @@ class mossaAsincrona(azioneAsincrona):
             for i in range((action+1)):
                 spazio['difensore'][i] = 0
         
+    def reset(self):
+        self.tempoAttesa = self.tempoAttuazione

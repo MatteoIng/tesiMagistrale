@@ -327,20 +327,20 @@ class raw_env(AECEnv):
         # VOGLIO VEDERE SE MIGLIORA IL TRAINING
         # aggiungo la sequenialità delle noop-noop mel'ero dimenticataa
 
-        if agent == 'attaccante':
+        """ if agent == 'attaccante':
             # solo noop puo fare se true
             att = [not(i) for i in self.lm['attaccante']['mosse']]
             #print('att:',att)
-            if all(att[:7]):
+            if all(att[:n_azioni-2]):
                 #print('ENTRATOatt')
                 self.lm[agent]['nmosse'] = self.num_moves
         else:
             # solo noop puo fare se true
             diff = [not(i) for i in self.lm['difensore']['mosse']]
             #print('diff:',diff)
-            if all(diff[:18]):
+            if all(diff[:n_azioni-2]):
                 #print('ENTRATOdiff')
-                self.lm[agent]['nmosse'] = self.num_moves
+                self.lm[agent]['nmosse'] = self.num_moves """
 
 
         # NON POSSONO AVERE VALORI DISCORDI GLI AGENTI delle terminations e troncation

@@ -30,5 +30,5 @@ class Attaccante(Agente):
     def reset(self):
         super().reset()
         self.asincronaAzione.reset()
-        self.sincronaAzione.reset()
+        #self.sincronaAzione.reset()
         

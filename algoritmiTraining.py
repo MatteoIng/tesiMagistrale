@@ -1,31 +1,21 @@
-import rsp
-
+from pettingzoo.test import api_test, performance_benchmark
+from ray.rllib.algorithms.apex_dqn.apex_dqn import ApexDQNConfig
+from ray.rllib.algorithms.dqn import DQNConfig
 from ray.rllib.algorithms.impala import ImpalaConfig
 from ray.rllib.algorithms.pg import PGConfig
-from ray.rllib.algorithms.dqn import DQNConfig
 from ray.rllib.algorithms.ppo import PPOConfig
-from ray.rllib.algorithms.apex_dqn.apex_dqn import ApexDQNConfig
-
-
-from ray.rllib.utils.framework import try_import_torch
-from ray.rllib.utils import check_env
-
-from ray.rllib.examples.models.action_mask_model import TorchActionMaskModel
-
-from ray.tune.registry import register_env
-
-from ray.rllib.models import ModelCatalog
-
 from ray.rllib.env import PettingZooEnv
-
-from pettingzoo.test import api_test
-from pettingzoo.test import performance_benchmark
-
-
-
+from ray.rllib.examples.models.action_mask_model import TorchActionMaskModel
+from ray.rllib.models import ModelCatalog
+from ray.rllib.utils import check_env
+from ray.rllib.utils.framework import try_import_torch
+from ray.tune.registry import register_env
 # SERVE PER AVERE LO SPAZIO DELLE AZIONI DI DIMENSIONI DIVERSE
 # e VOLENDO ANCHE LE OBSERVATIONs
-from supersuit.multiagent_wrappers import pad_action_space_v0,pad_observations_v0
+from supersuit.multiagent_wrappers import (pad_action_space_v0,
+                                           pad_observations_v0)
+
+import rsp
 
 env_name = "rsp"
 
@@ -185,7 +175,8 @@ class PPO():
           self.config = (
       PPOConfig()
       .environment(env_name,disable_env_checking=True)
-      .resources(num_cpus_for_local_worker=0,num_gpus=1)
+      # cpu_for_local_worker è per il training del ppo, devo capire quali per i rollout worker
+      .resources(num_gpus=0,num_cpus_for_local_worker=2,num_cpus_per_learner_worker=2)
       .framework("torch")
       .multi_agent(
         policies={

@@ -142,6 +142,7 @@ def terminationPartita(spazio,lm,num_moves,NUM_ITERS,mAtt,mDiff):
     #print(f'lenMDiff:{lenMDiff} e mDiff:{mDiff}')
 
 
+    #if ( all(checkNot) or (lenMDiff == mDiff and lenMAADiff == 0 and (1 in check))): #or (lenMAtt == mAtt and lenMAAtt == 0 and lenMDiff == mDiff and lenMAADiff == 0)):
     if ((all(checkNot) and lenMAtt == mAtt) or (lenMDiff == mDiff and (1 in check)) or (lenMAtt == mAtt and lenMAAtt == 0 and lenMDiff == mDiff and lenMAADiff == 0)):
         val = True
     else:
