@@ -69,10 +69,11 @@ class Agente():
         sincDisp = False
         asincDisp = False
         for i in range(mAgentSinc):
-            if i not in self.mosseEseguite:
+            if legal_moves[i] == 1:
                 sincDisp = True   
-        for i in range(mAgentSinc,mAgentAsinc):
-            if i not in self.mosseEseguite:
+
+        for i in range(mAgentSinc,mAgentTot):
+            if legal_moves[i] == 1:
                 asincDisp = True
 
         # se non ci sono 
