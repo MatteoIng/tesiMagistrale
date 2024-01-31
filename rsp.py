@@ -297,80 +297,83 @@ class raw_env(AECEnv):
         
         
         agent = self.agent_selection
-        #print('Agente in azione:',agent)
-        print('Mossa da eseguire:',action)
-        print('Timer Prima:',self.spazio['difensore'][timer])
-
-        ######################## PRE(con action mask solo post)/POST condizioni #####################################################
-
-        #print('Prima della mossa:',self.spazio)
-        self.lastTimer = postCondizioni(action,self.spazio,self.agent_selection,mosse,timer,self.lastTimer)
-        self.spazio['difensore'][timer] = round(self.spazio['difensore'][timer],3)
-        print('Dopo la mossa:',self.spazio['difensore'])
-
-        ############################################## REWARD ###########################################
-
-        # SI INFLUENZANO LE REWARD A VICENDA
-        """ print('Mossa valida:',mossaValida)
-        if mossaValida: """
-        rw = reward(agent,action,self.spazio['difensore'],n_azioni,n_azioni_attaccante_sincrone,n_azioni_difensore_sincrone,timer)
-        #if agent == 'difensore':
-        self.rewards[agent] += rw
-        """ else:
-            self.rewards[agent] -= rw """
-        
-        ############################# CHECK ARRESTO (se sono nello stato sicuro) #########################
-        
-        # COSA STO FACENDO
-        # NOOP-NOOP MI TERMINA
-        # MASOLO NEL CASO FOSSERO LE ULTIME DUE MOSSE RIMASTE
-        # VOGLIO VEDERE SE MIGLIORA IL TRAINING
-        # aggiungo la sequenialità delle noop-noop mel'ero dimenticataa
-
-        """ if agent == 'attaccante':
-            # solo noop puo fare se true
-            att = [not(i) for i in self.lm['attaccante']['mosse']]
-            #print('att:',att)
-            if all(att[:n_azioni-2]):
-                #print('ENTRATOatt')
-                self.lm[agent]['nmosse'] = self.num_moves
+        if agent == 'attaccante':
+            self.agent_selection = self._agent_selector.next()
         else:
-            # solo noop puo fare se true
-            diff = [not(i) for i in self.lm['difensore']['mosse']]
-            #print('diff:',diff)
-            if all(diff[:n_azioni-2]):
-                #print('ENTRATOdiff')
-                self.lm[agent]['nmosse'] = self.num_moves """
+            #print('Agente in azione:',agent)
+            print('Mossa da eseguire:',action)
+            print('Timer Prima:',self.spazio['difensore'][timer])
+
+            ######################## PRE(con action mask solo post)/POST condizioni #####################################################
+
+            #print('Prima della mossa:',self.spazio)
+            self.lastTimer = postCondizioni(action,self.spazio,self.agent_selection,mosse,timer,self.lastTimer)
+            self.spazio['difensore'][timer] = round(self.spazio['difensore'][timer],3)
+            print('Dopo la mossa:',self.spazio['difensore'])
+
+            ############################################## REWARD ###########################################
+
+            # SI INFLUENZANO LE REWARD A VICENDA
+            """ print('Mossa valida:',mossaValida)
+            if mossaValida: """
+            rw = reward(agent,action,self.spazio['difensore'],n_azioni,n_azioni_attaccante_sincrone,n_azioni_difensore_sincrone,timer)
+            #if agent == 'difensore':
+            self.rewards[agent] += rw
+            """ else:
+                self.rewards[agent] -= rw """
+            
+            ############################# CHECK ARRESTO (se sono nello stato sicuro) #########################
+            
+            # COSA STO FACENDO
+            # NOOP-NOOP MI TERMINA
+            # MASOLO NEL CASO FOSSERO LE ULTIME DUE MOSSE RIMASTE
+            # VOGLIO VEDERE SE MIGLIORA IL TRAINING
+            # aggiungo la sequenialità delle noop-noop mel'ero dimenticataa
+
+            """ if agent == 'attaccante':
+                # solo noop puo fare se true
+                att = [not(i) for i in self.lm['attaccante']['mosse']]
+                #print('att:',att)
+                if all(att[:n_azioni-2]):
+                    #print('ENTRATOatt')
+                    self.lm[agent]['nmosse'] = self.num_moves
+            else:
+                # solo noop puo fare se true
+                diff = [not(i) for i in self.lm['difensore']['mosse']]
+                #print('diff:',diff)
+                if all(diff[:n_azioni-2]):
+                    #print('ENTRATOdiff')
+                    self.lm[agent]['nmosse'] = self.num_moves """
 
 
-        # NON POSSONO AVERE VALORI DISCORDI GLI AGENTI delle terminations e troncation
-        mAtt = (n_azioni_attaccante_asincrone + n_azioni_attaccante_asincrone)
-        mDiff = (n_azioni_difensore_asincrone + n_azioni_difensore_asincrone)
-        val = terminationPartita(self.spazio,self.lm,self.num_moves,self.NUM_ITERS,mAtt,mDiff)
-        # se la condizione di aresto generale lo ferma bene altrimenti...
-        self.terminations = {
-            agent: val for agent in self.agents
-        }
+            # NON POSSONO AVERE VALORI DISCORDI GLI AGENTI delle terminations e troncation
+            mAtt = (n_azioni_attaccante_asincrone + n_azioni_attaccante_asincrone)
+            mDiff = (n_azioni_difensore_asincrone + n_azioni_difensore_asincrone)
+            val = terminationPartita(self.spazio,self.lm,self.num_moves,self.NUM_ITERS,mAtt,mDiff)
+            # se la condizione di aresto generale lo ferma bene altrimenti...
+            self.terminations = {
+                agent: val for agent in self.agents
+            }
 
-        ##################################################################################################
-        
-        # SALVE TUTTE LE REWARD CUMULATIVE DI TUTTE LE PARTITE
-        #curva_partita['attaccante'].append((self.num_moves,self._cumulative_rewards['attaccante']))
-        #curva_partita['difensore'].append((self.num_moves,self._cumulative_rewards['difensore']))
+            ##################################################################################################
+            
+            # SALVE TUTTE LE REWARD CUMULATIVE DI TUTTE LE PARTITE
+            #curva_partita['attaccante'].append((self.num_moves,self._cumulative_rewards['attaccante']))
+            #curva_partita['difensore'].append((self.num_moves,self._cumulative_rewards['difensore']))
 
-        self._accumulate_rewards()
+            self._accumulate_rewards()
 
-        print('Timer Dopo:',self.spazio['difensore'][timer])
-        print('Num Mosse:',self.num_moves)
-        print('Truncation:',self.truncations)
-        print('Termination:',self.terminations)
-        print('Rewards:', self.rewards)
-        print('reward cumulative:',self._cumulative_rewards)
+            print('Timer Dopo:',self.spazio['difensore'][timer])
+            print('Num Mosse:',self.num_moves)
+            print('Truncation:',self.truncations)
+            print('Termination:',self.terminations)
+            print('Rewards:', self.rewards)
+            print('reward cumulative:',self._cumulative_rewards)
 
-        # selects the next agent.
-        self.agent_selection = self._agent_selector.next()
-        self.num_moves += 1
-        self.rewards[agent] = 0
-        
-        if self.render_mode == "human":
-            self.render()
+            # selects the next agent.
+            self.agent_selection = self._agent_selector.next()
+            self.num_moves += 1
+            self.rewards[agent] = 0
+            
+            if self.render_mode == "human":
+                self.render()
