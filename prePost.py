@@ -121,7 +121,7 @@ def reward(agent,action,spazioDiff,n_azioni,n_azioni_attaccante_sincrone,n_azion
 
 
 # CONTROLLA LO STATE PER TERMINAR EO MENO
-def terminationPartita(spazio,lm,num_moves,NUM_ITERS,mAtt,mDiff):
+def terminationPartita(spazio,legal_moves,num_moves,NUM_ITERS,mAtt,mDiff):
     val = False
     
     # clean system state + esclusione degli altri parametri (lascio solo il check degli attacchi sotto T1 
@@ -131,8 +131,13 @@ def terminationPartita(spazio,lm,num_moves,NUM_ITERS,mAtt,mDiff):
     checkNot = [not(spazio['difensore'][i]) for i in range(len(spazio['difensore'])-1)]
     check = spazio['difensore'][:(len(spazio['difensore'])-1)]
 
-    lenMAtt = attaccante.lenMosseEseguite()
-    lenMDiff = difensore.lenMosseEseguite()
+    #lenMAtt = attaccante.lenMosseEseguite()
+    #lenMDiff = difensore.lenMosseEseguite()
+    mosseDisp = False
+    for i in range(mAtt):
+        if legal_moves[i] == 1:
+            mosseDisp = True
+
     lenMAAtt = attaccante.lenMosseAsincroneRunning()
     lenMAADiff = difensore.lenMosseAsincroneRunning()
 
@@ -142,7 +147,7 @@ def terminationPartita(spazio,lm,num_moves,NUM_ITERS,mAtt,mDiff):
     #print(f'lenMDiff:{lenMDiff} e mDiff:{mDiff}')
 
 
-    if ( all(checkNot) or (lenMDiff == mDiff and lenMAADiff == 0 and (1 in check))): #or (lenMAtt == mAtt and lenMAAtt == 0 and lenMDiff == mDiff and lenMAADiff == 0)):
+    if ( all(checkNot) or (mosseDisp and lenMAADiff == 0 and (1 in check))): #or (lenMAtt == mAtt and lenMAAtt == 0 and lenMDiff == mDiff and lenMAADiff == 0)):
     #if ((all(checkNot) and lenMAtt == mAtt) or (lenMDiff == mDiff and (1 in check)) or (lenMAtt == mAtt and lenMAAtt == 0 and lenMDiff == mDiff and lenMAADiff == 0)):
         val = True
     else:

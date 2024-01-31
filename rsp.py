@@ -70,6 +70,8 @@ mosse = {
     }
 }
 
+legal_moves = np.zeros(n_azioni,'int8')
+
 #-------------------------------------- Lettura conf ----------------------------------#
 
 def env(render_mode=None):
@@ -349,7 +351,7 @@ class raw_env(AECEnv):
             # NON POSSONO AVERE VALORI DISCORDI GLI AGENTI delle terminations e troncation
             mAtt = (n_azioni_attaccante_asincrone + n_azioni_attaccante_asincrone)
             mDiff = (n_azioni_difensore_asincrone + n_azioni_difensore_asincrone)
-            val = terminationPartita(self.spazio,self.lm,self.num_moves,self.NUM_ITERS,mAtt,mDiff)
+            val = terminationPartita(self.spazio,legal_moves,self.num_moves,self.NUM_ITERS,mAtt,mDiff)
             # se la condizione di aresto generale lo ferma bene altrimenti...
             self.terminations = {
                 agent: val for agent in self.agents
