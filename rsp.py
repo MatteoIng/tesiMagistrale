@@ -116,13 +116,6 @@ class raw_env(AECEnv):
         #self.possible_agents = [f'agente{i}' for i in range(n_agenti)]
         self.possible_agents = ['difensore','attaccante']
 
-        self.lm = {
-            i:{
-                'nmosse':-1,
-                'mosse':[]
-            } for i in self.possible_agents
-        }
-
         # spazio del difensore monitorato anche dall'attaccante per l'observation dopo un'action
         self.spazio = {
             i: generazioneSpazioRandom(dim_obs)
@@ -198,8 +191,7 @@ class raw_env(AECEnv):
         legal_moves = np.zeros(n_azioni,'int8')
 
         preCondizioni(agent,self.spazio,legal_moves,mosse,timer)
-        self.lm[agent]['mosse'] = np.copy(legal_moves)
-
+        
         print('\t')
         print('Observe agent:',agent)
         print('Observe observation:',self.spazio['difensore'])
@@ -231,12 +223,6 @@ class raw_env(AECEnv):
         reset()
         self.lastTimer = 0
 
-        self.lm = {
-            i:{
-                'nmosse':-1,
-                'mosse':[]
-            } for i in self.possible_agents
-        }
 
         # spazio del difensore monitorato anche dall'attaccante per l'observation dopo un'action
         self.spazio = {

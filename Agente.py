@@ -162,10 +162,10 @@ class Agente():
         # per forza ha finito le mosse
         # ma non deve alterarmi il timer in alcun modo
         # if tnop == 0:
-        if agent == 'attaccante':
+        """ if agent == 'attaccante':
             spazio['difensore'][timer] -= round(t,2)
         else:
-            spazio['difensore'][timer] += round(t,2)
+            spazio['difensore'][timer] += round(t,2) """
         #----------------------------------------------------------------------------
         self.aggiornaMosseAsincrone(round(t,2),agente,action,mAgentSinc)
         # perche lamossa noop col numero combacia alla posizione del timer
