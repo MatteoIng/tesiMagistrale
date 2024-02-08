@@ -133,10 +133,10 @@ def terminationPartita(spazio,legal_moves,num_moves,NUM_ITERS,mAtt,mDiff):
 
     #lenMAtt = attaccante.lenMosseEseguite()
     #lenMDiff = difensore.lenMosseEseguite()
-    mosseDisp = False
+    mosseDispAtt = False
     for i in range(mAtt):
         if legal_moves[i] == 1:
-            mosseDisp = True
+            mosseDispAtt = True
 
     lenMAAtt = attaccante.lenMosseAsincroneRunning()
     lenMAADiff = difensore.lenMosseAsincroneRunning()
@@ -148,7 +148,7 @@ def terminationPartita(spazio,legal_moves,num_moves,NUM_ITERS,mAtt,mDiff):
 
     # CHEKNOT se tutto safe
     # check se se ha almeno una ad 1
-    if ( all(checkNot) or (mosseDisp and lenMAADiff == 0 and (1 in check))): #or (lenMAtt == mAtt and lenMAAtt == 0 and lenMDiff == mDiff and lenMAADiff == 0)):
+    if ( all(checkNot) or (mosseDispAtt and lenMAADiff == 0 and (1 in check))): #or (lenMAtt == mAtt and lenMAAtt == 0 and lenMDiff == mDiff and lenMAADiff == 0)):
     #if ((all(checkNot) and lenMAtt == mAtt) or (lenMDiff == mDiff and (1 in check)) or (lenMAtt == mAtt and lenMAAtt == 0 and lenMDiff == mDiff and lenMAADiff == 0)):
         val = True
     else:
@@ -170,7 +170,7 @@ def generazioneSpazioRandom(dim_obs):
         spazio.append(1)
     spazio.append(0)
     # altero random una componente simulando un attacco 
-    spazio[random.randint(0,dim_obs-2)] = 1
+    # spazio[random.randint(0,dim_obs-2)] = 1
 
 
     return spazio

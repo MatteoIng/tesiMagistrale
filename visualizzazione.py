@@ -1,9 +1,10 @@
+import json
+import os
+import sys
+
+import numpy as np
 from matplotlib import pyplot as plt
 
-import json
-import numpy as np
-import sys
-import os
 
 def visualizza_reward_mosse():
     dati = ''
@@ -40,10 +41,7 @@ def visualizza_reward_mosse():
     #plt.xlabel('numero mosse per partita')
     plt.plot(np.arange(len(yA)),yA)
     plt.plot(np.arange(len(yB)),yB)
-    ra = [1 for i in range(len(yA))]
-    rb = [0.02 for i in range(len(yA))]
-    plt.plot(np.arange(len(yA)),ra)
-    plt.plot(np.arange(len(yA)),rb)
+    
     plt.legend(['attaccante','difensore'])
 
 
@@ -80,6 +78,10 @@ def visualizza_reward_mosse():
     #plt.xlabel('numero mosse per partita')
     plt.plot(np.arange(len(yA)),yA)
     plt.plot(np.arange(len(yB)),yB)
+    ra = [1 for i in range(len(yA))]
+    rb = [-1.1 for i in range(len(yA))]
+    plt.plot(np.arange(len(yA)),ra)
+    plt.plot(np.arange(len(yA)),rb)
     plt.legend(['attaccante','difensore'])
 
 
