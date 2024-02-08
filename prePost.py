@@ -170,7 +170,7 @@ def generazioneSpazioRandom(dim_obs):
         spazio.append(1)
     spazio.append(0)
     # altero random una componente simulando un attacco 
-    spazio[random.randint(0,dim_obs-1)] = 1
+    spazio[random.randint(0,dim_obs-2)] = 1
 
 
     return spazio
