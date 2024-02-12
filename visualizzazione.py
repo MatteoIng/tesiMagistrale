@@ -75,13 +75,13 @@ def visualizza_reward_mosse():
     plt.title('reward per epoca')
     plt.ylabel('reward')
     plt.xlabel('epoche')
-    ra = [1 for i in range(len(yA))]
+    plt.plot(np.arange(len(yA)),yA)
+    plt.plot(np.arange(len(yB)),yB)
+    ra = [0 for i in range(len(yA))]
     rb = [-0.1 for i in range(len(yA))]
     plt.plot(np.arange(len(yA)),ra)
     plt.plot(np.arange(len(yA)),rb)
-    plt.plot(np.arange(len(yA)),yA)
-    plt.plot(np.arange(len(yB)),yB)
-    plt.legend(['attaccante','difensore'])
+    plt.legend(['attaccante','difensore','reward ottimo attaccante','reward ottimo difensore'])
 
 
 
