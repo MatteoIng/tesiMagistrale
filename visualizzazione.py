@@ -1,9 +1,10 @@
+import json
+import os
+import sys
+
+import numpy as np
 from matplotlib import pyplot as plt
 
-import json
-import numpy as np
-import sys
-import os
 
 def visualizza_reward_mosse():
     dati = ''
@@ -12,7 +13,7 @@ def visualizza_reward_mosse():
         dati = file.read()
     dati_dict = json.loads(dati)
     
-    print(dati_dict)
+    #print(dati_dict)
 
     a = dati_dict['attaccante']
     b = dati_dict['difensore']
@@ -40,10 +41,7 @@ def visualizza_reward_mosse():
     #plt.xlabel('numero mosse per partita')
     plt.plot(np.arange(len(yA)),yA)
     plt.plot(np.arange(len(yB)),yB)
-    ra = [1 for i in range(len(yA))]
-    rb = [0.02 for i in range(len(yA))]
-    plt.plot(np.arange(len(yA)),ra)
-    plt.plot(np.arange(len(yA)),rb)
+    
     plt.legend(['attaccante','difensore'])
 
 
@@ -111,6 +109,10 @@ def visualizza_reward_mosse():
     plt.ylabel('reward attaccante')
     plt.xlabel('numero mosse per partita')
     plt.plot(x,y)
+    ra = [1 for i in range(len(yA))]
+    rb = [-0.1 for i in range(len(yA))]
+    plt.plot(np.arange(len(yA)),ra)
+    plt.plot(np.arange(len(yA)),rb)
 
     # Grafico 3
     # reward rispetto al numero di mosse fatte dal difensore
