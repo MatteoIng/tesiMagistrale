@@ -138,6 +138,7 @@ class Impala():
                 },
     ).rollouts(
             num_rollout_workers=3,
+            rollout_fragment_length=10,
     )
 )
           
