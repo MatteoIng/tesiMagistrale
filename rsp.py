@@ -15,10 +15,10 @@ from prePost import (curva_partita, generazioneSpazioRandom, postCondizioni,
 #------------------------------------- Lettura conf ---------------------------------#
 conf = open("conf.txt", "r")
 lines = conf.readlines()
-#print(lines)
+print(lines)
 for i in range(len(lines)):
     p = lines[i].strip().split('= ')
-    #print(int(p[1]))
+    print(int(p[1]))
     lines[i] = int(p[1])
 
 n_agenti = lines[0]
@@ -27,18 +27,18 @@ print(f'Numero agenti : {n_agenti}')
 n_azioni_attaccante = lines[1]
 print(f'Mosse sincrone dell attaccante: {n_azioni_attaccante}')
 
-k_att = lines[2]
+k_att = lines[2]/10
 
-n_azioni_attaccante_sincrone = (n_azioni_attaccante*k_att)
+n_azioni_attaccante_sincrone = int((n_azioni_attaccante*k_att))
 n_azioni_attaccante_asincrone = n_azioni_attaccante - n_azioni_attaccante_sincrone
 print(f'Mosse sincrone dell attaccante: {n_azioni_attaccante_sincrone}, mosse asincrone dell attaccante {n_azioni_attaccante_asincrone}')
 
 n_azioni_difensore = lines[3]
 print(f'Mosse sincrone del difensore: {n_azioni_difensore}')
 
-k_diff = lines[4]
+k_diff = lines[4]/10
 
-n_azioni_difensore_sincrone = (n_azioni_difensore*k_diff)
+n_azioni_difensore_sincrone = int((n_azioni_difensore*k_diff))
 n_azioni_difensore_asincrone = n_azioni_difensore - n_azioni_difensore_sincrone
 print(f'Mosse sincrone dell difensore: {n_azioni_difensore_sincrone}, mosse asincrone dell difensore {n_azioni_difensore_asincrone}')
 
@@ -49,7 +49,7 @@ dim_obs = 0
 n_azioni = 0
 # posizione del timer nello spazio
 timer = 0
-if ((n_azioni_attaccante) == (n_azioni_difensore) and k <= 1 and k >= 0):
+if ((n_azioni_attaccante) == (n_azioni_difensore) and k_att <= 10 and k_att >= 0 and k_diff <= 10 and k_diff >= 0):
     # ogni azione una var dello stato + timer
     dim_obs = n_azioni_difensore + 1
     # mosse totali somma asincrone e sincrone + noop + wait

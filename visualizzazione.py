@@ -75,7 +75,10 @@ def visualizza_reward_mosse():
     plt.title('reward per epoca')
     plt.ylabel('reward')
     plt.xlabel('epoche')
-    #plt.xlabel('numero mosse per partita')
+    ra = [1 for i in range(len(yA))]
+    rb = [-0.1 for i in range(len(yA))]
+    plt.plot(np.arange(len(yA)),ra)
+    plt.plot(np.arange(len(yA)),rb)
     plt.plot(np.arange(len(yA)),yA)
     plt.plot(np.arange(len(yB)),yB)
     plt.legend(['attaccante','difensore'])
@@ -109,10 +112,7 @@ def visualizza_reward_mosse():
     plt.ylabel('reward attaccante')
     plt.xlabel('numero mosse per partita')
     plt.plot(x,y)
-    ra = [1 for i in range(len(yA))]
-    rb = [-0.1 for i in range(len(yA))]
-    plt.plot(np.arange(len(yA)),ra)
-    plt.plot(np.arange(len(yA)),rb)
+    
 
     # Grafico 3
     # reward rispetto al numero di mosse fatte dal difensore
