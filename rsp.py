@@ -285,7 +285,7 @@ class raw_env(AECEnv):
         
         
         agent = self.agent_selection
-        if agent == 'attaccante':
+        if agent == 'difensore':
             self.agent_selection = self._agent_selector.next()
         else:
             #print('Agente in azione:',agent)
