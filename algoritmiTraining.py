@@ -91,7 +91,7 @@ class ApexDQN:
     ).resources(num_gpus=1,num_cpus_for_local_worker=2)
     .rollouts(
             num_rollout_workers=3,
-            ollout_fragment_length=10
+            rollout_fragment_length=10,
     ).training(
             train_batch_size=200,
             model = { 
@@ -140,7 +140,7 @@ class Impala():
                 },
     ).rollouts(
             num_rollout_workers=3,
-            rollout_fragment_length=10
+            rollout_fragment_length=10,
     )
 )
           
@@ -166,7 +166,8 @@ class PG():
                 "custom_model": "am_model"
                 },
     ).rollouts(
-            num_rollout_workers=3
+            num_rollout_workers=3,
+            rollout_fragment_length=10,
     )
 )  
           
@@ -179,7 +180,7 @@ class PPO():
       PPOConfig()
       .environment(env_name,disable_env_checking=True)
       # cpu_for_local_worker è per il training del ppo, devo capire quali per i rollout worker
-      .resources(num_gpus=1,num_cpus_for_local_worker=2)
+      .resources(num_gpus=0,num_cpus_for_local_worker=2)
       .framework("torch")
       .multi_agent(
         policies={
