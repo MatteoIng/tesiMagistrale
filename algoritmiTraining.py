@@ -177,7 +177,7 @@ class PPO():
       PPOConfig()
       .environment(env_name,disable_env_checking=True)
       # cpu_for_local_worker è per il training del ppo, devo capire quali per i rollout worker
-      .resources(num_gpus=1,num_cpus_for_local_worker=2)
+      .resources(num_gpus=0,num_cpus_for_local_worker=2)
       .framework("torch")
       .multi_agent(
         policies={
