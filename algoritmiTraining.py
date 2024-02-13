@@ -51,9 +51,10 @@ class DQN:
     DQNConfig()
     .environment(
             env=env_name
-    ).resources(num_gpus=1,num_cpus_for_local_worker=2
-).rollouts(
+    ).resources(num_gpus=1,num_cpus_for_local_worker=2)
+    .rollouts(
             num_rollout_workers=3,
+            rollout_fragment_length=10
     ).multi_agent(
             policies={
                     "attaccante": (None, obs_space, act_space, {}),
@@ -87,9 +88,10 @@ class ApexDQN:
     ApexDQNConfig()
     .environment(
             env=env_name
-    ).resources(num_gpus=1,num_cpus_for_local_worker=2
-).rollouts(
+    ).resources(num_gpus=1,num_cpus_for_local_worker=2)
+    .rollouts(
             num_rollout_workers=3,
+            ollout_fragment_length=10
     ).training(
             train_batch_size=200,
             model = { 
@@ -138,6 +140,7 @@ class Impala():
                 },
     ).rollouts(
             num_rollout_workers=3,
+            rollout_fragment_length=10
     )
 )
           
@@ -164,6 +167,7 @@ class PG():
                 },
     ).rollouts(
             num_rollout_workers=3,
+            rollout_fragment_length=10
     )
 )  
           
