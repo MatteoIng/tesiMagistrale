@@ -319,8 +319,6 @@ class raw_env(AECEnv):
         rw = reward(agent,action,self.spazio['difensore'],n_azioni,n_azioni_attaccante_sincrone,n_azioni_difensore_sincrone,timer)
         #if agent == 'difensore':
         self.rewards[agent] += rw
-        """ else:
-            self.rewards[agent] -= rw """
         
         ############################# CHECK ARRESTO (se sono nello stato sicuro) #########################
         
@@ -368,6 +366,8 @@ class raw_env(AECEnv):
         print('Truncation:',self.truncations)
         print('Termination:',self.terminations)
         print('Rewards:', self.rewards)
+
+        self._cumulative_rewards[agent] = round(self._cumulative_rewards[agent],2)
         print('reward cumulative:',self._cumulative_rewards)
 
         # selects the next agent.

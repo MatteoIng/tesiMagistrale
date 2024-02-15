@@ -25,6 +25,7 @@ class Attaccante(Agente):
 
     def reward(self, azione,n_azioni):
         return (azione - (n_azioni-2))/ (n_azioni-2)
+    
 
 
     def reset(self):

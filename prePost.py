@@ -96,7 +96,7 @@ def reward(agent,action,spazioDiff,n_azioni,n_azioni_attaccante_sincrone,n_azion
                 actionPerReward = mossaRewardMinore-action
             print('ACTIONPERREWARD:',actionPerReward)
 
-            calcolo = -((actionPerReward+1)/ (n_azioni))
+            calcolo = -((actionPerReward+1)/ (n_azioni-2))
         else:
             calcolo = 0
 
