@@ -15,31 +15,33 @@ from prePost import (curva_partita, generazioneSpazioRandom, postCondizioni,
 #------------------------------------- Lettura conf ---------------------------------#
 conf = open("conf.txt", "r")
 lines = conf.readlines()
-#print(lines)
+print(lines)
 for i in range(len(lines)):
     p = lines[i].strip().split('= ')
-    #print(int(p[1]))
+    print(int(p[1]))
     lines[i] = int(p[1])
 
 n_agenti = lines[0]
 print(f'Numero agenti : {n_agenti}')
 
-n_azioni_attaccante_sincrone = lines[1]
-print(f'Mosse sincrone dell attaccante: {n_azioni_attaccante_sincrone}')
+n_azioni_attaccante = lines[1]
+print(f'Mosse sincrone dell attaccante: {n_azioni_attaccante}')
 
-n_azioni_attaccante_asincrone = lines[2]
-print(f'Mosse asincrone dell attaccante: {n_azioni_attaccante_asincrone}')
+k_att = lines[2]/10
 
-n_azioni_difensore_sincrone = lines[3]
-print(f'Mosse sincrone del difensore: {n_azioni_difensore_sincrone}')
+n_azioni_attaccante_sincrone = int((n_azioni_attaccante*k_att))
+n_azioni_attaccante_asincrone = n_azioni_attaccante - n_azioni_attaccante_sincrone
+print(f'Mosse sincrone dell attaccante: {n_azioni_attaccante_sincrone}, mosse asincrone dell attaccante {n_azioni_attaccante_asincrone}')
 
-n_azioni_difensore_asincrone = lines[4]
-print(f'Mosse asincrone del difensore: {n_azioni_difensore_asincrone}')
+n_azioni_difensore = lines[3]
+print(f'Mosse sincrone del difensore: {n_azioni_difensore}')
 
-somma_attaccante = n_azioni_attaccante_sincrone+n_azioni_attaccante_asincrone
-print(f'somma_attaccante:{somma_attaccante}')
-somma_difensore = n_azioni_difensore_sincrone+n_azioni_difensore_asincrone
-print(f'somma_attaccante:{somma_difensore}')
+k_diff = lines[4]/10
+
+n_azioni_difensore_sincrone = int((n_azioni_difensore*k_diff))
+n_azioni_difensore_asincrone = n_azioni_difensore - n_azioni_difensore_sincrone
+print(f'Mosse sincrone dell difensore: {n_azioni_difensore_sincrone}, mosse asincrone dell difensore {n_azioni_difensore_asincrone}')
+
 
 # dimensione dello stato, tutte variabili booleane + timer 
 dim_obs = 0
@@ -47,11 +49,11 @@ dim_obs = 0
 n_azioni = 0
 # posizione del timer nello spazio
 timer = 0
-if ((somma_attaccante) == (somma_difensore)):
+if ((n_azioni_attaccante) == (n_azioni_difensore) and k_att <= 10 and k_att >= 0 and k_diff <= 10 and k_diff >= 0):
     # ogni azione una var dello stato + timer
-    dim_obs = n_azioni_attaccante_sincrone + n_azioni_attaccante_asincrone + 1
+    dim_obs = n_azioni_difensore + 1
     # mosse totali somma asincrone e sincrone + noop + wait
-    n_azioni = n_azioni_attaccante_sincrone + n_azioni_attaccante_asincrone + 2
+    n_azioni = n_azioni_difensore + 2
     # set timer
     timer = dim_obs - 1
 
@@ -69,7 +71,6 @@ mosse = {
         'asincrone':n_azioni_difensore_asincrone,
     }
 }
-
 legal_moves = np.zeros(n_azioni,'int8')
 
 #-------------------------------------- Lettura conf ----------------------------------#
