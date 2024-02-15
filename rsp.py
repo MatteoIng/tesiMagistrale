@@ -356,6 +356,8 @@ class raw_env(AECEnv):
             print('Truncation:',self.truncations)
             print('Termination:',self.terminations)
             print('Rewards:', self.rewards)
+            
+            self._cumulative_rewards[agent] = round(self._cumulative_rewards[agent],2)
             print('reward cumulative:',self._cumulative_rewards)
 
             # selects the next agent.
