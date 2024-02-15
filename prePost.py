@@ -77,32 +77,18 @@ def reward(agent,action,spazioDiff,n_azioni,n_azioni_attaccante_sincrone,n_azion
     calcolo = 0
     val = action
     if agent == 'attaccante':
-        # cosi la prima sincrona ha lo stesso costo della prima asincrona
-        #if action > n_azioni_attaccante_asincrone:
-        """ val = action-n_azioni_attaccante_sincrone
-        print(f'VAL MOSSA ASINCRONA {val}') """
-
-        #if action < mosse[agent]['sincrone']:
-            #calcolo = attaccante.reward(attaccante.REWARD_MAP[0])/((n_azioni+1)/(action+1))
+        
         calcolo = attaccante.reward(action,n_azioni)
-        #calcolo = (action+1 - n_azioni)/ n_azioni
-        """ else:
-            #calcolo = attaccante.reward(attaccante.REWARD_MAP[0])/((n_azioni+1)/(val+1))
-            calcolo = (action+1 - n_azioni)/ n_azioni """
+        
     else:
-        # cosi la prima sincrona ha lo stesso costo della prima asincrona
-        #if action > n_azioni_difensore_asincrone:
-        """ val = action-n_azioni_difensore_sincrone
-        print(f'VAL MOSSA ASINCRONA {val}') """
 
-        #if action < mosse[agent]['sincrone']:
-            #calcolo = -(difensore.reward(difensore.REWARD_MAP[0])/((n_azioni+1)/(action+1)))
-        #calcolo = (action+1 - n_azioni)/ n_azioni
-
+        # se non è wait e noop
         if action != waitPosition and action != waitPosition+1:
             mossaRewardMinore = -1
+            # scorro lo stato tranne il timer (-1)
             for i in range(len(spazioDiff)-1):
                 if spazioDiff[i] == 1:
+                    # max indice relativo alla variabile compromessa
                     mossaRewardMinore = i  
 
             actionPerReward = action-mossaRewardMinore
@@ -113,9 +99,7 @@ def reward(agent,action,spazioDiff,n_azioni,n_azioni_attaccante_sincrone,n_azion
             calcolo = -((actionPerReward+1)/ (n_azioni))
         else:
             calcolo = 0
-        """ else:
-            #calcolo = -(difensore.reward(difensore.REWARD_MAP[0])/((n_azioni+1)/(val+1)))
-            calcolo = (action+1 - n_azioni)/ n_azioni """
+
     return calcolo
 
 

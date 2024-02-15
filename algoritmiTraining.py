@@ -92,9 +92,9 @@ class ApexDQN:
     ApexDQNConfig()
     .environment(
             env=env_name
-    ).resources(num_gpus=1,num_cpus_for_local_worker=2)
+    ).resources(num_gpus=0,num_cpus_for_local_worker=0)
     .rollouts(
-            num_rollout_workers=3,
+            num_rollout_workers=2,
             rollout_fragment_length=10,
     ).training(
             train_batch_size=200,
@@ -130,7 +130,7 @@ class Impala():
           self.config = (
       ImpalaConfig()
       .environment(env_name,disable_env_checking=True)
-      .resources(num_gpus=1,num_cpus_for_local_worker=2)
+      .resources(num_gpus=0,num_cpus_for_local_worker=4)
       .framework("torch")
       .multi_agent(
         policies={
@@ -143,9 +143,18 @@ class Impala():
                 "custom_model": "am_model"
                 },
     ).rollouts(
-            num_rollout_workers=3,
+            num_rollout_workers=2,
             rollout_fragment_length=10,
-    )
+    ).exploration(
+         exploration_config={
+                    # The Exploration class to use.
+                    "type": "EpsilonGreedy",
+                    # Config for the Exploration class' constructor:
+                    "initial_epsilon": 0.1,
+                    "final_epsilon": 0.0,
+                    "epsilon_timesteps": 100000,  # Timesteps over which to anneal epsilon.
+                }
+        )
 )
           
 # Con 100 training iteration ho visto che le partite terminano con il difensore che in una media di 50 mosse vince
@@ -172,7 +181,16 @@ class PG():
     ).rollouts(
             num_rollout_workers=3,
             rollout_fragment_length=10,
-    )
+    ).exploration(
+         exploration_config={
+                    # The Exploration class to use.
+                    "type": "EpsilonGreedy",
+                    # Config for the Exploration class' constructor:
+                    "initial_epsilon": 0.1,
+                    "final_epsilon": 0.0,
+                    "epsilon_timesteps": 100000,  # Timesteps over which to anneal epsilon.
+                }
+        )
 )  
           
 
@@ -198,7 +216,16 @@ class PPO():
                 },
     ).rollouts(
             num_rollout_workers=3,
-    )
+    ).exploration(
+         exploration_config={
+                    # The Exploration class to use.
+                    "type": "EpsilonGreedy",
+                    # Config for the Exploration class' constructor:
+                    "initial_epsilon": 0.1,
+                    "final_epsilon": 0.0,
+                    "epsilon_timesteps": 100000,  # Timesteps over which to anneal epsilon.
+                }
+        )
 )
           # PER IL CUSTOM MODEL ERROR
           self.config.rl_module( _enable_rl_module_api=False)
