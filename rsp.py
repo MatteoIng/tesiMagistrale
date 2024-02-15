@@ -304,13 +304,6 @@ class raw_env(AECEnv):
         print('Mossa da eseguire:',action)
         print('Timer Prima:',self.spazio['difensore'][timer])
 
-        ######################## PRE(con action mask solo post)/POST condizioni #####################################################
-
-        #print('Prima della mossa:',self.spazio)
-        self.lastTimer = postCondizioni(action,self.spazio,self.agent_selection,mosse,timer,self.lastTimer)
-        self.spazio['difensore'][timer] = round(self.spazio['difensore'][timer],3)
-        print('Dopo la mossa:',self.spazio['difensore'])
-
         ############################################## REWARD ###########################################
 
         # SI INFLUENZANO LE REWARD A VICENDA
@@ -319,6 +312,13 @@ class raw_env(AECEnv):
         rw = reward(agent,action,self.spazio['difensore'],n_azioni,n_azioni_attaccante_sincrone,n_azioni_difensore_sincrone,timer)
         #if agent == 'difensore':
         self.rewards[agent] += rw
+
+        ######################## PRE(con action mask solo post)/POST condizioni #####################################################
+
+        #print('Prima della mossa:',self.spazio)
+        self.lastTimer = postCondizioni(action,self.spazio,self.agent_selection,mosse,timer,self.lastTimer)
+        self.spazio['difensore'][timer] = round(self.spazio['difensore'][timer],3)
+        print('Dopo la mossa:',self.spazio['difensore'])
         
         ############################# CHECK ARRESTO (se sono nello stato sicuro) #########################
         
