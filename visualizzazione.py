@@ -78,7 +78,7 @@ def visualizza_reward_mosse():
     #plt.xlabel('numero mosse per partita')
     plt.plot(np.arange(len(yA)),yA)
     plt.plot(np.arange(len(yB)),yB)
-    rb = [-1.1 for i in range(len(yA))]
+    rb = [-1.4 for i in range(len(yA))]
     plt.plot(np.arange(len(yA)),rb)
     plt.legend(['attaccante','difensore'])
 
@@ -131,4 +131,4 @@ def visualizza_reward_mosse():
     plt.show()
 
 
-
+visualizza_reward_mosse()

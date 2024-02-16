@@ -85,7 +85,7 @@ config['create_env_on_driver'] = True
 config['evaluation_interval'] = 1
 
 
-algo = config.training(gamma=1).build()
+algo = config.training(gamma=0.9).build()
 
 """ for i in range(20):
     result  = algo.train() """
