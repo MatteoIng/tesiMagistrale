@@ -54,6 +54,7 @@ class DQN:
     ).resources(num_gpus=1,num_cpus_for_local_worker=2
 ).rollouts(
             num_rollout_workers=3,
+            rollout_fragment_length=10,
     ).multi_agent(
             policies={
                     "attaccante": (None, obs_space, act_space, {}),
@@ -90,6 +91,7 @@ class ApexDQN:
     ).resources(num_gpus=1,num_cpus_for_local_worker=2
 ).rollouts(
             num_rollout_workers=3,
+            rollout_fragment_length=10,
     ).training(
             train_batch_size=200,
             model = { 
@@ -165,6 +167,7 @@ class PG():
                 },
     ).rollouts(
             num_rollout_workers=3,
+            rollout_fragment_length=10,
     )
 )  
           
@@ -191,6 +194,7 @@ class PPO():
                 },
     ).rollouts(
             num_rollout_workers=3,
+
     )
 )
           # PER IL CUSTOM MODEL ERROR
