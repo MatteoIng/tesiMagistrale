@@ -100,7 +100,7 @@ config = Impala().config
 # per l'evaluation
 config['evaluation_interval'] = 1
 
-algo = config.training(gamma=0.9).build()
+algo = config.training(gamma=0).build()
 
 results = tune.Tuner(
         "IMPALA", 

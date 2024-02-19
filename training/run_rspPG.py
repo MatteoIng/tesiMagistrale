@@ -83,7 +83,7 @@ config['create_env_on_driver'] = True
 config['evaluation_interval'] = 1
 
 
-algo = config.training(gamma=0.9).build()
+algo = config.training(gamma=0).build()
 
 results = tune.Tuner(
         "PG",

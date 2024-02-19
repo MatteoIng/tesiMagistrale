@@ -78,7 +78,7 @@ def visualizza_reward_mosse():
     plt.plot(np.arange(len(yA)),yA)
     plt.plot(np.arange(len(yB)),yB)
     ra = [0 for i in range(len(yA))]
-    rb = [-0.1 for i in range(len(yA))]
+    rb = [-1.4 for i in range(len(yA))]
     plt.plot(np.arange(len(yA)),ra)
     plt.plot(np.arange(len(yA)),rb)
     plt.legend(['attaccante','difensore','reward ottimo attaccante','reward ottimo difensore'])
@@ -132,5 +132,5 @@ def visualizza_reward_mosse():
 
     plt.show()
 
-
+#visualizza_reward_mosse()
 
