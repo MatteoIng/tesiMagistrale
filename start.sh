@@ -2,7 +2,7 @@
 
 if [ "$1" = "-h" ]; then
 	echo 'COMANDI:'
-	echo ' ./start ALGORITMO TrainingIteration'
+	echo ' ./start ALGORITMO TrainingIteration Gamma'
 	echo ' ./start ALGORITMO -e CheckPoint'
 	echo ''
 	echo 'LEGENDA:'
@@ -27,19 +27,19 @@ if [ "$2" = "-e" ]; then
 	fi
 else
 	if [ "$1" = "PG" ]; then
-		clear && python3 ./training/run_rspPG.py $2
+		clear && python3 ./training/run_rspPG.py $2 $3
 	fi
 	if [ "$1" = "PPO" ]; then
-		clear && python3 ./training/run_rspPPO.py $2
+		clear && python3 ./training/run_rspPPO.py $2 $3
 	fi
 	if [ "$1" = "DQN" ]; then
-		clear && python3 ./training/run_rspDQN.py $2
+		clear && python3 ./training/run_rspDQN.py $2 $3
 	fi
 	if [ "$1" = "ApexDQN" ]; then
-		clear && python3 ./training/run_rspApexDQN.py $2
+		clear && python3 ./training/run_rspApexDQN.py $2 $3
 	fi
 	if [ "$1" = "Impala" ]; then
-		clear && python3 ./training/run_rspImpala.py $2 
+		clear && python3 ./training/run_rspImpala.py $2 $3
 	fi
 fi 
 
