@@ -51,7 +51,7 @@ class DQN:
     DQNConfig()
     .environment(
             env=env_name
-    ).resources(num_gpus=1,num_cpus_for_local_worker=2
+    ).resources(num_gpus=0,num_cpus_for_local_worker=2
 ).rollouts(
             num_rollout_workers=3,
             rollout_fragment_length=10,
@@ -88,7 +88,7 @@ class ApexDQN:
     ApexDQNConfig()
     .environment(
             env=env_name
-    ).resources(num_gpus=1,num_cpus_for_local_worker=2
+    ).resources(num_gpus=0,num_cpus_for_local_worker=2
 ).rollouts(
             num_rollout_workers=3,
             rollout_fragment_length=10,
@@ -126,7 +126,7 @@ class Impala():
           self.config = (
       ImpalaConfig()
       .environment(env_name,disable_env_checking=True)
-      .resources(num_gpus=1,num_cpus_for_local_worker=2)
+      .resources(num_gpus=0,num_cpus_for_local_worker=2)
       .framework("torch")
       .multi_agent(
         policies={
@@ -141,6 +141,15 @@ class Impala():
     ).rollouts(
             num_rollout_workers=3,
             rollout_fragment_length=10,
+    ).exploration(
+            exploration_config={
+                    # The Exploration class to use.
+                    "type": "EpsilonGreedy",
+                    # Config for the Exploration class' constructor:
+                    "initial_epsilon": 0.1,
+                    "final_epsilon": 0.0,
+                    "epsilon_timesteps": 100000,  # Timesteps over which to anneal epsilon.
+            }
     )
 )
           
@@ -153,7 +162,7 @@ class PG():
           self.config = (
       PGConfig()
       .environment(env_name,disable_env_checking=True)
-      .resources(num_gpus=1,num_cpus_for_local_worker=2)
+      .resources(num_gpus=0,num_cpus_for_local_worker=2)
       .framework("torch")
       .multi_agent(
         policies={
@@ -168,6 +177,15 @@ class PG():
     ).rollouts(
             num_rollout_workers=3,
             rollout_fragment_length=10,
+    ).exploration(
+            exploration_config={
+                    # The Exploration class to use.
+                    "type": "EpsilonGreedy",
+                    # Config for the Exploration class' constructor:
+                    "initial_epsilon": 0.1,
+                    "final_epsilon": 0.0,
+                    "epsilon_timesteps": 100000,  # Timesteps over which to anneal epsilon.
+            }
     )
 )  
           
@@ -195,6 +213,15 @@ class PPO():
     ).rollouts(
             num_rollout_workers=3,
 
+    ).exploration(
+            exploration_config={
+                    # The Exploration class to use.
+                    "type": "EpsilonGreedy",
+                    # Config for the Exploration class' constructor:
+                    "initial_epsilon": 0.1,
+                    "final_epsilon": 0.0,
+                    "epsilon_timesteps": 100000,  # Timesteps over which to anneal epsilon.
+            }
     )
 )
           # PER IL CUSTOM MODEL ERROR
