@@ -55,7 +55,7 @@ class DQN:
     DQNConfig()
     .environment(
             env=env_name
-    ).resources(num_gpus=1,num_cpus_for_local_worker=2)
+    ).resources(num_gpus=1,num_cpus_for_local_worker=2,num_cpus_per_worker=2)
     .rollouts(
             num_rollout_workers=3,
             rollout_fragment_length=10
@@ -92,7 +92,7 @@ class ApexDQN:
     ApexDQNConfig()
     .environment(
             env=env_name
-    ).resources(num_gpus=0,num_cpus_for_local_worker=0)
+    ).resources(num_gpus=0,num_cpus_for_local_worker=0,num_cpus_per_worker=2)
     .rollouts(
             num_rollout_workers=2,
             rollout_fragment_length=10,
@@ -130,7 +130,7 @@ class Impala():
           self.config = (
       ImpalaConfig()
       .environment(env_name,disable_env_checking=True)
-      .resources(num_gpus=0,num_cpus_for_local_worker=4)
+      .resources(num_gpus=0,num_cpus_for_local_worker=4,num_cpus_per_worker=2)
       .framework("torch")
       .multi_agent(
         policies={
@@ -166,7 +166,7 @@ class PG():
           self.config = (
       PGConfig()
       .environment(env_name,disable_env_checking=True)
-      .resources(num_gpus=1,num_cpus_for_local_worker=2)
+      .resources(num_gpus=1,num_cpus_for_local_worker=2,num_cpus_per_worker=2)
       .framework("torch")
       .multi_agent(
         policies={
@@ -202,7 +202,7 @@ class PPO():
       PPOConfig()
       .environment(env_name,disable_env_checking=True)
       # cpu_for_local_worker è per il training del ppo, devo capire quali per i rollout worker
-      .resources(num_gpus=0,num_cpus_for_local_worker=2)
+      .resources(num_gpus=0,num_cpus_for_local_worker=2,num_cpus_per_worker=2)
       .framework("torch")
       .multi_agent(
         policies={
