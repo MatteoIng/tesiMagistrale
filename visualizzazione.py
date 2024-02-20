@@ -86,49 +86,49 @@ def visualizza_reward_mosse():
 
 
     # il numero di mosse fatte nel tempo, per partita
-    y = []
+    """ y = []
     for i in a :
         y.append(i[0])
     plt.figure()
     plt.title('MOSSE ATT+DIF fatte per ogni partita')
     plt.ylabel('n mosse')
     plt.xlabel('partite')
-    plt.plot(np.arange(len(y)),y)
+    plt.plot(np.arange(len(y)),y) """
 
 
 
 
     # reward rispetto al numero di mosse fatte dall'attaccante
-    x = []
+    """ x = []
     y = []
     a.sort()
     for i in a :
         x.append(i[0])
         y.append(i[1])
-    """ print(len(x))
-    print(len(y)) """
+    #print(len(x))
+    #print(len(y))
     plt.figure()
     plt.title('REWARD attaccante rispetto il N.MOSSE')
     plt.ylabel('reward attaccante')
     plt.xlabel('numero mosse per partita')
-    plt.plot(x,y)
+    plt.plot(x,y) """
     
 
     # Grafico 3
     # reward rispetto al numero di mosse fatte dal difensore
-    x = []
+    """ x = []
     y = []
     b.sort()
     for i in b :
         x.append(i[0])
         y.append(i[1])
-    """ print(len(x))
-    print(len(y)) """
+    #print(len(x))
+    #print(len(y)) 
     plt.figure()
     plt.title('')
     plt.title('REWARD difensore rispetto il N.MOSSE')
     plt.xlabel('numero mosse per partita')
-    plt.plot(x,y)
+    plt.plot(x,y) """
 
     plt.show()
 
