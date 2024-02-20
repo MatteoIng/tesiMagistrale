@@ -43,6 +43,7 @@ torch, nn = try_import_torch()
 torch.cuda.empty_cache()
 
 trainingIteration =  int(sys.argv[1])
+g = float(sys.argv[1])
 
 # COndizioni di stopping degli algoritmi 
 stop = {
@@ -80,7 +81,7 @@ config['dueling'] = False
 # per l'evaluation
 config['evaluation_interval'] = 1
 
-algo = config.training(gamma=0.9).build()
+algo = config.training(gamma=g).build()
 
 results = tune.Tuner(
     "DQN",
