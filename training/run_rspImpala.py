@@ -43,7 +43,7 @@ torch, nn = try_import_torch()
 torch.cuda.empty_cache()
 
 trainingIteration =  int(sys.argv[1])
-g = float(sys.argv[1])
+g = float(sys.argv[2])
 
 # COndizioni di stopping degli algoritmi 
 stop = {
