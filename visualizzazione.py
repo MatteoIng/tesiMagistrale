@@ -29,11 +29,12 @@ def visualizza_reward_mosse():
     yA = []
     yB = []
 
-    for i in range(len(app)) :
+    # reward per ogni partita
+    """ for i in range(len(app)) :
         yA.append(app[i][1])
         yB.append(bpp[i][1])
-    """ print('YA:',yA)
-    print('YB:',yB) """
+    #print('YA:',yA)
+    #print('YB:',yB)
     plt.figure()
     plt.title('ADDESTRAMENTO/EVALUATE')
     plt.ylabel('reward')
@@ -42,7 +43,7 @@ def visualizza_reward_mosse():
     plt.plot(np.arange(len(yA)),yA)
     plt.plot(np.arange(len(yB)),yB)
     
-    plt.legend(['attaccante','difensore'])
+    plt.legend(['attaccante','difensore']) """
 
 
     # reward per epoca
