@@ -88,16 +88,16 @@ config['evaluation_interval'] = 1
 
 algo = config.training(gamma=g).build()
 
-""" for i in range(20):
-    result  = algo.train() """
+for _ in range(trainingIteration):
+    result  = algo.train()
 
-results = tune.Tuner(
+""" results = tune.Tuner(
         "PPO", 
         param_space=config, 
         run_config=air.RunConfig(stop=stop, verbose=0)
     ).fit()
 
-print(results)
+print(results) """
 
 ray.shutdown()
 visualizza_reward_mosse()

@@ -83,11 +83,14 @@ config['evaluation_interval'] = 1
 
 algo = config.training(gamma=g).build()
 
-results = tune.Tuner(
+for _ in range(trainingIteration):
+    algo.train()
+
+""" results = tune.Tuner(
     "DQN",
     run_config = train.RunConfig(stop=stop,verbose=1),
     param_space = config,
-).fit()
+).fit() """
 
 visualizza_reward_mosse() 
 
