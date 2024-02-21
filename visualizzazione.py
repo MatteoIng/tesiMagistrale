@@ -68,8 +68,8 @@ def visualizza_reward_mosse():
         bPPEND+=bpp[i][1]
         count +=1
 
-        sommaTempoAtt += app[i][2]
-        sommaTempoDiff += bpp[i][2]
+        sommaTempoAtt = app[i][2]
+        sommaTempoDiff = bpp[i][2]
 
         if count == 10:
             count = 0

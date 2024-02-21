@@ -106,6 +106,8 @@ class raw_env(AECEnv):
 
     def __init__(self, render_mode=None):
 
+        self.start = time.time()
+
         # Questa è la truncation cosi esce per non girare all'infinito
         self.NUM_ITERS = 2000
         self.lastTimer = 0
@@ -167,7 +169,6 @@ class raw_env(AECEnv):
             ) for i in self.possible_agents
         }
         
-        start = time.time()
         self.render_mode = render_mode
 
 
@@ -281,9 +282,12 @@ class raw_env(AECEnv):
             self.terminations[self.agent_selection]
             #or self.truncations[self.agent_selection]
         ):
-            end = time.time()
+            self.end = time.time()
+            print('START:',self.start) 
+            print('END:',self.end)
+            print(self.end-self.start)
             # DI OGNI PARTITA SALVO LE REWARD OTTENUTE TOTALI E IL NUMERO DI MOSSE ASSOCIATE
-            reward_mosse[self.agent_selection].append((self.num_moves,self._cumulative_rewards[self.agent_selection],(end-start)))
+            reward_mosse[self.agent_selection].append((self.num_moves,self._cumulative_rewards[self.agent_selection],int((self.end-self.start))))
             
             # SALVOLE INFO NEI FILE
             # apro in write perche butto dentro la struttura dati in prePost
