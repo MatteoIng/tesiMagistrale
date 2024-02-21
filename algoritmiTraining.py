@@ -162,7 +162,7 @@ class PG():
           self.config = (
       PGConfig()
       .environment(env_name,disable_env_checking=True)
-      .resources(num_gpus=0,num_cpus_for_local_worker=2,num_cpus_per_worker=2)
+      .resources(num_gpus=0,num_cpus_for_local_worker=1,num_cpus_per_worker=1)
       .framework("torch")
       .multi_agent(
         policies={
@@ -175,7 +175,7 @@ class PG():
                 "custom_model": "am_model"
                 },
     ).rollouts(
-            num_rollout_workers=3,
+            num_rollout_workers=1,
             rollout_fragment_length=10,
     ).exploration(
             exploration_config={

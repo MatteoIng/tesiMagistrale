@@ -101,11 +101,14 @@ config['evaluation_interval'] = 1
 
 algo = config.training(gamma=g).build()
 
-results = tune.Tuner(
+for i in range(trainingIteration):
+    results  = algo.train()
+
+""" results = tune.Tuner(
     "APEX",
     run_config = train.RunConfig(stop=stop,verbose=1),
     param_space = config,
-).fit()
+).fit() """
 
 visualizza_reward_mosse()
 

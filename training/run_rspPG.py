@@ -86,11 +86,14 @@ config['evaluation_interval'] = 1
 
 algo = config.training(gamma=g).build()
 
-results = tune.Tuner(
+for i in range(trainingIteration):
+    results  = algo.train()
+
+""" results = tune.Tuner(
         "PG",
         param_space=config, 
         run_config=air.RunConfig(stop=stop, verbose=1)
-    ).fit() 
+    ).fit()  """
     
 visualizza_reward_mosse()
 
