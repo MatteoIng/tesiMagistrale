@@ -2,6 +2,7 @@ import functools
 import json
 import os
 import sys
+import time
 
 import numpy as np
 from gymnasium.spaces import Box, Dict, Discrete
@@ -72,7 +73,7 @@ mosse = {
     }
 }
 legal_moves = np.zeros(n_azioni,'int8')
-
+start = 0
 #-------------------------------------- Lettura conf ----------------------------------#
 
 def env(render_mode=None):
@@ -159,7 +160,7 @@ class raw_env(AECEnv):
             ) for i in self.possible_agents
         }
         
-                    
+        start = time.time()
         self.render_mode = render_mode
 
 
@@ -223,7 +224,7 @@ class raw_env(AECEnv):
         # prePost Reset per attaccante e difensore
         reset()
         self.lastTimer = 0
-
+        
 
         # spazio del difensore monitorato anche dall'attaccante per l'observation dopo un'action
         self.spazio = {
@@ -262,13 +263,16 @@ class raw_env(AECEnv):
 
 
     def step(self, action):
+        
+
         if (
             self.terminations[self.agent_selection]
             #or self.truncations[self.agent_selection]
         ):
+            end = time.time()
             # DI OGNI PARTITA SALVO LE REWARD OTTENUTE TOTALI E IL NUMERO DI MOSSE ASSOCIATE
-            reward_mosse[self.agent_selection].append((self.num_moves,self._cumulative_rewards[self.agent_selection]))
-            
+            reward_mosse[self.agent_selection].append((self.num_moves,self._cumulative_rewards[self.agent_selection],(end-start)))
+    
             # SALVOLE INFO NEI FILE
             # apro in write perche butto dentro la struttura dati in prePost
             # che mi tiene tutto ed alla fine ho i dati di tutto
