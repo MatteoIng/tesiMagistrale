@@ -54,14 +54,23 @@ def visualizza_reward_mosse():
 
     yA = []
     yB = []
-
+    tempoAtt = []
+    tempoDiff = []
+    
     aPPEND = 0
     bPPEND = 0
     count = 0
+    sommaTempoAtt = 0
+    sommaTempoDiff = 0
+
     for i in range(len(app)):
         aPPEND+=app[i][1]
         bPPEND+=bpp[i][1]
         count +=1
+
+        sommaTempoAtt += app[i][2]
+        sommaTempoDiff += bpp[i][2]
+
         if count == 10:
             count = 0
             #print(i)
@@ -70,6 +79,9 @@ def visualizza_reward_mosse():
             yB.append(bPPEND/10)
             aPPEND = 0
             bPPEND = 0
+            tempoAtt.append(sommaTempoAtt)
+            tempoDiff.append(sommaTempoDiff)
+
     """ print('YA:',yA)
     print('YB:',yB) """
     plt.figure()
@@ -83,6 +95,11 @@ def visualizza_reward_mosse():
     plt.plot(np.arange(len(yA)),ra)
     plt.plot(np.arange(len(yA)),rb)
     plt.legend(['attaccante','difensore','reward ottimo attaccante','reward ottimo difensore'])
+
+    plt.figure()
+    plt.plot(tempoAtt,yA)
+    plt.plot(tempoDiff,yB)
+    plt.legend(['reward-tempo Attaccante','reward-tempo Difensore'])
 
 
 
