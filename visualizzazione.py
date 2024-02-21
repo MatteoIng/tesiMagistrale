@@ -64,7 +64,7 @@ def visualizza_reward_mosse():
     for i in range(len(app)):
         aPPEND += app[i][1]
         bPPEND += bpp[i][1]
-        sommaTempo += bpp[i][2]
+        sommaTempo = bpp[i][2]
 
         count +=1
         if count == 10:

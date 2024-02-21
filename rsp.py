@@ -106,6 +106,8 @@ class raw_env(AECEnv):
 
     def __init__(self, render_mode=None):
 
+        self.start = time.time()
+
         # Questa è la truncation cosi esce per non girare all'infinito
         self.NUM_ITERS = 2000
         self.lastTimer = 0
@@ -268,9 +270,14 @@ class raw_env(AECEnv):
             #or self.truncations[self.agent_selection]
         ):
             # DI OGNI PARTITA SALVO LE REWARD OTTENUTE TOTALI E IL NUMERO DI MOSSE ASSOCIATE
-            end = time.time()
-            reward_mosse[self.agent_selection].append((self.num_moves,self._cumulative_rewards[self.agent_selection],(end-start)))
-            # SALVOLE INFO NEI FILE
+            self.end = time.time()
+            print('START:',self.start) 
+            print('END:',self.end)
+            print(self.end-self.start)
+            # DI OGNI PARTITA SALVO LE REWARD OTTENUTE TOTALI E IL NUMERO DI MOSSE ASSOCIATE
+            reward_mosse[self.agent_selection].append((self.num_moves,self._cumulative_rewards[self.agent_selection],int((self.end-self.start))))
+            
+              # SALVOLE INFO NEI FILE
             # apro in write perche butto dentro la struttura dati in prePost
             # che mi tiene tutto ed alla fine ho i dati di tutto
             file_uno = open("/home/matteo/Documenti/GitHub/tesiMagistrale/fileGrafici/reward_mosse.txt", "w")
