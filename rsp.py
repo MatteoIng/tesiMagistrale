@@ -72,8 +72,8 @@ mosse = {
         'asincrone':n_azioni_difensore_asincrone,
     }
 }
+
 legal_moves = np.zeros(n_azioni,'int8')
-start = 0
 #-------------------------------------- Lettura conf ----------------------------------#
 
 def env(render_mode=None):
@@ -105,6 +105,9 @@ class raw_env(AECEnv):
     metadata = {"render_modes": ["human"], "name": "rps_v2"}
 
     def __init__(self, render_mode=None):
+        
+        self.start = time.time()
+        self.end = 0
 
         # Questa è la truncation cosi esce per non girare all'infinito
         self.NUM_ITERS = 2000
@@ -160,7 +163,6 @@ class raw_env(AECEnv):
             ) for i in self.possible_agents
         }
         
-        start = time.time()
         self.render_mode = render_mode
 
 
@@ -253,12 +255,14 @@ class raw_env(AECEnv):
         #self.observations = {agent: 3 for agent in self.agents}
 
         self.num_moves = 0
+        
+
         """
         Our agent_selector utility allows easy cyclic stepping through the agents list.
         """
         self._agent_selector = agent_selector(self.agents)
         self.agent_selection = self._agent_selector.next()
-
+    
 
 
 
@@ -269,9 +273,12 @@ class raw_env(AECEnv):
             self.terminations[self.agent_selection]
             #or self.truncations[self.agent_selection]
         ):
-            end = time.time()
+            self.end = time.time()
+            print('START:',self.start) 
+            print('END:',self.end)
+            print(self.end-self.start)
             # DI OGNI PARTITA SALVO LE REWARD OTTENUTE TOTALI E IL NUMERO DI MOSSE ASSOCIATE
-            reward_mosse[self.agent_selection].append((self.num_moves,self._cumulative_rewards[self.agent_selection],(end-start)))
+            reward_mosse[self.agent_selection].append((self.num_moves,self._cumulative_rewards[self.agent_selection],int((self.end-self.start))))
     
             # SALVOLE INFO NEI FILE
             # apro in write perche butto dentro la struttura dati in prePost
