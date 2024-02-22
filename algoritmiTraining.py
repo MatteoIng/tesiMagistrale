@@ -182,9 +182,9 @@ class PG():
                     # The Exploration class to use.
                     "type": "EpsilonGreedy",
                     # Config for the Exploration class' constructor:
-                    "initial_epsilon": 0.1,
-                    "final_epsilon": 0.0,
-                    "epsilon_timesteps": 100000,  # Timesteps over which to anneal epsilon.
+                    "initial_epsilon": 10,
+                    "final_epsilon": 10,
+                    "epsilon_timesteps": 0,  # Timesteps over which to anneal epsilon.
             }
     )
 )  
