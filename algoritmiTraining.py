@@ -68,12 +68,8 @@ class DQN:
     ).exploration(
             exploration_config={
                     # The Exploration class to use.
-                    "type": "EpsilonGreedy",
-                    # Config for the Exploration class' constructor:
-                    "initial_epsilon": 0.1,
-                    "final_epsilon": 0.0,
-                    "epsilon_timesteps": 100000,  # Timesteps over which to anneal epsilon.
-                }
+                    "type": "StochasticSampling",
+        }
     ).training(
             model = { 
                     "custom_model": "am_model", 

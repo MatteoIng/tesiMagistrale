@@ -83,14 +83,23 @@ def visualizza_reward_mosse():
     plt.xlabel('epoche')
     
     plt.plot(np.arange(len(yB)),yB)
-    rb = [-1.4 for i in range(len(yA))]
-    plt.plot(np.arange(len(yA)),rb)
-    plt.ylim(-3,0)
-    #plt.xlim(0,500)
+    xl = 300
+    rb = [-1.4 for i in range(xl)]
+    plt.plot(np.arange(xl),rb)
+    plt.ylim(-3.5,0)
+    plt.xlim(0,300)
     plt.legend(['difensore','reward ottimo difensore'])
 
+
     plt.figure()
+    xl=600
+    rb = [-1.4 for i in range(xl)]
     plt.plot(tempo,yB)
+    plt.plot([i for i in range(xl)],rb)
+    plt.xlabel('secondi')
+    plt.ylabel('reward')
+    plt.ylim(-3.5,0)
+    plt.xlim(0,600)
     #plt.xticks(tempo,tempo)
     print(tempo)
 
@@ -141,4 +150,4 @@ def visualizza_reward_mosse():
     plt.show()
 
 
-#visualizza_reward_mosse()
+visualizza_reward_mosse()
