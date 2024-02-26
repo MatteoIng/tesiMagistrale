@@ -77,23 +77,31 @@ def visualizza_reward_mosse():
             aPPEND = 0
             bPPEND = 0
             
-    """ print('YA:',yA)
-    print('YB:',yB) """
     plt.figure()
     plt.title('reward per epoca')
     plt.ylabel('reward')
     plt.xlabel('epoche')
     
-    plt.plot(np.arange(len(yA)),yA)
-    rb = [-1.4 for i in range(len(yA))]
-    plt.plot(np.arange(len(yA)),rb)
-    
-    plt.ylim(-3,0)
-    #plt.xlim(0,500)
+    plt.plot(np.arange(len(yB)),yB)
+    xl = 300
+    rb = [-1.4 for i in range(xl)]
+    plt.plot(np.arange(xl),rb)
+    plt.ylim(-3.5,0)
+    plt.xlim(0,300)
     plt.legend(['attaccante','reward ottimo attaccante'])
 
+
     plt.figure()
-    plt.plot(tempo,yA)
+    xl=600
+    rb = [-1.4 for i in range(xl)]
+    plt.plot(tempo,yB)
+    plt.plot([i for i in range(xl)],rb)
+    plt.xlabel('secondi')
+    plt.ylabel('reward')
+    plt.ylim(-3.5,0)
+    plt.xlim(0,600)
+    #plt.xticks(tempo,tempo)
+    print(tempo)
 
     # il numero di mosse fatte nel tempo, per partita
     """ y = []
@@ -142,4 +150,4 @@ def visualizza_reward_mosse():
     plt.show()
 
 
-#visualizza_reward_mosse()
+visualizza_reward_mosse()
