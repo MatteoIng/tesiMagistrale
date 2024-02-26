@@ -99,6 +99,15 @@ def visualizza_reward_mosse():
     plt.figure()
     plt.plot(tempoAtt,yA)
     plt.plot(tempoDiff,yB)
+    xl=600
+    ra = [0 for i in range(xl)]
+    rb = [-0.1 for i in range(xl)]
+    plt.plot(np.arange(xl),ra)
+    plt.plot(np.arange(xl),rb)
+    plt.xlabel('secondi')
+    plt.ylabel('reward')
+    plt.ylim(-3.5,0)
+    plt.xlim(0,600)
     plt.legend(['reward-tempo Attaccante','reward-tempo Difensore'])
 
 
