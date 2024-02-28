@@ -9,11 +9,11 @@ from matplotlib import pyplot as plt
 def visualizza_reward_mosse():
     dati = ''
     #with open(pathCompleto, "r") as file:
-    with open("/home/matteo/Documenti/GitHub/tesiMagistrale/fileGrafici/reward_mosse.txt", "r") as file:
+    with open("/home/matteo/Documenti/tesi/reward_mosse.txt", "r") as file:
         dati = file.read()
     dati_dict = json.loads(dati)
     
-    print(dati_dict)
+    #print(dati_dict)
 
     a = dati_dict['attaccante']
     b = dati_dict['difensore']
@@ -54,67 +54,81 @@ def visualizza_reward_mosse():
 
     yA = []
     yB = []
-    tempo = []
-
+    tempoAtt = []
+    tempoDiff = []
+    
     aPPEND = 0
     bPPEND = 0
-    sommaTempo = 0
-
     count = 0
-    for i in range(len(app)):
-        aPPEND += app[i][1]
-        bPPEND += bpp[i][1]
-        sommaTempo = bpp[i][2]
+    sommaTempoAtt = 0
+    sommaTempoDiff = 0
 
+    for i in range(len(app)):
+        aPPEND+=app[i][1]
+        bPPEND+=bpp[i][1]
         count +=1
+
+        sommaTempoAtt = app[i][2]
+        sommaTempoDiff = bpp[i][2]
+
         if count == 10:
             count = 0
             #print(i)
             #print(c/10)
             yA.append(aPPEND/10)
             yB.append(bPPEND/10)
-            tempo.append(sommaTempo)
             aPPEND = 0
             bPPEND = 0
-            
+            tempoAtt.append(sommaTempoAtt)
+            tempoDiff.append(sommaTempoDiff)
+
+    """ print('YA:',yA)
+    print('YB:',yB) """
     plt.figure()
     plt.title('reward per epoca')
     plt.ylabel('reward')
     plt.xlabel('epoche')
-    
+    plt.plot(np.arange(len(yA)),yA)
     plt.plot(np.arange(len(yB)),yB)
-    xl = 300
-    rb = [-1.4 for i in range(xl)]
-    plt.plot(np.arange(xl),rb)
-    plt.ylim(-3.5,0)
-    plt.xlim(0,300)
-    plt.legend(['difensore','reward ottimo difensore'])
-    
-    
-    """ # manteniamo per sicurezza
-    plt.figure()
+    ra = [0 for i in range(len(yA))]
+    rb = [-0.1 for i in range(len(yA))]
+    plt.plot(np.arange(len(yA)),ra)
+    plt.plot(np.arange(len(yA)),rb)
+    plt.legend(['attaccante','difensore','reward ottimo attaccante','reward ottimo difensore'])
+
+    """  plt.figure()
+    plt.plot(tempoAtt,yA)
+    plt.plot(tempoDiff,yB)
     xl=600
-    rb = [-1.4 for i in range(xl)]
-    plt.plot(tempo,yB)
-    plt.plot([i for i in range(xl)],rb)
+    ra = [0 for i in range(xl)]
+    rb = [-0.1 for i in range(xl)]
+    plt.plot(np.arange(xl),ra)
+    plt.plot(np.arange(xl),rb)
     plt.xlabel('secondi')
     plt.ylabel('reward')
     plt.ylim(-3.5,0)
     plt.xlim(0,600)
-    #plt.xticks(tempo,tempo)
-    print(tempo) """
+    plt.legend(['reward-tempo Attaccante','reward-tempo Difensore']) """
 
-    # Crea il grafico
+# Crea il grafico
     fig, ax = plt.subplots()
 
     # Plotta i dati
-    #plt.plot()
-    ax.plot(np.arange(len(yB)),yB)
-
+    ax.plot(tempoAtt,yB)
+    ax.plot(tempoDiff,yB)
+    ax.set_xlabel('secondi')
+   
     ax2 = ax.twiny()
-    ax2.plot(tempo,yB)
+    ax2.plot(tempoAtt,yB)
+    ax2.set_xticks([0,tempoAtt[int(len(tempoAtt)/4)],tempoAtt[int(len(tempoAtt)/2)],tempoAtt[int(3*(len(tempoAtt))/4)],tempoAtt[-1]],[0,int(len(yB)/4),int(len(yB)/2),int(3*(len(yB)/4)),len(yB)])
     
+    ax2.plot(tempoDiff,yB)
+    ax2.set_xticks([0,tempoDiff[int(len(tempoDiff)/4)],tempoDiff[int(len(tempoDiff)/2)],tempoDiff[int(3*(len(tempoDiff))/4)],tempoDiff[-1]],[0,int(len(yB)/4),int(len(yB)/2),int(3*(len(yB)/4)),len(yB)])
+    ax2.set_xlabel('epoche')
+    
+    plt.legend(['difensore'])
     plt.show()
+
 
 
     # il numero di mosse fatte nel tempo, per partita
@@ -144,6 +158,7 @@ def visualizza_reward_mosse():
     plt.ylabel('reward attaccante')
     plt.xlabel('numero mosse per partita')
     plt.plot(x,y) """
+    
 
     # Grafico 3
     # reward rispetto al numero di mosse fatte dal difensore
@@ -154,7 +169,7 @@ def visualizza_reward_mosse():
         x.append(i[0])
         y.append(i[1])
     #print(len(x))
-    #print(len(y))
+    #print(len(y)) 
     plt.figure()
     plt.title('')
     plt.title('REWARD difensore rispetto il N.MOSSE')
@@ -163,5 +178,5 @@ def visualizza_reward_mosse():
 
     plt.show()
 
-
 visualizza_reward_mosse()
+
