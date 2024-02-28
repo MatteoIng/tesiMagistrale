@@ -9,7 +9,7 @@ from matplotlib import pyplot as plt
 def visualizza_reward_mosse():
     dati = ''
     #with open(pathCompleto, "r") as file:
-    with open("/home/matteo/Documenti/GitHub/tesiMagistrale/fileGrafici/reward_mosse.txt", "r") as file:
+    with open("/home/matteo/Documenti/tesi/reward_mosse.txt", "r") as file:
         dati = file.read()
     dati_dict = json.loads(dati)
     
@@ -108,11 +108,11 @@ def visualizza_reward_mosse():
     fig, ax = plt.subplots()
 
     # Plotta i dati
-    #plt.plot()
-    ax.plot(np.arange(len(yB)),yB)
-
+    ax.plot(tempo,yB)
+   
     ax2 = ax.twiny()
     ax2.plot(tempo,yB)
+    ax2.set_xticks([0,tempo[int(len(tempo)/4)],tempo[int(len(tempo)/2)],tempo[int(3*(len(tempo))/4)],tempo[-1]],[0,int(len(yB)/4),int(len(yB)/2),int(3*(len(yB)/4)),len(yB)])
     
     plt.show()
 
