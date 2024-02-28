@@ -55,7 +55,7 @@ class DQN:
     DQNConfig()
     .environment(
             env=env_name
-    ).resources(num_gpus=1,num_cpus_for_local_worker=2,num_cpus_per_worker=2)
+    ).resources(num_gpus=1)
     .rollouts(
             num_rollout_workers=3,
             rollout_fragment_length=10
