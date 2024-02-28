@@ -88,7 +88,7 @@ def visualizza_reward_mosse():
     plt.plot(np.arange(xl),rb)
     plt.ylim(-3.5,0)
     plt.xlim(0,300)
-    plt.legend(['difensore','reward ottimo difensore'])
+    plt.legend(['attaccante','reward ottimo attaccante'])
     
     
     """ # manteniamo per sicurezza
@@ -116,7 +116,7 @@ def visualizza_reward_mosse():
     ax2.set_xticks([0,tempo[int(len(tempo)/4)],tempo[int(len(tempo)/2)],tempo[int(3*(len(tempo))/4)],tempo[-1]],[0,int(len(yB)/4),int(len(yB)/2),int(3*(len(yB)/4)),len(yB)])
     ax2.set_xlabel('epoche')
 
-    
+    plt.legend(['attaccante'])
     plt.show()
 
 
