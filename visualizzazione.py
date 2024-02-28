@@ -89,8 +89,9 @@ def visualizza_reward_mosse():
     plt.ylim(-3.5,0)
     plt.xlim(0,300)
     plt.legend(['difensore','reward ottimo difensore'])
-
-
+    
+    
+    """ # manteniamo per sicurezza
     plt.figure()
     xl=600
     rb = [-1.4 for i in range(xl)]
@@ -101,7 +102,20 @@ def visualizza_reward_mosse():
     plt.ylim(-3.5,0)
     plt.xlim(0,600)
     #plt.xticks(tempo,tempo)
-    print(tempo)
+    print(tempo) """
+
+    # Crea il grafico
+    fig, ax = plt.subplots()
+
+    # Plotta i dati
+    #plt.plot()
+    ax.plot(np.arange(len(yB)),yB)
+
+    ax2 = ax.twiny()
+    ax2.plot(tempo,yB)
+    
+    plt.show()
+
 
     # il numero di mosse fatte nel tempo, per partita
     """ y = []
