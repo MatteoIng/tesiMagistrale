@@ -106,6 +106,8 @@ def visualizza_reward_mosse():
 
     # Crea il grafico
     fig, ax = plt.subplots()
+    plt.plot(np.arange(1000),[-1.4 for i in range(1000)])
+    plt.ylim(-4,0)
 
     # Plotta i dati
     ax.plot(tempo,yB)
@@ -120,7 +122,7 @@ def visualizza_reward_mosse():
     ax2.set_xlabel('epoche')
     
     plt.ylabel('reward')
-    plt.legend(['difensore'])
+    plt.legend(['difensore','reward ottimo difensore'])
     plt.show()
 
 
