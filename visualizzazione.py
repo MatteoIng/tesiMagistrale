@@ -88,7 +88,7 @@ def visualizza_reward_mosse():
     plt.plot(np.arange(xl),rb)
     plt.ylim(-3.5,0)
     plt.xlim(0,300)
-    plt.legend(['attaccante','reward ottimo attaccante'])
+    plt.legend(['difensore','reward ottimo difensore'])
     
     
     """ # manteniamo per sicurezza
@@ -106,17 +106,23 @@ def visualizza_reward_mosse():
 
     # Crea il grafico
     fig, ax = plt.subplots()
+    plt.plot(np.arange(1000),[-1.4 for i in range(1000)])
+    plt.ylim(-4,0)
 
     # Plotta i dati
     ax.plot(tempo,yB)
     ax.set_xlabel('secondi')
+    ax.set_xlim(0,600)
    
     ax2 = ax.twiny()
     ax2.plot(tempo,yB)
+    ax2.set_xlim(0,600)
     ax2.set_xticks([0,tempo[int(len(tempo)/4)],tempo[int(len(tempo)/2)],tempo[int(3*(len(tempo))/4)],tempo[-1]],[0,int(len(yB)/4),int(len(yB)/2),int(3*(len(yB)/4)),len(yB)])
-    ax2.set_xlabel('epoche')
 
-    plt.legend(['attaccante'])
+    ax2.set_xlabel('epoche')
+    
+    plt.ylabel('reward')
+    plt.legend(['difensore','reward ottimo difensore'])
     plt.show()
 
 
