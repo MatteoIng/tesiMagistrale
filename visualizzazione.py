@@ -110,12 +110,16 @@ def visualizza_reward_mosse():
     # Plotta i dati
     ax.plot(tempo,yB)
     ax.set_xlabel('secondi')
+    ax.set_xlim(0,600)
    
     ax2 = ax.twiny()
     ax2.plot(tempo,yB)
+    ax2.set_xlim(0,600)
     ax2.set_xticks([0,tempo[int(len(tempo)/4)],tempo[int(len(tempo)/2)],tempo[int(3*(len(tempo))/4)],tempo[-1]],[0,int(len(yB)/4),int(len(yB)/2),int(3*(len(yB)/4)),len(yB)])
-    ax2.set_xlabel('epoche')
 
+    ax2.set_xlabel('epoche')
+    
+    plt.ylabel('reward')
     plt.legend(['difensore'])
     plt.show()
 
