@@ -9,7 +9,7 @@ from matplotlib import pyplot as plt
 def visualizza_reward_mosse():
     dati = ''
     #with open(pathCompleto, "r") as file:
-    with open("/home/matteo/Documenti/tesi/reward_mosse.txt", "r") as file:
+    with open("/home/matteo/Documenti/GitHub/tesiMagistrale/fileGrafici/reward_mosse.txt", "r") as file:
         dati = file.read()
     dati_dict = json.loads(dati)
     

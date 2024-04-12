@@ -51,10 +51,10 @@ class DQN:
     DQNConfig()
     .environment(
             env=env_name
-    ).resources(num_gpus=0,num_cpus_for_local_worker=2,num_cpus_per_worker=2)
-    .rollouts(
+    ).resources(num_gpus=0,num_cpus_for_local_worker=2,num_cpus_per_worker=2
+).rollouts(
             num_rollout_workers=3,
-            rollout_fragment_length=10
+            rollout_fragment_length=10,
     ).multi_agent(
             policies={
                     "attaccante": (None, obs_space, act_space, {}),
@@ -68,8 +68,12 @@ class DQN:
     ).exploration(
             exploration_config={
                     # The Exploration class to use.
-                    "type": "StochasticSampling",
-        }
+                    "type": "EpsilonGreedy",
+                    # Config for the Exploration class' constructor:
+                    "initial_epsilon": 0.1,
+                    "final_epsilon": 0.0,
+                    "epsilon_timesteps": 100000,  # Timesteps over which to anneal epsilon.
+                }
     ).training(
             model = { 
                     "custom_model": "am_model", 
@@ -84,8 +88,8 @@ class ApexDQN:
     ApexDQNConfig()
     .environment(
             env=env_name
-    ).resources(num_gpus=0,num_cpus_for_local_worker=2,num_cpus_per_worker=2)
-    .rollouts(
+    ).resources(num_gpus=0,num_cpus_for_local_worker=2,num_cpus_per_worker=2
+).rollouts(
             num_rollout_workers=3,
             rollout_fragment_length=10,
     ).training(
@@ -122,7 +126,7 @@ class Impala():
           self.config = (
       ImpalaConfig()
       .environment(env_name,disable_env_checking=True)
-      .resources(num_gpus=0,num_cpus_for_local_worker=2,num_cpus_per_worker=2)
+      .resources(num_gpus=0)
       .framework("torch")
       .multi_agent(
         policies={
@@ -135,17 +139,9 @@ class Impala():
                 "custom_model": "am_model"
                 },
     ).rollouts(
-            num_rollout_workers=3,
-            rollout_fragment_length=10
+            num_rollout_workers=10,
+            rollout_fragment_length=10,
     ).exploration(
-            exploration_config={
-                    # The Exploration class to use.
-                    "type": "EpsilonGreedy",
-                    # Config for the Exploration class' constructor:
-                    "initial_epsilon": 0.1,
-                    "final_epsilon": 0.0,
-                    "epsilon_timesteps": 100000,  # Timesteps over which to anneal epsilon.
-            }
     )
 )
           
@@ -158,43 +154,7 @@ class PG():
           self.config = (
       PGConfig()
       .environment(env_name,disable_env_checking=True)
-      .resources(num_gpus=0,num_cpus_for_local_worker=2,num_cpus_per_worker=2)
-      .framework("torch")
-      .multi_agent(
-        policies={
-            "attaccante": (None, obs_space, act_space, {}),
-            "difensore": (None, obs_space, act_space, {}),
-        },
-        policy_mapping_fn=(lambda agent_id, *args, **kwargs: agent_id),
-    ).training(
-          model={
-                "custom_model": "am_model"
-                },
-    ).rollouts(
-            num_rollout_workers=3,
-            rollout_fragment_length=10
-    ).exploration(
-            exploration_config={
-                    # The Exploration class to use.
-                    "type": "EpsilonGreedy",
-                    # Config for the Exploration class' constructor:
-                    "initial_epsilon": 10,
-                    "final_epsilon": 10,
-                    "epsilon_timesteps": 0,  # Timesteps over which to anneal epsilon.
-            }
-    )
-)  
-          
-
-
-# Con 50 epoche alcune le vince altre le perde, PG mi sembrava vincesse sempre (potrei sbagliare) pero partite piu brevi
-class PPO():
-     def __init__(self):
-          self.config = (
-      PPOConfig()
-      .environment(env_name,disable_env_checking=True)
-      # cpu_for_local_worker è per il training del ppo, devo capire quali per i rollout worker
-      .resources(num_gpus=0,num_cpus_for_local_worker=0,num_cpus_per_worker=2)
+      .resources(num_gpus=0,num_cpus_for_local_worker=1,num_cpus_per_worker=1)
       .framework("torch")
       .multi_agent(
         policies={
@@ -208,6 +168,43 @@ class PPO():
                 },
     ).rollouts(
             num_rollout_workers=1,
+            rollout_fragment_length=10,
+    ).exploration(
+            exploration_config={
+                    # The Exploration class to use.
+                    "type": "EpsilonGreedy",
+                    # Config for the Exploration class' constructor:
+                    "initial_epsilon": 0.1,
+                    "final_epsilon": 0.0,
+                    "epsilon_timesteps": 100000,  # Timesteps over which to anneal epsilon.
+            }
+    )
+)  
+          
+
+
+# Con 50 epoche alcune le vince altre le perde, PG mi sembrava vincesse sempre (potrei sbagliare) pero partite piu brevi
+class PPO():
+     def __init__(self):
+          self.config = (
+      PPOConfig()
+      .environment(env_name,disable_env_checking=True)
+      # cpu_for_local_worker è per il training del ppo, devo capire quali per i rollout worker
+      .resources(num_gpus=0,num_cpus_for_local_worker=2,num_cpus_per_worker=2)
+      .framework("torch")
+      .multi_agent(
+        policies={
+            "attaccante": (None, obs_space, act_space, {}),
+            "difensore": (None, obs_space, act_space, {}),
+        },
+        policy_mapping_fn=(lambda agent_id, *args, **kwargs: agent_id),
+    ).training(
+          model={
+                "custom_model": "am_model"
+                },
+    ).rollouts(
+            num_rollout_workers=3,
+
     ).exploration(
             exploration_config={
                     # The Exploration class to use.
