@@ -146,14 +146,7 @@ class Impala():
             num_rollout_workers=2,
             rollout_fragment_length=10,
     ).exploration(
-         exploration_config={
-                    # The Exploration class to use.
-                    "type": "EpsilonGreedy",
-                    # Config for the Exploration class' constructor:
-                    "initial_epsilon": 0.1,
-                    "final_epsilon": 0.0,
-                    "epsilon_timesteps": 100000,  # Timesteps over which to anneal epsilon.
-                }
+
         )
 )
           
@@ -182,14 +175,6 @@ class PG():
             num_rollout_workers=1,
             rollout_fragment_length=10,
     ).exploration(
-         exploration_config={
-                    # The Exploration class to use.
-                    "type": "EpsilonGreedy",
-                    # Config for the Exploration class' constructor:
-                    "initial_epsilon": 0.1,
-                    "final_epsilon": 0.0,
-                    "epsilon_timesteps": 100000,  # Timesteps over which to anneal epsilon.
-                }
         )
 )  
           
@@ -217,14 +202,6 @@ class PPO():
     ).rollouts(
             num_rollout_workers=3,
     ).exploration(
-         exploration_config={
-                    # The Exploration class to use.
-                    "type": "EpsilonGreedy",
-                    # Config for the Exploration class' constructor:
-                    "initial_epsilon": 0.1,
-                    "final_epsilon": 0.0,
-                    "epsilon_timesteps": 100000,  # Timesteps over which to anneal epsilon.
-                }
         )
 )
           # PER IL CUSTOM MODEL ERROR
