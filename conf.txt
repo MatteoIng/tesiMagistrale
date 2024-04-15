@@ -1,0 +1,5 @@
+agenti = 2
+mosse_attaccante_tot = 10
+k_att = 5
+mosse_difensore_tot = 10
+k_diff = 5
