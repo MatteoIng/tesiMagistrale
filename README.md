@@ -1,4 +1,5 @@
 # IRS: Intrusion Response System
+# Solo attaccante
 
 INSTALLARE
 requirements.txt
